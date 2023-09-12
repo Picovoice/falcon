@@ -1,0 +1,14 @@
+{
+  "tests": {
+    "diarization_tests": [
+      {
+        "audio_file": "test.wav",
+        "segments": [
+          {"start_sec": 1.70, "end_sec": 3.90, "speaker_tag": 1},
+          {"start_sec": 6.20, "end_sec": 11.10, "speaker_tag": 2},
+          {"start_sec": 12.80, "end_sec": 18.00, "speaker_tag": 3}
+        ]
+      }
+    ]
+  }
+}
