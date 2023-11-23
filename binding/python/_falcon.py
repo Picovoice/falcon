@@ -210,6 +210,10 @@ class Falcon(object):
         self._segments_delete_func.restype = None
 
     Segment = namedtuple("Segment", ["start_sec", "end_sec", "speaker_tag"])
+    """
+    Represents a segment with its start, end, and associated speaker tag.
+    The speaker tag is a non-negative integer that uniquely identifies a speaker.
+    """
 
     def process(self, pcm: Sequence[int]) -> Sequence[Segment]:
         """
