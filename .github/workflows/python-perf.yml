@@ -70,49 +70,49 @@ jobs:
         --num-test-iterations 20
         --performance-threshold-sec ${{matrix.performance_threshold_sec}}
 
- perf-self-hosted:
-   runs-on: ${{ matrix.machine }}
+  perf-self-hosted:
+    runs-on: ${{ matrix.machine }}
 
-   strategy:
-     fail-fast: false
-     matrix:
-       machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson]
-       include:
-       - machine: rpi3-32
-         performance_threshold_sec: 0.0
-       - machine: rpi3-64
-         performance_threshold_sec: 0.0
-       - machine: rpi4-32
-         performance_threshold_sec: 0.0
-       - machine: rpi4-64
-         performance_threshold_sec: 0.0
-       - machine: jetson
-         performance_threshold_sec: 0.0
+    strategy:
+      fail-fast: false
+      matrix:
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson]
+        include:
+        - machine: rpi3-32
+          performance_threshold_sec: 0.0
+        - machine: rpi3-64
+          performance_threshold_sec: 0.0
+        - machine: rpi4-32
+          performance_threshold_sec: 0.0
+        - machine: rpi4-64
+          performance_threshold_sec: 0.0
+        - machine: jetson
+          performance_threshold_sec: 0.0
 
-   steps:
-   - uses: actions/checkout@v3
+    steps:
+    - uses: actions/checkout@v3
 
-   - name: Machine state before
-     working-directory: resources/scripts
-     run: bash machine-state.sh
+    - name: Machine state before
+      working-directory: resources/scripts
+      run: bash machine-state.sh
 
-   - name: Pre-build dependencies
-     run: python3 -m pip install --upgrade pip
+    - name: Pre-build dependencies
+      run: python3 -m pip install --upgrade pip
 
-   - name: Build dependencies
-     run: |
-       pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/*.whl
+    - name: Build dependencies
+      run: |
+        pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/*.whl
 
-   - name: Install dependencies
-     run: pip install -r requirements.txt
+    - name: Install dependencies
+      run: pip install -r requirements.txt
 
-   - name: Test
-     run: >
-       python3 test_falcon_perf.py
-       --access-key ${{secrets.PV_VALID_ACCESS_KEY}}
-       --num-test-iterations 20
-       --performance_threshold_sec ${{matrix.performance_threshold_sec}}
+    - name: Test
+      run: >
+        python3 test_falcon_perf.py
+        --access-key ${{secrets.PV_VALID_ACCESS_KEY}}
+        --num-test-iterations 20
+        --performance_threshold_sec ${{matrix.performance_threshold_sec}}
 
-   - name: Machine state after
-     working-directory: resources/scripts
-     run: bash machine-state.sh
+    - name: Machine state after
+      working-directory: resources/scripts
+      run: bash machine-state.sh
