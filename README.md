@@ -160,7 +160,7 @@ pv_falcon_delete(falcon);
 
 ## Releases
 
-### v1.0.0 - November 28th, 2023
+### v1.0.0 — November 28th, 2023
 
 - Initial release.
 
