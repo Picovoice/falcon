@@ -93,7 +93,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Machine state before
-        working-directory: resources/scripts
+        working-directory: resources/.scripts
         run: bash machine-state.sh
 
       - name: Pre-build dependencies
@@ -114,5 +114,5 @@ jobs:
           --performance_threshold_sec ${{matrix.performance_threshold_sec}}
 
       - name: Machine state after
-        working-directory: resources/scripts
+        working-directory: resources/.scripts
         run: bash machine-state.sh
