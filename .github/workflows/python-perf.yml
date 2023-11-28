@@ -58,7 +58,7 @@ jobs:
 
       - name: Build dependencies
         run: |
-          pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/*.whl
+          pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/*.*
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -101,7 +101,7 @@ jobs:
 
       - name: Build dependencies
         run: |
-          pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/*.whl
+          pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/*.*
 
       - name: Install dependencies
         run: pip install -r requirements.txt
