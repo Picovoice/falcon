@@ -15,11 +15,6 @@ import shutil
 import setuptools
 
 INCLUDE_FILES = ("../../LICENSE", "__init__.py", "_factory.py", "_falcon.py", "_util.py")
-INCLUDE_LIBS = (
-    "common",
-    "linux",
-)
-# TODO: Uncomment the following line to include all libraries
 # INCLUDE_LIBS = ('common', 'jetson', 'linux', 'mac', 'raspberry-pi', 'windows')
 
 os.system("git clean -dfx")
