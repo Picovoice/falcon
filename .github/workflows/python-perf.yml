@@ -58,7 +58,7 @@ jobs:
 
       - name: Build dependencies
         run: |
-          pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/
+          pip install wheel && python3 setup.py sdist bdist_wheel && pip install dist/pvfalcon-1.0.0-py3-none-any.whl
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -101,7 +101,7 @@ jobs:
 
       - name: Build dependencies
         run: |
-          pip install wheel && python3 setup.py sdist bdist_wheel && pip install pip install -U dist/
+          pip install wheel && python3 setup.py sdist bdist_wheel && pip install dist/pvfalcon-1.0.0-py3-none-any.whl
 
       - name: Install dependencies
         run: pip install -r requirements.txt
