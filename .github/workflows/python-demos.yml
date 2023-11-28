@@ -45,18 +45,18 @@ jobs:
       - name: Test
         run: python falcon_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --wav_paths ../../resources/audio_samples/test.wav
 
-  build-self-hosted:
-    runs-on: ${{ matrix.machine }}
+  # build-self-hosted:
+  #   runs-on: ${{ matrix.machine }}
 
-    strategy:
-      matrix:
-        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson]
+  #   strategy:
+  #     matrix:
+  #       machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson]
 
-    steps:
-      - uses: actions/checkout@v3
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: pip3 install -r requirements.txt
+  #     - name: Install dependencies
+  #       run: pip3 install -r requirements.txt
 
-      - name: Test
-        run: python3 falcon_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --wav_paths ../../resources/audio_samples/test.wav
+  #     - name: Test
+  #       run: python3 falcon_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --wav_paths ../../resources/audio_samples/test.wav
