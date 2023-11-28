@@ -24,20 +24,26 @@ Falcon is an on-device speaker diarization engine. Falcon is:
     - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
     - Raspberry Pi (4, 3) and NVIDIA Jetson Nano
 
-  
 ## Table of Contents
 
 - [Falcon](#falcon)
-  - [Table of Contents](#table-of-contents)
-  - [AccessKey](#accesskey)
-  - [Demos](#demos)
-    - [Python Demos](#python-demos)
-    - [C Demos](#c-demos)
-  - [SDKs](#sdks)
-    - [Python](#python)
-    - [C](#c)
-  - [Releases](#releases)
-  - [FAQ](#faq)
+    - [Table of Contents](#table-of-contents)
+    - [What is Speaker Diarization?](#what-is-speaker-diarization)
+    - [AccessKey](#accesskey)
+    - [Demos](#demos)
+        - [Python Demos](#python-demos)
+        - [C Demos](#c-demos)
+    - [SDKs](#sdks)
+        - [Python](#python)
+        - [C](#c)
+    - [Releases](#releases)
+    - [FAQ](#faq)
+
+## What is Speaker Diarization?
+
+Speaker diarization, a fundamental step in automatic speech recognition and audio processing, focuses on identifying and
+separating distinct speakers within an audio recording. Its objective is to divide the audio into segments while
+precisely identifying the speakers and their respective speaking intervals.
 
 ## AccessKey
 
@@ -105,9 +111,10 @@ print(falcon.process_file('${AUDIO_PATH}'))
 ```
 
 Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/) and
-`${AUDIO_PATH}` to path an audio file. 
+`${AUDIO_PATH}` to path an audio file.
 
 Finally, when done be sure to explicitly release the resources:
+
 ```python
 falcon.delete()
 ```
@@ -153,6 +160,7 @@ Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console, `${MODEL_PAT
 [default model file](./lib/common/falcon_params.pv) (or your custom one), and `${AUDIO_PATH}` to path an audio file.
 
 Finally, when done be sure to release resources acquired:
+
 ```c
 pv_falcon_delete(falcon);
 ```

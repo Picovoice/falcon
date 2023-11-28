@@ -125,10 +125,10 @@ PV_API pv_status_t pv_falcon_process_file(
         pv_segment_t **segments);
 
 /**
- * Deletes segments allocated by `pv_falcon_process()`.
+ * Deletes segments allocated by `pv_falcon_process()` and `pv_falcon_process_file()`.
  *
  * Use this function to properly release memory allocated for segments returned by the
- * `pv_falcon_process()` functions.
+ * `pv_falcon_process()` and `pv_falcon_process_file()` functions.
  *
  * @param segments Pointer to the array of segments to be deleted.
  */

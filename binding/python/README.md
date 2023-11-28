@@ -1,4 +1,6 @@
-# Falcon Speaker Diarization Engine
+# Falcon Binding for Python
+
+## Falcon Speaker Diarization Engine
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
@@ -28,7 +30,7 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 
 ### Usage
 
-Create an instance of the engine and diarize an audio file:
+Create an instance of the engine and perform speaker diarization on an audio file:
 
 ```python
 import pvfalcon
