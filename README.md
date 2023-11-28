@@ -37,7 +37,6 @@ Falcon is an on-device speaker diarization engine. Falcon is:
     - [Python](#python)
     - [C](#c)
   - [Releases](#releases)
-    - [v1.0.0 - November xth, 2023](#v100---november-xth-2023)
   - [FAQ](#faq)
 
 ## AccessKey
