@@ -1,10 +1,14 @@
 # Falcon
 
+<!-- TODO: -->
+<!-- markdown-link-check-disable -->
+
 [![GitHub release](https://img.shields.io/github/v/tag/Picovoice/falcon.svg)](https://github.com/Picovoice/falcon/releases)
 [![GitHub](https://img.shields.io/github/license/Picovoice/falcon)](https://github.com/Picovoice/falcon/)
 
 [![PyPI](https://img.shields.io/pypi/v/pvfalcon)](https://pypi.org/project/pvfalcon/)
 
+<!-- markdown-link-check-enable -->
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
@@ -33,6 +37,7 @@ Falcon is an on-device speaker diarization engine. Falcon is:
     - [Python](#python)
     - [C](#c)
   - [Releases](#releases)
+    - [v1.0.0 - November xth, 2023](#v100---november-xth-2023)
   - [FAQ](#faq)
 
 ## AccessKey
