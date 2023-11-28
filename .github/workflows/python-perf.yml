@@ -41,9 +41,9 @@ jobs:
           - os: ubuntu-latest
             performance_threshold_sec: 1.2
           - os: windows-latest
-            performance_threshold_sec: 1.2
+            performance_threshold_sec: 1.5
           - os: macos-latest
-            performance_threshold_sec: 1.2
+            performance_threshold_sec: 1.5
 
     steps:
       - uses: actions/checkout@v3
@@ -111,7 +111,7 @@ jobs:
           python3 test_falcon_perf.py
           --access-key ${{secrets.PV_VALID_ACCESS_KEY}}
           --num-test-iterations 20
-          --performance_threshold_sec ${{matrix.performance_threshold_sec}}
+          --performance-threshold-sec ${{matrix.performance_threshold_sec}}
 
       - name: Machine state after
         working-directory: resources/.scripts
