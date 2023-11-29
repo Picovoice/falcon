@@ -1,14 +1,9 @@
 # Falcon
 
-<!-- TODO: -->
-<!-- markdown-link-check-disable -->
-
 [![GitHub release](https://img.shields.io/github/v/tag/Picovoice/falcon.svg)](https://github.com/Picovoice/falcon/releases)
 [![GitHub](https://img.shields.io/github/license/Picovoice/falcon)](https://github.com/Picovoice/falcon/)
 
 [![PyPI](https://img.shields.io/pypi/v/pvfalcon)](https://pypi.org/project/pvfalcon/)
-
-<!-- markdown-link-check-enable -->
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
