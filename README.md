@@ -168,4 +168,4 @@ pv_falcon_delete(falcon);
 
 ## FAQ
 
-You can find the FAQ [here](https://picovoice.ai/docs/faq/picovoice/).
+You can find the FAQ [here](https://picovoice.ai/docs/faq/general/).
