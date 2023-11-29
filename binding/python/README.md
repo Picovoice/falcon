@@ -49,10 +49,5 @@ Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://con
 
 ## Demos
 
-<!-- TODO: -->
-<!-- markdown-link-check-disable -->
-
 [pvfalcondemo](https://pypi.org/project/pvfalcondemo/) provides command-line utilities for processing audio using
 Falcon.
-
-<!-- markdown-link-check-enable -->
