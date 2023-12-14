@@ -22,6 +22,7 @@ body:
     attributes:
       label: SDK
       options:
+        - C
         - Python
     validations:
       required: true
