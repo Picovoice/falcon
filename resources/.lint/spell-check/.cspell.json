@@ -13,11 +13,11 @@
   "ignorePaths": [
     // binaries
     "**/*.dll",
-    "**/*.dll",
     "**/*.dylib",
     "**/*.mp3",
     "**/*.pv",
     "**/*.so",
-    "**/*.wav"
+    "**/*.wav",
+    "**/*.wasm"
   ]
 }
