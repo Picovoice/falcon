@@ -174,7 +174,7 @@ export class Falcon {
   }
 
   /**
-   * Creates an instance of the Picovoice Falcon Speech-to-Text engine.
+   * Creates an instance of the Picovoice Falcon Speaker Diarization engine.
    * Behind the scenes, it requires the WebAssembly code to load and initialize before
    * it can create an instance.
    *
@@ -231,7 +231,7 @@ export class Falcon {
    * 16-bit linearly-encoded. Furthermore, the engine operates on single-channel audio.
    *
    * @param pcm A frame of audio with properties described above.
-   * @return The transcript.
+   * @return The segments.
    */
   public async process(pcm: Int16Array): Promise<FalconSegments> {
     if (!(pcm instanceof Int16Array)) {
@@ -373,16 +373,6 @@ export class Falcon {
       exports.pv_get_error_stack as pv_get_error_stack_type;
     const pv_free_error_stack =
       exports.pv_free_error_stack as pv_free_error_stack_type;
-
-    const transcriptAddressAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
-    if (transcriptAddressAddress === 0) {
-      throw new FalconErrors.FalconOutOfMemoryError(
-        'malloc failed: Cannot allocate memory'
-      );
-    }
 
     const numSegmentsAddress = await aligned_alloc(
       Int32Array.BYTES_PER_ELEMENT,

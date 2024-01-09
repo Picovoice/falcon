@@ -83,7 +83,7 @@ export class FalconWorker {
   }
 
   /**
-   * Creates a worker instance of the Picovoice Falcon Speech-to-Text engine.
+   * Creates a worker instance of the Picovoice Falcon Speaker Diarization engine.
    * Behind the scenes, it requires the WebAssembly code to load and initialize before
    * it can create an instance.
    *
@@ -171,7 +171,7 @@ export class FalconWorker {
    * @param options.transferCallback Optional callback containing a new Int16Array with contents from 'pcm'. Use this callback
    * to get the input pcm when using transfer.
    *
-   * @return A transcript object.
+   * @return A segments object.
    */
   public process(
     pcm: Int16Array,

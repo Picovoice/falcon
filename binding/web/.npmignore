@@ -6,4 +6,3 @@ lib
 cypress
 cypress.config.ts
 scripts
-test
