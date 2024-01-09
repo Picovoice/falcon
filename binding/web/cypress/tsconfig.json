@@ -3,9 +3,6 @@
   "compilerOptions": {
     "types": ["cypress"]
   },
-  "include": [
-    "../test/**/*.ts",
-    "./**/*.ts"
-  ],
+  "include": ["../test/**/*.ts", "./**/*.ts"],
   "exclude": []
 }

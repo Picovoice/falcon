@@ -1,72 +1,28 @@
-import { Leopard, LeopardWorker } from '../';
+import { Falcon, FalconWorker } from '../';
 import testData from './test_data.json';
 
 // @ts-ignore
 import falconParams from './falcon_params';
 import { PvModel } from '@picovoice/web-utils';
-import { LeopardWord } from '../src';
-import { LeopardError } from '../src/falcon_errors';
+import { FalconSegment } from '../src';
+import { FalconError } from '../src/falcon_errors';
 
-const ACCESS_KEY: string = Cypress.env('ACCESS_KEY');
-
-const levenshteinDistance = (words1: string[], words2: string[]) => {
-  const res = Array.from(
-    Array(words1.length + 1),
-    () => new Array(words2.length + 1)
-  );
-  for (let i = 0; i <= words1.length; i++) {
-    res[i][0] = i;
-  }
-  for (let j = 0; j <= words2.length; j++) {
-    res[0][j] = j;
-  }
-  for (let i = 1; i <= words1.length; i++) {
-    for (let j = 1; j <= words2.length; j++) {
-      res[i][j] = Math.min(
-        res[i - 1][j] + 1,
-        res[i][j - 1] + 1,
-        res[i - 1][j - 1] +
-        (words1[i - 1].toUpperCase() === words2[j - 1].toUpperCase() ? 0 : 1)
-      );
-    }
-  }
-  return res[words1.length][words2.length];
-};
-
-const wordErrorRate = (
-  reference: string,
-  hypothesis: string,
-  useCER = false
-): number => {
-  const splitter = useCER ? '' : ' ';
-  const ed = levenshteinDistance(
-    reference.split(splitter),
-    hypothesis.split(splitter)
-  );
-  return ed / reference.length;
-};
+const ACCESS_KEY = Cypress.env('ACCESS_KEY');
 
 const validateMetadata = (
-  words: LeopardWord[],
-  expectedWords: LeopardWord[],
-  enableDiarization: boolean
+  words: FalconSegment[],
+  expectedSegments: FalconSegment[]
 ) => {
-  expect(words.length).to.be.eq(expectedWords.length);
+  expect(words.length).to.be.eq(expectedSegments.length);
   for (let i = 0; i < words.length; i += 1) {
-    expect(words[i].word).to.be.eq(expectedWords[i].word);
-    expect(words[i].startSec).to.be.closeTo(expectedWords[i].startSec, 0.1);
-    expect(words[i].endSec).to.be.closeTo(expectedWords[i].endSec, 0.1);
-    expect(words[i].confidence).to.be.closeTo(expectedWords[i].confidence, 0.1);
-    if (enableDiarization) {
-      expect(words[i].speakerTag).to.be.eq(expectedWords[i].speakerTag);
-    } else {
-      expect(words[i].speakerTag).to.be.eq(-1);
-    }
+    expect(words[i].startSec).to.be.closeTo(expectedSegments[i].startSec, 0.1);
+    expect(words[i].endSec).to.be.closeTo(expectedSegments[i].endSec, 0.1);
+    expect(words[i].speakerTag).to.be.eq(expectedSegments[i].speakerTag);
   }
 };
 
 const runInitTest = async (
-  instance: typeof Leopard | typeof LeopardWorker,
+  instance: typeof Falcon | typeof FalconWorker,
   params: {
     accessKey?: string;
     model?: PvModel;
@@ -87,7 +43,7 @@ const runInitTest = async (
     expect(typeof falcon.version).to.eq('string');
     expect(falcon.version.length).to.be.greaterThan(0);
 
-    if (falcon instanceof LeopardWorker) {
+    if (falcon instanceof FalconWorker) {
       falcon.terminate();
     } else {
       await falcon.release();
@@ -106,40 +62,27 @@ const runInitTest = async (
 };
 
 const runProcTest = async (
-  instance: typeof Leopard | typeof LeopardWorker,
+  instance: typeof Falcon | typeof FalconWorker,
   inputPcm: Int16Array,
-  expectedTranscript: string,
-  expectedErrorRate: number,
-  expectedWords: LeopardWord[],
+  expectedSegments: FalconSegment[],
   params: {
     accessKey?: string;
     model?: PvModel;
-    enablePunctuation?: boolean;
-    enableDiarization?: boolean;
-    useCER?: boolean;
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
     model = { publicPath: '/test/falcon_params.pv', forceWrite: true },
-    enablePunctuation = false,
-    enableDiarization = false,
-    useCER = false,
   } = params;
 
   try {
-    const falcon = await instance.create(accessKey, model, {
-      enableAutomaticPunctuation: enablePunctuation,
-      enableDiarization: enableDiarization,
-    });
+    const falcon = await instance.create(accessKey, model);
 
-    const { transcript, words } = await falcon.process(inputPcm);
-    const errorRate = wordErrorRate(expectedTranscript, transcript, useCER);
-    expect(errorRate).to.be.lt(expectedErrorRate);
+    const { segments } = await falcon.process(inputPcm);
 
-    validateMetadata(words, expectedWords, enableDiarization);
+    validateMetadata(segments, expectedSegments);
 
-    if (falcon instanceof LeopardWorker) {
+    if (falcon instanceof FalconWorker) {
       falcon.terminate();
     } else {
       await falcon.release();
@@ -149,11 +92,11 @@ const runProcTest = async (
   }
 };
 
-describe('Leopard Binding', function () {
+describe('Falcon Binding', function () {
   it(`should return process error message stack`, async () => {
-    let error: LeopardError | null = null;
+    let error: FalconError | null = null;
 
-    const falcon = await Leopard.create(ACCESS_KEY, {
+    const falcon = await Falcon.create(ACCESS_KEY, {
       publicPath: '/test/falcon_params.pv',
       forceWrite: true,
     });
@@ -167,7 +110,7 @@ describe('Leopard Binding', function () {
     try {
       await falcon.process(testPcm);
     } catch (e) {
-      error = e as LeopardError;
+      error = e as FalconError;
     }
 
     // @ts-ignore
@@ -176,13 +119,13 @@ describe('Leopard Binding', function () {
 
     expect(error).to.not.be.null;
     if (error) {
-      expect((error as LeopardError).messageStack.length).to.be.gt(0);
-      expect((error as LeopardError).messageStack.length).to.be.lte(8);
+      expect((error as FalconError).messageStack.length).to.be.gt(0);
+      expect((error as FalconError).messageStack.length).to.be.lte(8);
     }
   });
 
-  for (const instance of [Leopard, LeopardWorker]) {
-    const instanceString = instance === LeopardWorker ? 'worker' : 'main';
+  for (const instance of [Falcon, FalconWorker]) {
+    const instanceString = instance === FalconWorker ? 'worker' : 'main';
 
     it(`should return correct error message stack (${instanceString})`, async () => {
       let messageStack = [];
@@ -263,144 +206,20 @@ describe('Leopard Binding', function () {
       });
     });
 
-    // for (const testParam of testData.tests.language_tests) {
-    //   it(`should be able to process (${testParam.language}) (${instanceString})`, () => {
-    //     try {
-    //       cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
-    //         async pcm => {
-    //           const suffix =
-    //             testParam.language === 'en' ? '' : `_${testParam.language}`;
-    //           await runProcTest(
-    //             instance,
-    //             pcm,
-    //             testParam.transcript,
-    //             testParam.error_rate,
-    //             testParam.words.map((w: any) => ({
-    //               word: w.word,
-    //               startSec: w.start_sec,
-    //               endSec: w.end_sec,
-    //               confidence: w.confidence,
-    //               speakerTag: w.speaker_tag,
-    //             })),
-    //             {
-    //               model: {
-    //                 publicPath: `/test/falcon_params${suffix}.pv`,
-    //                 forceWrite: true,
-    //               },
-    //               useCER: testParam.language === 'ja',
-    //             }
-    //           );
-    //         }
-    //       );
-    //     } catch (e) {
-    //       expect(e).to.be.undefined;
-    //     }
-    //   });
-    //
-    //   it(`should be able to process with punctuation (${testParam.language}) (${instanceString})`, () => {
-    //     try {
-    //       cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
-    //         async pcm => {
-    //           const suffix =
-    //             testParam.language === 'en' ? '' : `_${testParam.language}`;
-    //           await runProcTest(
-    //             instance,
-    //             pcm,
-    //             testParam.transcript_with_punctuation,
-    //             testParam.error_rate,
-    //             testParam.words.map((w: any) => ({
-    //               word: w.word,
-    //               startSec: w.start_sec,
-    //               endSec: w.end_sec,
-    //               confidence: w.confidence,
-    //               speakerTag: w.speaker_tag,
-    //             })),
-    //             {
-    //               model: {
-    //                 publicPath: `/test/falcon_params${suffix}.pv`,
-    //                 forceWrite: true,
-    //               },
-    //               enablePunctuation: true,
-    //               useCER: testParam.language === 'ja',
-    //             }
-    //           );
-    //         }
-    //       );
-    //     } catch (e) {
-    //       expect(e).to.be.undefined;
-    //     }
-    //   });
-
-      it(`should be able to process with diarization (${testParam.language}) (${instanceString})`, () => {
+    for (const testParam of testData.tests.diarization_tests) {
+      it(`should be able to process (${instanceString})`, () => {
         try {
           cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
             async pcm => {
-              const suffix =
-                testParam.language === 'en' ? '' : `_${testParam.language}`;
               await runProcTest(
                 instance,
                 pcm,
-                testParam.transcript,
-                testParam.error_rate,
-                testParam.words.map((w: any) => ({
-                  word: w.word,
-                  startSec: w.start_sec,
-                  endSec: w.end_sec,
-                  confidence: w.confidence,
-                  speakerTag: w.speaker_tag,
-                })),
-                {
-                  model: {
-                    publicPath: `/test/falcon_params${suffix}.pv`,
-                    forceWrite: true,
-                  },
-                  enableDiarization: true,
-                  useCER: testParam.language === 'ja',
-                }
+                testParam.segments.map((s: any) => ({
+                  startSec: s.start_sec,
+                  endSec: s.end_sec,
+                  speakerTag: s.speaker_tag,
+                }))
               );
-            }
-          );
-        } catch (e) {
-          expect(e).to.be.undefined;
-        }
-      });
-    }
-
-    for (const testParam of testData.tests.diarization_tests) {
-      it(`should be able to process diarization multiple speakers (${testParam.language}) (${instanceString})`, () => {
-        try {
-          cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
-            async pcm => {
-              const suffix =
-                testParam.language === 'en' ? '' : `_${testParam.language}`;
-
-              const falcon = await instance.create(
-                ACCESS_KEY,
-                {
-                  publicPath: `/test/falcon_params${suffix}.pv`,
-                  forceWrite: true,
-                },
-                {
-                  enableDiarization: true,
-                }
-              );
-
-              const { words } = await falcon.process(pcm);
-
-              expect(words.length).to.eq(testParam.words.length);
-
-              for (let i = 0; i < words.length; i++) {
-                expect(words[i].word).to.eq(testParam.words[i].word);
-                expect(words[i].speakerTag).to.eq(
-                  testParam.words[i].speaker_tag
-                );
-              }
-
-              if (falcon instanceof Leopard) {
-                await falcon.release();
-              } else {
-                falcon.terminate();
-              }
             }
           );
         } catch (e) {
@@ -412,11 +231,10 @@ describe('Leopard Binding', function () {
     it(`should be able to transfer buffer`, () => {
       try {
         cy.getFramesFromFile(`audio_samples/test.wav`).then(async pcm => {
-          const falcon = await LeopardWorker.create(
-            ACCESS_KEY,
-            { publicPath: '/test/falcon_params.pv', forceWrite: true },
-            { enableAutomaticPunctuation: false }
-          );
+          const falcon = await FalconWorker.create(ACCESS_KEY, {
+            publicPath: '/test/falcon_params.pv',
+            forceWrite: true,
+          });
 
           let copy = new Int16Array(pcm.length);
           copy.set(pcm);

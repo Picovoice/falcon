@@ -5,14 +5,7 @@ const wasmFiles = ['pv_falcon.wasm', 'pv_falcon_simd.wasm'];
 
 console.log('Copying the WASM model...');
 
-const sourceDirectory = join(
-  __dirname,
-  '..',
-  '..',
-  '..',
-  'lib',
-  'wasm',
-);
+const sourceDirectory = join(__dirname, '..', '..', '..', 'lib', 'wasm');
 
 const outputDirectory = join(__dirname, '..', 'lib');
 

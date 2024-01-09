@@ -12,7 +12,7 @@ const paramsSourceDirectory = join(
   '..',
   '..',
   'lib',
-  'common',
+  'common'
 );
 
 const testDataSource = join(
@@ -25,26 +25,26 @@ const testDataSource = join(
   'test_data.json'
 );
 
-const sourceDirectory = join(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "resources",
-);
+const sourceDirectory = join(__dirname, '..', '..', '..', 'resources');
 
 try {
   fs.mkdirSync(testDirectory, { recursive: true });
 
   fs.readdirSync(paramsSourceDirectory).forEach(file => {
-    fs.copyFileSync(join(paramsSourceDirectory, file), join(testDirectory, file));
+    fs.copyFileSync(
+      join(paramsSourceDirectory, file),
+      join(testDirectory, file)
+    );
   });
 
   fs.copyFileSync(testDataSource, join(testDirectory, 'test_data.json'));
 
   fs.mkdirSync(join(fixturesDirectory, 'audio_samples'), { recursive: true });
   fs.readdirSync(join(sourceDirectory, 'audio_samples')).forEach(file => {
-    fs.copyFileSync(join(sourceDirectory, 'audio_samples', file), join(fixturesDirectory, 'audio_samples', file));
+    fs.copyFileSync(
+      join(sourceDirectory, 'audio_samples', file),
+      join(fixturesDirectory, 'audio_samples', file)
+    );
   });
 } catch (error) {
   console.error(error);
