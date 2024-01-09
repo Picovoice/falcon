@@ -158,4 +158,4 @@ await falcon.terminate();
 
 ## Demo
 
-For example usage refer to our [Web demo application](https://github.com/Picovoice/falcon/tree/master/demo/web).
+For example usage refer to our [Web demo application](../../demo/web).
