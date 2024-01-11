@@ -1,13 +1,18 @@
 import { Falcon, FalconWorker } from '../';
 
-const ACCESS_KEY = Cypress.env('ACCESS_KEY');
-const NUM_TEST_ITERATIONS = Number(Cypress.env('NUM_TEST_ITERATIONS'));
-const INIT_PERFORMANCE_THRESHOLD_SEC = Number(
-  Cypress.env('INIT_PERFORMANCE_THRESHOLD_SEC')
-);
-const PROC_PERFORMANCE_THRESHOLD_SEC = Number(
-  Cypress.env('PROC_PERFORMANCE_THRESHOLD_SEC')
-);
+// const ACCESS_KEY = Cypress.env('ACCESS_KEY');
+// const NUM_TEST_ITERATIONS = Number(Cypress.env('NUM_TEST_ITERATIONS'));
+// const INIT_PERFORMANCE_THRESHOLD_SEC = Number(
+//   Cypress.env('INIT_PERFORMANCE_THRESHOLD_SEC')
+// );
+// const PROC_PERFORMANCE_THRESHOLD_SEC = Number(
+//   Cypress.env('PROC_PERFORMANCE_THRESHOLD_SEC')
+// );
+
+const ACCESS_KEY = 'mW3jTf9S6NUBzDHDpN/lNLNE9k8wk2ERjIKPGeX3tM62LzxFbdFtIQ==';
+const NUM_TEST_ITERATIONS = 15;
+const INIT_PERFORMANCE_THRESHOLD_SEC = 4.5;
+const PROC_PERFORMANCE_THRESHOLD_SEC = 0.3;
 
 async function testPerformance(
   instance: typeof Falcon | typeof FalconWorker,

@@ -310,11 +310,11 @@ export class Falcon {
           const segments: FalconSegment[] = [];
           for (let i = 0; i < numSegments; i++) {
             const startSec = memoryBufferView.getFloat32(ptr, true);
-            ptr += Uint32Array.BYTES_PER_ELEMENT;
+            ptr += Float32Array.BYTES_PER_ELEMENT;
             const endSec = memoryBufferView.getFloat32(ptr, true);
-            ptr += Uint32Array.BYTES_PER_ELEMENT;
+            ptr += Float32Array.BYTES_PER_ELEMENT;
             const speakerTag = memoryBufferView.getInt32(ptr, true);
-            ptr += Uint32Array.BYTES_PER_ELEMENT;
+            ptr += Int32Array.BYTES_PER_ELEMENT;
             segments.push({ startSec, endSec, speakerTag });
           }
 
@@ -350,7 +350,7 @@ export class Falcon {
     modelPath: string
   ): Promise<any> {
     // A WebAssembly page has a constant size of 64KiB. -> 1MiB ~= 16 pages
-    const memory = new WebAssembly.Memory({ initial: 11500 });
+    const memory = new WebAssembly.Memory({ initial: 130 });
 
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
 
