@@ -10,14 +10,14 @@ import { FalconError } from '../src/falcon_errors';
 const ACCESS_KEY = Cypress.env('ACCESS_KEY');
 
 const validateMetadata = (
-  words: FalconSegment[],
+  segments: FalconSegment[],
   expectedSegments: FalconSegment[]
 ) => {
-  expect(words.length).to.be.eq(expectedSegments.length);
-  for (let i = 0; i < words.length; i += 1) {
-    expect(words[i].startSec).to.be.closeTo(expectedSegments[i].startSec, 0.1);
-    expect(words[i].endSec).to.be.closeTo(expectedSegments[i].endSec, 0.1);
-    expect(words[i].speakerTag).to.be.eq(expectedSegments[i].speakerTag);
+  expect(segments.length).to.be.eq(expectedSegments.length);
+  for (let i = 0; i < segments.length; i += 1) {
+    expect(segments[i].startSec).to.be.closeTo(expectedSegments[i].startSec, 0.1);
+    expect(segments[i].endSec).to.be.closeTo(expectedSegments[i].endSec, 0.1);
+    expect(segments[i].speakerTag).to.be.eq(expectedSegments[i].speakerTag);
   }
 };
 

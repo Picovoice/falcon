@@ -43,7 +43,7 @@
             const { segments } = await falcon.process(i16PCM, {
               transfer: true,
             });
-            setWordTable(segments);
+            setSegmentsTable(segments);
             writeMessage("Diarizing audio file... done!");
           });
         });
@@ -107,7 +107,7 @@
           const { segments } = await falcon.process(frames, {
             transfer: true,
           });
-          setWordTable(segments);
+          setSegmentsTable(segments);
           writeMessage("Diarizing audio file... done!");
         });
       };
@@ -117,7 +117,7 @@
         document.getElementById("status").innerHTML = message;
       }
 
-      function setWordTable(segments) {
+      function setSegmentsTable(segments) {
         let html = `
           <tr>
             <th>startSec</th>
