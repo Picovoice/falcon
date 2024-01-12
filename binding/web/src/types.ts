@@ -32,12 +32,11 @@ export enum PvStatus {
 export type FalconModel = PvModel;
 
 export type FalconSegment = {
-  /** Start of segment in seconds. */
+  /** Start of a segment in seconds. */
   startSec: number;
-  /** End of segment in seconds. */
+  /** End of a segment in seconds. */
   endSec: number;
-  /** The speaker tag is a non-negative integer identifying unique speakers, with `0` reserved for
-   * unknown speakers. */
+  /** A non-negative integer that uniquely identifies a speaker. */
   speakerTag: number;
 };
 
