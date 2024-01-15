@@ -241,10 +241,10 @@ class Falcon(object):
 
         segments = list()
         for i in range(num_segments.value):
-            word = self.Segment(
+            segment = self.Segment(
                 start_sec=c_segments[i].start_sec, end_sec=c_segments[i].end_sec, speaker_tag=c_segments[i].speaker_tag
             )
-            segments.append(word)
+            segments.append(segment)
 
         self._segments_delete_func(c_segments)
 
@@ -276,10 +276,10 @@ class Falcon(object):
 
         segments = list()
         for i in range(num_segments.value):
-            word = self.Segment(
+            segment = self.Segment(
                 start_sec=c_segments[i].start_sec, end_sec=c_segments[i].end_sec, speaker_tag=c_segments[i].speaker_tag
             )
-            segments.append(word)
+            segments.append(segment)
 
         self._segments_delete_func(c_segments)
 
