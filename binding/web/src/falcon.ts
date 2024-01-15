@@ -243,7 +243,7 @@ export class Falcon {
     const maxSize = MAX_PCM_LENGTH_SEC * Falcon._sampleRate;
     if (pcm.length > maxSize) {
       throw new FalconErrors.FalconInvalidArgumentError(
-        `'pcm' size must be smaller than ${maxSize}`
+        `'pcm' must be less than ${maxSize} samples (${MAX_PCM_LENGTH_SEC} seconds)`
       );
     }
 
@@ -350,7 +350,7 @@ export class Falcon {
     modelPath: string
   ): Promise<any> {
     // A WebAssembly page has a constant size of 64KiB. -> 1MiB ~= 16 pages
-    const memory = new WebAssembly.Memory({ initial: 130 });
+    const memory = new WebAssembly.Memory({ initial: 2875 });
 
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
 

@@ -40,11 +40,15 @@
             );
 
             writeMessage("Diarizing audio file...");
-            const { segments } = await falcon.process(i16PCM, {
-              transfer: true,
-            });
-            setSegmentsTable(segments);
-            writeMessage("Diarizing audio file... done!");
+            try {
+              const { segments } = await falcon.process(i16PCM, {
+                transfer: true,
+              });
+              setSegmentsTable(segments);
+              writeMessage("Diarizing audio file... done!");
+            } catch (e) {
+              writeMessage(e);
+            }
           });
         });
 
@@ -79,7 +83,7 @@
             timer = setInterval(() => {
               currentTimer += 0.1;
               displayTimer.innerText = `${currentTimer.toFixed(1)} / 120`;
-              if (currentTimer === 120) {
+              if (Math.floor(currentTimer) >= 120) {
                 stopRecord.click();
               }
             }, 100);
@@ -118,23 +122,22 @@
       }
 
       function setSegmentsTable(segments) {
-        let html = `
-          <tr>
-            <th>startSec</th>
-            <th>endSec</th>
-            <th>speaker tag</th>
-          </tr>
-        `;
-        segments.forEach((obj) => {
-          html += `
-            <tr>
-              <td>${obj.startSec.toFixed(3)}</td>
-              <td>${obj.endSec.toFixed(3)}</td>
-              <td>${obj.speakerTag}</td>
-            </tr>
-          `;
+        document.getElementById("segments-table").style.display = "block";
+        const table = document.getElementById("segments-table");
+        const rowCount = table.rows.length;
+        for (let i = 1; i < rowCount; i++) {
+          table.deleteRow(1);
+        }
+        segments.forEach((s) => {
+          const row = table.insertRow(-1);
+          const start = row.insertCell(0);
+          const end = row.insertCell(1);
+          const speakerTag = row.insertCell(2);
+
+          start.innerHTML = `${s.startSec.toFixed(3)}`;
+          end.innerHTML = `${s.endSec.toFixed(3)}`;
+          speakerTag.innerHTML = `${s.speakerTag}`;
         });
-        document.getElementById("segments").innerHTML = html;
       }
 
       async function startFalcon(accessKey) {
@@ -148,6 +151,26 @@
         }
       }
     </script>
+    <style>
+      table {
+        margin-top: 2rem;
+        display: inline-block;
+        overflow: auto;
+      }
+
+      table {
+        border-collapse: separate;
+      }
+
+      td {
+        text-align: right;
+        vertical-align: middle;
+      }
+
+      tr:nth-child(even) {
+        background: #eee;
+      }
+    </style>
   </head>
   <body>
     <h1>Falcon Web Demo</h1>
@@ -187,6 +210,17 @@
     </div>
     <div id="status" style="white-space: pre"></div>
     <br />
-    <table id="segments"></table>
+    <table id="segments-table" style="display: none">
+      <colgroup>
+        <col span="1" style="width: 20%" />
+        <col span="1" style="width: 20%" />
+        <col span="1" style="width: 20%" />
+      </colgroup>
+      <tr>
+        <th>Start time (s)</th>
+        <th>End time (s)</th>
+        <th>Speaker tag</th>
+      </tr>
+    </table>
   </body>
 </html>
