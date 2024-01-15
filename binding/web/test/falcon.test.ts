@@ -15,7 +15,10 @@ const validateMetadata = (
 ) => {
   expect(segments.length).to.be.eq(expectedSegments.length);
   for (let i = 0; i < segments.length; i += 1) {
-    expect(segments[i].startSec).to.be.closeTo(expectedSegments[i].startSec, 0.1);
+    expect(segments[i].startSec).to.be.closeTo(
+      expectedSegments[i].startSec,
+      0.1
+    );
     expect(segments[i].endSec).to.be.closeTo(expectedSegments[i].endSec, 0.1);
     expect(segments[i].speakerTag).to.be.eq(expectedSegments[i].speakerTag);
   }

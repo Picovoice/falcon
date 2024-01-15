@@ -2,8 +2,10 @@
 # yarn lockfile v1
 
 
-"@picovoice/falcon-web@file:../../binding/web":
+"@picovoice/falcon-web@~1.0.0":
   version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@picovoice/falcon-web/-/falcon-web-1.0.0.tgz#fb3380dd80949ba3fd76684d8f5fadc648a7d500"
+  integrity sha512-XvQwKRNyYC0gDiHd1l6BoqKvmVHxRaeCH9aKTvhqW/cNvkKUuDW6wvs1fsVgH7l/rB9BEp94LxxQDJxpsbtDew==
   dependencies:
     "@picovoice/web-utils" "=1.3.2"
 
