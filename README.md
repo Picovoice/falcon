@@ -18,6 +18,7 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 - Cross-Platform:
     - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
     - Raspberry Pi (4, 3) and NVIDIA Jetson Nano
+    - Chrome, Safari, Firefox, and Edge
 
 ## Table of Contents
 
@@ -28,9 +29,11 @@ Falcon is an on-device speaker diarization engine. Falcon is:
     - [Demos](#demos)
         - [Python Demos](#python-demos)
         - [C Demos](#c-demos)
+        - [Web Demos](#web-demos)
     - [SDKs](#sdks)
         - [Python](#python)
         - [C](#c)
+        - [Web](#web)
     - [Releases](#releases)
     - [FAQ](#faq)
 
@@ -84,6 +87,24 @@ Run the demo:
 ```console
 ./demo/c/build/falcon_demo -a ${ACCESS_KEY} -l ${LIBRARY_PATH} -m ${MODEL_PATH} ${AUDIO_PATH}
 ```
+
+### Web Demos
+
+From [demo/web](demo/web) run the following in the terminal:
+
+```console
+yarn
+yarn start
+```
+
+(or)
+
+```console
+npm install
+npm run start
+```
+
+Open `http://localhost:5000` in your browser to try the demo.
 
 ## SDKs
 
@@ -159,6 +180,42 @@ Finally, when done be sure to release resources acquired:
 ```c
 pv_falcon_delete(falcon);
 ```
+
+### Web
+
+Install the web SDK using yarn:
+
+```console
+yarn add @picovoice/falcon-web
+```
+
+or using npm:
+
+```console
+npm install --save @picovoice/falcon-web
+```
+
+Create an instance of the engine using `FalconWorker` and diarize an audio file:
+
+```typescript
+import { Falcon } from "@picovoice/falcon-web";
+import falconParams from "${PATH_TO_BASE64_FALCON_PARAMS}";
+
+function getAudioData(): Int16Array {
+  // ... function to get audio data
+  return new Int16Array();
+}
+
+const falcon = await FalconWorker.create(
+  "${ACCESS_KEY}",
+  { base64: falconParams }
+);
+
+const { segments } = await falcon.process(getAudioData());
+console.log(segments);
+```
+
+Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/). Finally, when done release the resources using `falcon.release()`.
 
 ## Releases
 
