@@ -24,6 +24,7 @@ body:
       options:
         - C
         - Python
+        - Web
     validations:
       required: true
   - type: input
