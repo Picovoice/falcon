@@ -1,4 +1,6 @@
-*.py linguist-detectable=true
+binding/web/** linguist-detectable=false
+binding/web/src/falcon.ts linguist-detectable=true
 demo/** linguist-detectable=false
 lib/** linguist-detectable=false
 resources/** linguist-detectable=false
+*.py linguist-detectable=true
