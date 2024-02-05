@@ -17,25 +17,25 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 - Private; All voice processing runs locally.
 - Cross-Platform:
     - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
-    - Raspberry Pi (4, 3) and NVIDIA Jetson Nano
+    - Raspberry Pi (5, 4, 3) and NVIDIA Jetson Nano
     - Chrome, Safari, Firefox, and Edge
 
 ## Table of Contents
 
 - [Falcon](#falcon)
-    - [Table of Contents](#table-of-contents)
-    - [What is Speaker Diarization?](#what-is-speaker-diarization)
-    - [AccessKey](#accesskey)
-    - [Demos](#demos)
-        - [Python Demos](#python-demos)
-        - [C Demos](#c-demos)
-        - [Web Demos](#web-demos)
-    - [SDKs](#sdks)
-        - [Python](#python)
-        - [C](#c)
-        - [Web](#web)
-    - [Releases](#releases)
-    - [FAQ](#faq)
+  - [Table of Contents](#table-of-contents)
+  - [What is Speaker Diarization?](#what-is-speaker-diarization)
+  - [AccessKey](#accesskey)
+  - [Demos](#demos)
+    - [Python Demos](#python-demos)
+    - [C Demos](#c-demos)
+    - [Web Demos](#web-demos)
+  - [SDKs](#sdks)
+    - [Python](#python)
+    - [C](#c)
+    - [Web](#web)
+  - [Releases](#releases)
+  - [FAQ](#faq)
 
 ## What is Speaker Diarization?
 
