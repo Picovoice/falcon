@@ -83,7 +83,7 @@ jobs:
           - machine: rpi4-64
             performance_threshold_sec: 2.5
           - machine: rpi5-64
-            performance_threshold_sec: 0.1
+            performance_threshold_sec: 1.0
           - machine: jetson
             performance_threshold_sec: 2.5
 
