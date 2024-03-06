@@ -11,6 +11,7 @@
 package ai.picovoice.falcon;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -25,6 +26,18 @@ import java.io.OutputStream;
  */
 public class Falcon {
 
+    private static String defaultModelPath;
+
+    private static String _sdk = "android";
+
+
+    static {
+        System.loadLibrary("pv_falcon");
+    }
+
+
+    private long handle;
+
     private static final String[] VALID_EXTENSIONS = {
             "3gp",
             "flac",
@@ -38,13 +51,6 @@ public class Falcon {
             "webm"
     };
 
-    static {
-        System.loadLibrary("pv_falcon");
-    }
-
-    private long handle;
-    private static String _sdk = "android";
-
     public static void setSdk(String sdk) {
         Falcon._sdk = sdk;
     }
@@ -52,8 +58,8 @@ public class Falcon {
     /**
      * Constructor.
      *
-     * @param accessKey                  AccessKey obtained from Picovoice Console
-     * @param modelPath                  Absolute path to the file containing Falcon model parameters.
+     * @param accessKey AccessKey obtained from Picovoice Console
+     * @param modelPath Absolute path to the file containing Falcon model parameters.
      * @throws FalconException if there is an error while initializing Falcon.
      */
     private Falcon(
@@ -64,27 +70,6 @@ public class Falcon {
         handle = FalconNative.init(
                 accessKey,
                 modelPath);
-    }
-
-    private static String extractResource(
-            Context context,
-            InputStream srcFileStream,
-            String dstFilename) throws IOException {
-        InputStream is = new BufferedInputStream(
-                srcFileStream,
-                256);
-        OutputStream os = new BufferedOutputStream(
-                context.openFileOutput(dstFilename, Context.MODE_PRIVATE),
-                256);
-        int r;
-        while ((r = is.read()) != -1) {
-            os.write(r);
-        }
-        os.flush();
-
-        is.close();
-        os.close();
-        return new File(context.getFilesDir(), dstFilename).getAbsolutePath();
     }
 
     /**
@@ -103,7 +88,7 @@ public class Falcon {
      * @param pcm A frame of audio samples. The incoming audio needs to have a sample rate
      *            equal to {@link #getSampleRate()} and be 16-bit linearly-encoded. Furthermore,
      *            Falcon operates on single channel audio. If you wish to process data in a different
-     *            sample rate or format consider using `.process_file`.
+     *            sample rate or format, consider using {@link #processFile(String)}.
      * @return FalconSegments object which contains the diarization results of the engine.
      * @throws FalconException if there is an error while processing the audio frame.
      */
@@ -177,7 +162,7 @@ public class Falcon {
     }
 
     /**
-     * Builder for creating an instance of Falcon with a mixture of default arguments.
+     * Builder for creating an instance of Falcon.
      */
     public static class Builder {
 
@@ -204,6 +189,36 @@ public class Falcon {
             return this;
         }
 
+        private static void extractPackageResources(Context context) throws FalconIOException {
+            final Resources resources = context.getResources();
+
+            try {
+                defaultModelPath = extractResource(context,
+                        resources.openRawResource(R.raw.falcon_params),
+                        resources.getResourceEntryName(R.raw.falcon_params) + ".pv");
+            } catch (IOException ex) {
+                throw new FalconIOException(ex);
+            }
+        }
+
+        private static String extractResource(
+                Context context,
+                InputStream srcFileStream,
+                String dstFilename
+        ) throws IOException {
+            InputStream is = new BufferedInputStream(srcFileStream, 512);
+            OutputStream os = new BufferedOutputStream(context.openFileOutput(dstFilename, Context.MODE_PRIVATE), 512);
+            int r;
+            while ((r = is.read()) != -1) {
+                os.write(r);
+            }
+            os.flush();
+
+            is.close();
+            os.close();
+            return new File(context.getFilesDir(), dstFilename).getAbsolutePath();
+        }
+
         /**
          * Creates an instance of Falcon Speaker Diarization engine.
          */
@@ -213,7 +228,10 @@ public class Falcon {
             }
 
             if (modelPath == null) {
-                throw new FalconInvalidArgumentException("ModelPath must not be null");
+                if (defaultModelPath == null) {
+                    extractPackageResources(context);
+                }
+                modelPath = defaultModelPath;
             } else {
                 File modelFile = new File(modelPath);
                 String modelFilename = modelFile.getName();

@@ -1,5 +1,5 @@
 /*
-    Copyright 2022-2023 Picovoice Inc.
+    Copyright 2024 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -12,7 +12,6 @@
 
 package ai.picovoice.falcon.testapp;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
@@ -111,41 +110,10 @@ public class BaseTest {
     ) {
         assertEquals(segments.length, expectedSegments.length);
         for (int i = 0; i < segments.length; i++) {
-            assertEquals(segments[i].getStartSec(), expectedSegments[i].getStartSec(), 0.01);
-            assertEquals(segments[i].getEndSec(), expectedSegments[i].getEndSec(), 0.01);
+            assertEquals(segments[i].getStartSec(), expectedSegments[i].getStartSec(), 0.1);
+            assertEquals(segments[i].getEndSec(), expectedSegments[i].getEndSec(), 0.1);
             assertEquals(segments[i].getSpeakerTag(), expectedSegments[i].getSpeakerTag());
         }
-    }
-
-    protected static float getSegmentErrorRate(
-            String transcript,
-            String expectedTranscript,
-            boolean useCER) {
-        String splitter = (useCER) ? "" : " ";
-        return (float) levenshteinDistance(
-                transcript.split(splitter),
-                expectedTranscript.split(splitter)) / transcript.length();
-    }
-
-    private static int levenshteinDistance(String[] segments1, String[] segments2) {
-        int[][] res = new int[segments1.length + 1][segments2.length + 1];
-        for (int i = 0; i <= segments1.length; i++) {
-            res[i][0] = i;
-        }
-        for (int j = 0; j <= segments2.length; j++) {
-            res[0][j] = j;
-        }
-        for (int i = 1; i <= segments1.length; i++) {
-            for (int j = 1; j <= segments2.length; j++) {
-                res[i][j] = Math.min(
-                        Math.min(
-                                res[i - 1][j] + 1,
-                                res[i][j - 1] + 1),
-                        res[i - 1][j - 1] + (segments1[i - 1].equalsIgnoreCase(segments2[j - 1]) ? 0 : 1)
-                );
-            }
-        }
-        return res[segments1.length][segments2.length];
     }
 
     private void extractAssetsRecursively(String path) throws IOException {

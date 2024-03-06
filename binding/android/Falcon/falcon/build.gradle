@@ -19,10 +19,11 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+        // TODO: update post-jni
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -42,4 +43,11 @@ task copyLibs(type: Copy) {
     into("${rootDir}/falcon/src/main/jniLibs")
 }
 
-preBuild.dependsOn copyLibs
+task copyParams(type: Copy) {
+    from("${rootDir}/../../../lib/common")
+    include('falcon_params.pv')
+    into("${rootDir}/falcon/src/main/res/raw")
+}
+
+preBuild.dependsOn(copyLibs)
+preBuild.dependsOn(copyParams)

@@ -49,67 +49,43 @@ android {
     }
 
     signingConfigs {
-        release {
-            storePassword properties.getProperty("storePassword")
-            storeFile file(properties.getProperty("storeFile", ".dummy.jks"))
-            keyAlias properties.getProperty("keyAlias")
-            keyPassword properties.getProperty("keyPassword")
-        }
+        // TODO: update post-jni
+//        release {
+//            storePassword properties.getProperty("storePassword")
+//            storeFile file(properties.getProperty("storeFile", ".dummy.jks"))
+//            keyAlias properties.getProperty("keyAlias")
+//            keyPassword properties.getProperty("keyPassword")
+//        }
     }
 
     buildTypes {
+        // TODO: update post-jni
         debug {
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+//        }
     }
 
     if (System.getProperty("testBuildType", "debug") == "integ") {
         testBuildType("release")
     }
 
-    def testDataFile = file('../../../../resources/.test/test_data.json')
-    def parsedJson = new groovy.json.JsonSlurper().parseText(testDataFile.text)
-    def languages = []
-    parsedJson.tests.parameters.each { a ->
-        languages.add(a.language)
+    task("copyParams", type: Copy) {
+        from("$projectDir/../../../../lib/common/")
+        include("falcon_params.pv")
+        into("$projectDir/src/main/assets/models")
+    }
+    task("copyAudio", type: Copy) {
+        description = "Copy audio resources"
+        from("$projectDir/../../../../resources/audio_samples/")
+        include("test.wav")
+        into("$projectDir/src/main/assets/audio_samples/")
     }
 
-    flavorDimensions "language"
-    productFlavors {
-        en {
-            getIsDefault().set(true)
-        }
-
-        languages.each { language ->
-            "$language" {
-                applicationIdSuffix ".$language"
-
-            }
-        }
-
-        all { flavor ->
-            delete fileTree("$projectDir/src/main/assets") {
-                exclude '**/.gitkeep'
-            }
-            String suffix = (flavor.name != "en") ? "_${flavor.name}" : ""
-            task("${flavor.name}CopyParams", type: Copy) {
-                from("$projectDir/../../../../lib/common/")
-                include("falcon_params${suffix}.pv")
-                into("$projectDir/src/main/assets/models")
-            }
-            task("${flavor.name}CopyAudio", type: Copy) {
-                description = "Copy ${flavor.name} audio resources"
-                from("$projectDir/../../../../resources/audio_samples/")
-                include("test${suffix}.wav")
-                into("$projectDir/src/main/assets/audio_samples")
-            }
-        }
-    }
     sourceSets {
         androidTest {
             java {
@@ -140,6 +116,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // TODO: update post-release
     implementation files('../../Falcon/falcon/build/outputs/aar/falcon-release.aar')
 
     // Espresso UI Testing
@@ -152,11 +129,8 @@ dependencies {
 }
 
 afterEvaluate {
-    android.productFlavors.all {
-        flavor ->
-            tasks."merge${flavor.name.capitalize()}DebugAssets".dependsOn "${flavor.name}CopyParams"
-            tasks."merge${flavor.name.capitalize()}ReleaseAssets".dependsOn "${flavor.name}CopyParams"
-            tasks."merge${flavor.name.capitalize()}DebugAssets".dependsOn "${flavor.name}CopyAudio"
-            tasks."merge${flavor.name.capitalize()}ReleaseAssets".dependsOn "${flavor.name}CopyAudio"
-    }
+    tasks."mergeDebugAssets".dependsOn "copyParams"
+    tasks."mergeReleaseAssets".dependsOn "copyParams"
+    tasks."mergeDebugAssets".dependsOn "copyAudio"
+    tasks."mergeReleaseAssets".dependsOn "copyAudio"
 }

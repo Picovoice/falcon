@@ -1,5 +1,5 @@
 /*
-    Copyright 2022-2023 Picovoice Inc.
+    Copyright 2024 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -93,14 +93,7 @@ public class MainActivity extends AppCompatActivity {
         result = new TestResult();
         result.testName = "Test Process";
         try {
-            String suffix = "_" + BuildConfig.FLAVOR;
-            if (BuildConfig.FLAVOR == "en") {
-                suffix = "";
-            }
-
-            String audioPath = "audio_samples/test" + suffix + ".wav";
-
-            FalconSegments processResult = processTestAudio(falcon, audioPath);
+            FalconSegments processResult = processTestAudio(falcon, "audio_samples/test.wav");
             if (processResult != null) {
                 result.success = true;
             } else {
@@ -180,8 +173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getModelFile() {
-        String suffix = (!BuildConfig.FLAVOR.equals("en")) ? String.format("_%s", BuildConfig.FLAVOR) : "";
-        return String.format("models/falcon_params%s.pv", suffix);
+        return "models/falcon_params.pv";
     }
 
     private FalconSegments processTestAudio(@NonNull Falcon l, String audioPath) throws Exception {
