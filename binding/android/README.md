@@ -13,11 +13,11 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 
 ## Compatibility
 
-- Android 5.0 (SDK 21+)
+- Android 5.0+ (SDK 21+)
 
 ## Installation
 
-Falcon is hosted on Maven Central. To include the package in your Android project, ensure you have
+Falcon can be found on Maven Central. To include the package in your Android project, ensure you have
 included `mavenCentral()` in your top-level `build.gradle` file and then add the following to your
 app's `build.gradle`:
 
@@ -34,19 +34,26 @@ Falcon requires a valid Picovoice `AccessKey` at initialization. `AccessKey` act
 You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
 Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
+## Permissions
+
+To enable AccessKey validation and recording with your Android device's microphone, you must add the following line to your `AndroidManifest.xml` file:
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
 ## Usage
 
-Create an instance of the engine with the Falcon Builder class by passing in the `accessKey`, `modelPath` and Android app context:
+Create an instance of the engine with the Falcon Builder class by passing in the `accessKey` and Android app context:
 
 ```java
 import ai.picovoice.falcon.*;
 
-final String accessKey = "${ACCESS_KEY}"; // AccessKey provided by Picovoice Console (https://console.picovoice.ai/)
-final String modelPath = "${MODEL_FILE_PATH}"; // path relative to the assets folder or absolute path to file on device
+final String accessKey = "${ACCESS_KEY}";
+
 try {
     Falcon falcon = new Falcon.Builder()
         .setAccessKey(accessKey)
-        .setModelPath(modelPath)
         .build(appContext);
 } catch (FalconException ex) { }
 ```
@@ -58,9 +65,8 @@ File audioFile = new File("${AUDIO_FILE_PATH}");
 FalconSegments segments = falcon.processFile(audioFile.getAbsolutePath());
 ```
 
-Supported audio file formats are `3gp (AMR)`, `FLAC`, `MP3`, `MP4/m4a (AAC)`, `Ogg`, `WAV` and `WebM`.
-
 Perform diarization on raw audio data (sample rate of 16 kHz, 16-bit linearly encoded and 1 channel):
+
 ```java
 short[] getAudioData() {
     // ...
@@ -68,26 +74,17 @@ short[] getAudioData() {
 FalconSegments segments = falcon.process(getAudioData());
 ```
 
+The return value `segments` represents an array of segments, each with the following metadata items:
+
+- **Start Time:** Indicates when the segment started in the audio. Value is in seconds.
+- **End Time:** Indicates when the segment ended in the audio. Value is in seconds.
+- **Speaker Tag:** A non-negative integer identifying unique speakers.
+
 When done, release resources explicitly:
 
 ```java
 falcon.delete();
 ```
-
-### Language Model
-
-Add the Falcon model file to your Android application by:
-
-1. Either create a model in [Picovoice Console](https://console.picovoice.ai/) or use one of the default language models found in [lib/common](../../lib/common).
-2. Add the model as a bundled resource by placing it under the assets directory of your Android project (`src/main/assets/`).
-
-### Word Metadata
-
-Along with the segments, Falcon returns metadata for each transcribed word. Available metadata items are:
-
-- **Start Time:** Indicates when the word started in the transcribed audio. Value is in seconds.
-- **End Time:** Indicates when the word ended in the transcribed audio. Value is in seconds.
-- **Speaker Tag:** A non-negative integer identifying unique speakers.
 
 ## Demo App
 

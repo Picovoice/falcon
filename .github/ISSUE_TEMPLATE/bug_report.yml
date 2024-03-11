@@ -22,6 +22,7 @@ body:
     attributes:
       label: SDK
       options:
+        - Android
         - C
         - Python
         - Web
