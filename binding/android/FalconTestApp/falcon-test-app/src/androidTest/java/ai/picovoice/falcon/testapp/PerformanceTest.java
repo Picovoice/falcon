@@ -76,7 +76,6 @@ public class PerformanceTest extends BaseTest {
         String procThresholdString = appContext.getString(R.string.procPerformanceThresholdSec);
         Assume.assumeNotNull(procThresholdString);
         Assume.assumeFalse(procThresholdString.equals(""));
-
         double procPerformanceThresholdSec = Double.parseDouble(procThresholdString);
 
         Falcon falcon = new Falcon.Builder().setAccessKey(accessKey)
