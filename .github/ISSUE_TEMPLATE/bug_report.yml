@@ -22,10 +22,10 @@ body:
     attributes:
       label: SDK
       options:
-        - Android
         - C
         - Python
         - Web
+        - Android
     validations:
       required: true
   - type: input

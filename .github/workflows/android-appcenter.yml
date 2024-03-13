@@ -27,8 +27,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.js environment
+      - name: Set up Node.js LTS
         uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
 
       - name: Install AppCenter CLI
         run: npm install -g appcenter-cli
@@ -54,6 +56,9 @@ jobs:
 
       - name: Setup Android keystore file
         run: echo "${{secrets.ANDROID_RELEASE_KEYSTORE_FILE_B64}}" | base64 -d > picovoice.jks
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build app
         run: ./gradlew assembleDebug
