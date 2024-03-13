@@ -34,7 +34,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    // TODO: update post-release
-    implementation files('../../../../binding/android/Falcon/falcon/build/outputs/aar/falcon-release.aar')
+    implementation 'ai.picovoice:falcon-android:1.0.0'
     implementation 'ai.picovoice:android-voice-processor:1.0.2'
 }

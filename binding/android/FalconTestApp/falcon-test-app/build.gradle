@@ -59,13 +59,13 @@ android {
 
     buildTypes {
         debug {
-           signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
-       release {
-           minifyEnabled false
-           proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-           signingConfig signingConfigs.release
-       }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
     }
 
     if (System.getProperty("testBuildType", "debug") == "integ") {
@@ -114,8 +114,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    // TODO: update post-release
-    implementation files('../../Falcon/falcon/build/outputs/aar/falcon-release.aar')
+    implementation 'ai.picovoice:falcon-android:1.0.0'
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
