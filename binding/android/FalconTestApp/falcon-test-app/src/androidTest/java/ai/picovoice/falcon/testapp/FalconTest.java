@@ -31,7 +31,7 @@ import java.util.List;
 
 import ai.picovoice.falcon.Falcon;
 import ai.picovoice.falcon.FalconException;
-import ai.picovoice.falcon.FalconSegments;
+import ai.picovoice.falcon.FalconSegment;
 
 
 @RunWith(Enclosed.class)
@@ -136,7 +136,7 @@ public class FalconTest {
         public String testAudioFile;
 
         @Parameterized.Parameter(value = 1)
-        public FalconSegments.Segment[] expectedSegments;
+        public FalconSegment[] expectedSegments;
 
         @Parameterized.Parameters(name = "{0}")
         public static Collection<Object[]> initParameters() throws IOException {
@@ -157,7 +157,7 @@ public class FalconTest {
 
                 String testAudioFile = String.format("audio_samples/%s", audioFile);
 
-                FalconSegments.Segment[] paramSegments = new FalconSegments.Segment[segments.size()];
+                FalconSegment[] paramSegments = new FalconSegment[segments.size()];
                 for (int j = 0; j < segments.size(); j++) {
                     JsonObject segmentObject = segments.get(j).getAsJsonObject();
 
@@ -165,7 +165,7 @@ public class FalconTest {
                     float endSec = segmentObject.get("end_sec").getAsFloat();
                     int speakerTag = segmentObject.get("speaker_tag").getAsInt();
 
-                    paramSegments[j] = new FalconSegments.Segment(
+                    paramSegments[j] = new FalconSegment(
                             startSec,
                             endSec,
                             speakerTag
@@ -190,11 +190,11 @@ public class FalconTest {
             File audioFile = new File(testResourcesPath, testAudioFile);
             short[] pcm = readAudioFile(audioFile.getAbsolutePath());
 
-            FalconSegments result = falcon.process(pcm);
+            FalconSegment[] result = falcon.process(pcm);
 
-            assertEquals(result.getSegmentArray().length, expectedSegments.length);
-            for (int i = 0; i < result.getSegmentArray().length; i++) {
-                validateMetadata(result.getSegmentArray(), expectedSegments);
+            assertEquals(result.length, expectedSegments.length);
+            for (int i = 0; i < result.length; i++) {
+                validateMetadata(result, expectedSegments);
             }
             falcon.delete();
         }

@@ -62,7 +62,7 @@ Perform diarization on an audio file by providing the absolute path to the file:
 
 ```java
 File audioFile = new File("${AUDIO_FILE_PATH}");
-FalconSegments segments = falcon.processFile(audioFile.getAbsolutePath());
+FalconSegment[] segments = falcon.processFile(audioFile.getAbsolutePath());
 ```
 
 Perform diarization on raw audio data (sample rate of 16 kHz, 16-bit linearly encoded and 1 channel):
@@ -71,7 +71,7 @@ Perform diarization on raw audio data (sample rate of 16 kHz, 16-bit linearly en
 short[] getAudioData() {
     // ...
 }
-FalconSegments segments = falcon.process(getAudioData());
+FalconSegment[] segments = falcon.process(getAudioData());
 ```
 
 The return value `segments` represents an array of segments, each with the following metadata items:

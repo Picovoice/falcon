@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import ai.picovoice.falcon.FalconSegments;
+import ai.picovoice.falcon.FalconSegment;
 
 public class BaseTest {
 
@@ -105,8 +105,8 @@ public class BaseTest {
     }
 
     protected void validateMetadata(
-            FalconSegments.Segment[] segments,
-            FalconSegments.Segment[] expectedSegments
+            FalconSegment[] segments,
+            FalconSegment[] expectedSegments
     ) {
         assertEquals(segments.length, expectedSegments.length);
         for (int i = 0; i < segments.length; i++) {

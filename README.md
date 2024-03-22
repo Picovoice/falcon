@@ -235,7 +235,7 @@ dependencies {
 }
 ```
 
-Create an instance of the engine and generate speech:
+Create an instance of the engine and perform speaker diarization on an audio file:
 
 ```java
 import ai.picovoice.falcon.*;
@@ -247,7 +247,7 @@ try {
         .build(appContext);
 
         File audioFile = new File("${AUDIO_FILE_PATH}");
-        FalconSegments segments = falcon.processFile(audioFile.getAbsolutePath());
+        FalconSegment[] segments = falcon.processFile(audioFile.getAbsolutePath());
 
 } catch (FalconException ex) { }
 ```

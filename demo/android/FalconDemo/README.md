@@ -29,5 +29,3 @@ Ensure you have an Android device connected or simulator running. Then run the f
 cd demo/android/FalconDemo
 ./gradlew connectedAndroidTest -PpvTestingAccessKey="YOUR_ACCESS_KEY_HERE"
 ```
-
-The test results are stored in `falcon-demo-app/build/reports`.

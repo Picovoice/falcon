@@ -46,7 +46,7 @@ import ai.picovoice.falcon.FalconActivationRefusedException;
 import ai.picovoice.falcon.FalconActivationThrottledException;
 import ai.picovoice.falcon.FalconException;
 import ai.picovoice.falcon.FalconInvalidArgumentException;
-import ai.picovoice.falcon.FalconSegments;
+import ai.picovoice.falcon.FalconSegment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 long diarizationStart = System.currentTimeMillis();
-                FalconSegments segments = falcon.process(pcmDataArray);
+                FalconSegment[] segments = falcon.process(pcmDataArray);
                 long diarizationEnd = System.currentTimeMillis();
 
                 float diarizationTime = (diarizationEnd - diarizationStart) / 1000f;
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
                     ResultsViewAdaptor searchResultsViewAdaptor = new ResultsViewAdaptor(
                             getApplicationContext(),
-                            Arrays.asList(segments.getSegmentArray()));
+                            Arrays.asList(segments));
                     resultsView.setAdapter(searchResultsViewAdaptor);
                 });
             } catch (FalconException e) {
@@ -280,10 +280,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static class ResultsViewAdaptor extends RecyclerView.Adapter<ResultsViewAdaptor.ViewHolder> {
-        private final List<FalconSegments.Segment> data;
+        private final List<FalconSegment> data;
         private final LayoutInflater inflater;
 
-        ResultsViewAdaptor(Context context, List<FalconSegments.Segment> data) {
+        ResultsViewAdaptor(Context context, List<FalconSegment> data) {
             this.inflater = LayoutInflater.from(context);
             this.data = data;
         }
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("DefaultLocale")
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            FalconSegments.Segment segment = data.get(position);
+            FalconSegment segment = data.get(position);
             holder.speakerTag.setText(String.format("%d", segment.getSpeakerTag()));
             holder.startSec.setText(String.format("%.2fs", segment.getStartSec()));
             holder.endSec.setText(String.format("%.2fs", segment.getEndSec()));
