@@ -27,13 +27,15 @@ Falcon is an on-device speaker diarization engine. Falcon is:
   - [What is Speaker Diarization?](#what-is-speaker-diarization)
   - [AccessKey](#accesskey)
   - [Demos](#demos)
-    - [Python Demos](#python-demos)
-    - [C Demos](#c-demos)
-    - [Web Demos](#web-demos)
+    - [Python Demo](#python-demo)
+    - [C Demo](#c-demo)
+    - [Web Demo](#web-demo)
+    - [Android Demo](#android-demo)
   - [SDKs](#sdks)
     - [Python](#python)
     - [C](#c)
     - [Web](#web)
+    - [Android](#android)
   - [Releases](#releases)
   - [FAQ](#faq)
 
@@ -56,7 +58,7 @@ AccessKey also verifies that your usage is within the limits of your account. Ev
 
 ## Demos
 
-### Python Demos
+### Python Demo
 
 Install the demo package:
 
@@ -74,7 +76,7 @@ Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console.
 
 For more information about Python demos go to [demo/python](./demo/python).
 
-### C Demos
+### C Demo
 
 Build the demo:
 
@@ -88,7 +90,7 @@ Run the demo:
 ./demo/c/build/falcon_demo -a ${ACCESS_KEY} -l ${LIBRARY_PATH} -m ${MODEL_PATH} ${AUDIO_PATH}
 ```
 
-### Web Demos
+### Web Demo
 
 From [demo/web](demo/web) run the following in the terminal:
 
@@ -105,6 +107,12 @@ npm run start
 ```
 
 Open `http://localhost:5000` in your browser to try the demo.
+
+### Android Demo
+
+Using Android Studio, open [demo/android/FalconDemo](./demo/android/FalconDemo) as an Android project and then run the application.
+
+Replace `"${YOUR_ACCESS_KEY_HERE}"` in the file [MainActivity.java](./demo/android/FalconDemo/falcon-demo-app/src/main/java/ai/picovoice/falcondemo/MainActivity.java) with your `AccessKey`.
 
 ## SDKs
 
@@ -216,6 +224,43 @@ console.log(segments);
 ```
 
 Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/). Finally, when done release the resources using `falcon.release()`.
+
+### Android
+
+To include the Falcon package in your Android project, ensure you have included `mavenCentral()` in your top-level `build.gradle` file and then add the following to your app's `build.gradle`:
+
+```groovy
+dependencies {
+    implementation 'ai.picovoice:falcon-android:${LATEST_VERSION}'
+}
+```
+
+Create an instance of the engine and perform speaker diarization on an audio file:
+
+```java
+import ai.picovoice.falcon.*;
+
+final String accessKey = "${ACCESS_KEY}"; // AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
+try {
+    Falcon falcon = new Falcon.Builder()
+        .setAccessKey(accessKey)
+        .build(appContext);
+
+        File audioFile = new File("${AUDIO_FILE_PATH}");
+        FalconSegment[] segments = falcon.processFile(audioFile.getAbsolutePath());
+
+} catch (FalconException ex) { }
+```
+
+Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console, and `${AUDIO_FILE_PATH}` with the path to the audio file.
+
+Finally, when done make sure to explicitly release the resources:
+
+```java
+falcon.delete()
+```
+
+For more details, see the [Android SDK](./binding/android/README.md).
 
 ## Releases
 

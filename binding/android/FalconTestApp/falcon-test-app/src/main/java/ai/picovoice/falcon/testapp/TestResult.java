@@ -1,0 +1,8 @@
+package ai.picovoice.falcon.testapp;
+
+public class TestResult {
+    public String testName;
+    public boolean success;
+    public String errorMessage;
+}
+

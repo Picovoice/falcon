@@ -25,3 +25,11 @@ stdbool
 stdlib
 vorbis
 wargv
+testapp
+androidx
+Readables
+Compat
+falcondemo
+recyclerview
+constraintlayout
+gradlew

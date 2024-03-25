@@ -1,0 +1,30 @@
+ext {
+    defaultTargetSdkVersion = 33
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://s01.oss.sonatype.org/content/repositories/aipicovoice-1323/'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://s01.oss.sonatype.org/content/repositories/aipicovoice-1323/'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
