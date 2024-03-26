@@ -4,6 +4,7 @@
 [![GitHub](https://img.shields.io/github/license/Picovoice/falcon)](https://github.com/Picovoice/falcon/)
 
 [![PyPI](https://img.shields.io/pypi/v/pvfalcon)](https://pypi.org/project/pvfalcon/)
+[![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/falcon-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/falcon-android/)
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
