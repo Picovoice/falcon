@@ -1,0 +1,14 @@
+source 'https://cdn.cocoapods.org/'
+platform :ios, '13.0'
+
+target 'FalconAppTest' do
+  pod 'Falcon-iOS', '~> 1.0.0'
+end
+
+target 'FalconAppTestUITests' do
+  pod 'Falcon-iOS', '~> 1.0.0'
+end
+
+target 'PerformanceTest' do
+  pod 'Falcon-iOS', '~> 1.0.0'
+end
