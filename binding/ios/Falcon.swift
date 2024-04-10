@@ -135,7 +135,7 @@ public class Falcon {
     ///          If you wish to process data in a different sample rate or format consider using `.process_file`.
     /// - Throws: FalconError
     /// - Returns: Sequence of speaker segments with their associated metadata.
-    public func process(_ pcm: [Int16]) throws -> (segments: [FalconSegment]) {
+    public func process(_ pcm: [Int16]) throws -> ([FalconSegment]) {
         if handle == nil {
             throw FalconInvalidStateError("Falcon must be initialized before processing")
         }
@@ -180,7 +180,7 @@ public class Falcon {
     ///                `3gp (AMR)`, `FLAC`, `MP3`, `MP4/m4a (AAC)`, `Ogg`, `WAV` and `WebM`.
     /// - Throws: FalconError
     /// - Returns: Sequence of speaker segments with their associated metadata.
-    public func processFile(_ audioPath: String) throws -> (segments: [FalconSegment]) {
+    public func processFile(_ audioPath: String) throws -> ([FalconSegment]) {
         if handle == nil {
             throw FalconInvalidStateError("Falcon must be initialized before processing")
         }
@@ -225,7 +225,7 @@ public class Falcon {
     ///              `3gp (AMR)`, `FLAC`, `MP3`, `MP4/m4a (AAC)`, `Ogg`, `WAV` and `WebM`.
     /// - Throws: FalconError
     /// - Returns: Sequence of speaker segments with their associated metadata.
-    public func processFile(_ audioURL: URL) throws -> (segments: [FalconSegment]) {
+    public func processFile(_ audioURL: URL) throws -> ([FalconSegment]) {
         if handle == nil {
             throw FalconInvalidStateError("Falcon must be initialized before processing")
         }
