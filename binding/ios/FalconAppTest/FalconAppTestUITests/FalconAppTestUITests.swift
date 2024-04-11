@@ -61,24 +61,20 @@ class FalconAppTestUITests: XCTestCase {
                 withExtension: "",
                 subdirectory: "test_resources/audio_samples")!
 
-        do {
-            let falcon = try? Falcon(accessKey: accessKey)
-            
-            let data = try Data(contentsOf: audioFileURL)
-            var pcmBuffer = [Int16](repeating: 0, count: ((data.count - 44) / MemoryLayout<Int16>.size))
-            _ = pcmBuffer.withUnsafeMutableBytes {
-                data.copyBytes(to: $0, from: 44..<data.count)
-            }
-
-            let falconSegments = try falcon!.process(pcmBuffer)
-            falcon!.delete()
-
-            validateMetadata(
-                segments: falconSegments,
-                expectedSegments: expectedSegments)
-        } catch {
-            NSLog("\(error.localizedDescription)")
+        let falcon = try! Falcon(accessKey: accessKey)
+        
+        let data = try Data(contentsOf: audioFileURL)
+        var pcmBuffer = [Int16](repeating: 0, count: ((data.count - 44) / MemoryLayout<Int16>.size))
+        _ = pcmBuffer.withUnsafeMutableBytes {
+            data.copyBytes(to: $0, from: 44..<data.count)
         }
+
+        let falconSegments = try falcon.process(pcmBuffer)
+        falcon.delete()
+
+        validateMetadata(
+            segments: falconSegments,
+            expectedSegments: expectedSegments)
     }
 
     func runTestProcessFile(
@@ -86,14 +82,14 @@ class FalconAppTestUITests: XCTestCase {
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
 
-        let falcon = try? Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey)
 
         let audioFilePath: String = bundle.path(
                 forResource: testAudio,
                 ofType: "",
                 inDirectory: "test_resources/audio_samples")!
-        let falconSegments = try falcon!.processFile(audioFilePath)
-        falcon!.delete()
+        let falconSegments = try falcon.processFile(audioFilePath)
+        falcon.delete()
 
         validateMetadata(
             segments: falconSegments,
@@ -109,10 +105,10 @@ class FalconAppTestUITests: XCTestCase {
                 withExtension: "",
                 subdirectory: "test_resources/audio_samples")!
 
-        let falcon = try? Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey)
 
-        let falconSegments = try falcon!.processFile(audioFileURL)
-        falcon!.delete()
+        let falconSegments = try falcon.processFile(audioFileURL)
+        falcon.delete()
 
         validateMetadata(
             segments: falconSegments,

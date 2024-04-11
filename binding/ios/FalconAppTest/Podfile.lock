@@ -10,7 +10,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Falcon-iOS:
-    :commit: b503c368e509ee6e285b26aebb2fc82950a2a436
+    :commit: c6f4f71fa314dc5e589c27a53a684175c2fca89e
     :git: https://github.com/Picovoice/falcon.git
 
 SPEC CHECKSUMS:
