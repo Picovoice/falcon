@@ -14,9 +14,9 @@ import Falcon
 
 class PerformanceTest: XCTestCase {
     let accessKey: String = ""
-    let iterationString: String = "1"
-    let initThresholdString: String = "1"
-    let procThresholdString: String = "1"
+    let iterationString: String = ""
+    let initThresholdString: String = ""
+    let procThresholdString: String = ""
 
     override func setUp() {
         super.setUp()

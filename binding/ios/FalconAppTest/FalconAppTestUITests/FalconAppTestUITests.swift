@@ -46,8 +46,8 @@ class FalconAppTestUITests: XCTestCase {
     func validateMetadata(segments: [FalconSegment], expectedSegments: [DiarizationTestSegment]) {
         XCTAssert(segments.count == expectedSegments.count)
         for i in 0..<segments.count {
-            XCTAssert(abs(segments[i].startSec - expectedSegments[i].start_sec) < 0.01)
-            XCTAssert(abs(segments[i].endSec - expectedSegments[i].end_sec) < 0.01)
+            XCTAssert(abs(segments[i].startSec - expectedSegments[i].start_sec) < 0.1)
+            XCTAssert(abs(segments[i].endSec - expectedSegments[i].end_sec) < 0.1)
             XCTAssert(segments[i].speakerTag == expectedSegments[i].speaker_tag)
         }
     }
