@@ -30,11 +30,13 @@ Falcon is an on-device speaker diarization engine. Falcon is:
     - [Python Demo](#python-demo)
     - [C Demo](#c-demo)
     - [Web Demo](#web-demo)
+    - [iOS Demo](#ios-demo)
     - [Android Demo](#android-demo)
   - [SDKs](#sdks)
     - [Python](#python)
     - [C](#c)
     - [Web](#web)
+    - [iOS](#iOS)
     - [Android](#android)
   - [Releases](#releases)
   - [FAQ](#faq)
@@ -107,6 +109,18 @@ npm run start
 ```
 
 Open `http://localhost:5000` in your browser to try the demo.
+
+### iOS Demo
+
+To run the demo, go to [demo/ios/FalconDemo](./demo/ios/FalconDemo) and run:
+
+```console
+pod install
+```
+
+Replace `let accessKey = "${YOUR_ACCESS_KEY_HERE}"` in the file [ViewModel.swift](./demo/ios/FalconDemo/FalconDemo/ViewModel.swift) with your `AccessKey`.
+
+Then, using [Xcode](https://developer.apple.com/xcode/), open the generated `FalconDemo.xcworkspace` and run the application.
 
 ### Android Demo
 
@@ -224,6 +238,29 @@ console.log(segments);
 ```
 
 Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/). Finally, when done release the resources using `falcon.release()`.
+
+### iOS
+<!-- markdown-link-check-disable -->
+The Falcon iOS binding is available via [CocoaPods](https://cocoapods.org/pods/Falcon-iOS). To import it into your iOS project, add the following line to your Podfile and run `pod install`:
+<!-- markdown-link-check-enable -->
+```ruby
+pod 'Falcon-iOS'
+```
+
+Create an instance of the engine and perform speaker diarization on an audio_file:
+
+```swift
+import Falcon
+
+let falcon = Falcon(accessKey: "${ACCESS_KEY}")
+
+do {
+    let audioPath = Bundle(for: type(of: self)).path(forResource: "${AUDIO_FILE_NAME}", ofType: "${AUDIO_FILE_EXTENSION}")
+    let segments = falcon.process(audioPath)
+} catch { }
+```
+
+Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console, `${AUDIO_FILE_NAME}` with the name of the audio file and `${AUDIO_FILE_EXTENSION}` with the extension of the audio file.
 
 ### Android
 

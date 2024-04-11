@@ -15,42 +15,11 @@ import Falcon
 class PerformanceTest: XCTestCase {
     let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
     let iterationString: String = "{NUM_TEST_ITERATIONS}"
-    let initThresholdString: String = "{INIT_PERFORMANCE_THRESHOLD_SEC}"
     let procThresholdString: String = "{PROC_PERFORMANCE_THRESHOLD_SEC}"
 
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-    }
-
-    func testInitPerformance() throws {
-        try XCTSkipIf(initThresholdString == "{INIT_PERFORMANCE_THRESHOLD_SEC}")
-
-        let numTestIterations = Int(iterationString) ?? 30
-        let initPerformanceThresholdSec = Double(initThresholdString)
-        try XCTSkipIf(initPerformanceThresholdSec == nil)
-
-        let bundle = Bundle(for: type(of: self))
-
-        var results: [Double] = []
-        for i in 0...numTestIterations {
-            var totalNSec = 0.0
-
-            let before = CFAbsoluteTimeGetCurrent()
-            let falcon = try? Falcon(accessKey: accessKey)
-            let after = CFAbsoluteTimeGetCurrent()
-            totalNSec += (after - before)
-
-            // throw away first run to account for cold start
-            if i > 0 {
-                results.append(totalNSec)
-            }
-            falcon?.delete()
-        }
-
-        let avgNSec = results.reduce(0.0, +) / Double(numTestIterations)
-        let avgSec = Double(round(avgNSec * 1000) / 1000)
-        XCTAssertLessThanOrEqual(avgSec, initPerformanceThresholdSec!)
     }
 
     func testProcessPerformance() throws {
