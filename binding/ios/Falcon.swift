@@ -105,14 +105,14 @@ public class Falcon {
     ///
     /// - Parameters:
     ///   - accessKey: The AccessKey obtained from Picovoice Console (https://console.picovoice.ai).
-    ///   - modelURL: URL to the file containing model parameters.
+    ///   - modelPath: Absolute path to file containing model parameters.
     /// - Throws: FalconError
     public convenience init(
         accessKey: String,
-        modelURL: URL) throws {
+        modelPath: String? = nil) throws {
         try self.init(
                 accessKey: accessKey,
-                modelPath: modelURL.path)
+                modelPath: modelPath)
     }
 
     deinit {

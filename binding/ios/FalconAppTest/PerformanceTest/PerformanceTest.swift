@@ -13,10 +13,10 @@ import XCTest
 import Falcon
 
 class PerformanceTest: XCTestCase {
-    let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
-    let iterationString: String = "{NUM_TEST_ITERATIONS}"
-    let initThresholdString: String = "{INIT_PERFORMANCE_THRESHOLD_SEC}"
-    let procThresholdString: String = "{PROC_PERFORMANCE_THRESHOLD_SEC}"
+    let accessKey: String = ""
+    let iterationString: String = "1"
+    let initThresholdString: String = "1"
+    let procThresholdString: String = "1"
 
     override func setUp() {
         super.setUp()
