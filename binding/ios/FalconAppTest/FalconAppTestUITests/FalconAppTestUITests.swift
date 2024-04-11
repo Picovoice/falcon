@@ -37,7 +37,7 @@ struct DiarizationTestSegment: Decodable {
 }
 
 class FalconAppTestUITests: XCTestCase {
-    let accessKey: String = ""
+    let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
 
     override func setUpWithError() throws {
         continueAfterFailure = true
@@ -125,7 +125,7 @@ class FalconAppTestUITests: XCTestCase {
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "testCase") { _ in
+            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
                 try runTestProcess(
                         expectedSegments: testCase.segments,
                         testAudio: testCase.audio_file)
@@ -143,7 +143,7 @@ class FalconAppTestUITests: XCTestCase {
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "testCase") { _ in
+            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
                 try runTestProcessFile(
                         expectedSegments: testCase.segments,
                         testAudio: testCase.audio_file)
@@ -161,43 +161,13 @@ class FalconAppTestUITests: XCTestCase {
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "testCase") { _ in
+            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
                 try runTestProcessURL(
                         expectedSegments: testCase.segments,
                         testAudio: testCase.audio_file)
             }
         }
     }
-
-    // func testDiarizationMultipleSpeakers() throws {
-    //     let bundle = Bundle(for: type(of: self))
-    //     let testDataJsonUrl = bundle.url(
-    //         forResource: "test_data",
-    //         withExtension: "json",
-    //         subdirectory: "test_resources")!
-    //     let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
-    //     let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
-
-    //     for testCase in testData.tests.diarization_tests {
-    //         try XCTContext.runActivity(named: "testCase") { _ in
-    //             let falcon = try? Falcon(accessKey: accessKey)
-
-    //             let audioFilePath: String = bundle.path(
-    //                 forResource: testCase.audio_file,
-    //                 ofType: "",
-    //                 inDirectory: "test_resources/audio_samples")!
-    //             let segments = try falcon!.processFile(audioFilePath)
-    //             falcon!.delete()
-
-    //             XCTAssert(segments.count == testCase.segments.count)
-    //             for i in 0..<segments.count {
-    //                 XCTAssert(segments[i].startSec == testCase.segments[i].start_sec)
-    //                 XCTAssert(segments[i].endSec == testCase.segments[i].end_sec)
-    //                 XCTAssert(segments[i].speakerTag == testCase.segments[i].speaker_tag)
-    //             }
-    //         }
-    //     }
-    // }
 
     func testVersion() throws {
         XCTAssertGreaterThan(Falcon.version, "")

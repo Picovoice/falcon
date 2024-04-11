@@ -1,0 +1,6 @@
+source 'https://cdn.cocoapods.org/'
+platform :ios, '13.0'
+
+target 'FalconDemo' do
+  pod 'Falcon-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/falcon/falcon-ios/binding/ios/Falcon-iOS.podspec'
+end
