@@ -20,6 +20,17 @@
     "**/*.wav",
     "**/*.wasm",
 
+    // ios
+    "**/*.xcconfig",
+    "**/*.podspec",
+    "**/Podfile",
+    "**/*.plist",
+    "**/contents.xcworkspacedata",
+    "**/*.storyboard",
+    "**/*.pbxproj",
+    "**/*.xcscheme",
+    "**/*.m",
+
     // android & java
     "**/AndroidManifest.xml",
     "**/activity_main.xml",
