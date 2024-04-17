@@ -6,20 +6,9 @@ Pod::Spec.new do |s|
   s.summary = 'iOS SDK for Picovoice\'s Falcon speaker diarization engine.'
   s.description =
   <<-DESC
-  Falcon is an on-device speaker diarization engine.
-
-  Falcon is:
-    - private, all voice processing runs locally.
-    - Accurate
-    - compact and computationally-Efficient
-    - cross-platform:
-      - Linux (x86_64)
-      - macOS (x86_64, arm64)
-      - Windows (x86_64)
-      - Android
-      - iOS
-      - Raspberry Pi (3, 4)
-      - NVIDIA Jetson Nano
+  Falcon is an on-device speaker diarization engine that identifies speakers 
+  in an audio stream by finding speaker change points and grouping speech segments 
+  based on speaker voice characteristics.
   DESC
   s.homepage = 'https://github.com/Picovoice/falcon/tree/main/binding/ios'
   s.author = { 'Picovoice' => 'hello@picovoice.ai' }
