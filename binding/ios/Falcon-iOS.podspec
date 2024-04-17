@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.vendored_frameworks = 'lib/ios/PvFalcon.xcframework'
   s.resources = 'lib/common/falcon_params.pv'
   s.source_files = 'binding/ios/*.{swift}'
-  s.exclude_files = 'binding/ios/FalconAppTest/**'
+  s.exclude_files = 'binding/ios/FalconTestApp/**'
 end
