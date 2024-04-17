@@ -53,8 +53,6 @@ jobs:
         run: |
           brew update
           brew install convmv
-      - name: Copy test_resources
-        run: ./copy_test_resources.sh
 
       - name: Run Cocoapods
         run: pod install
