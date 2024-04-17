@@ -67,8 +67,8 @@ jobs:
       - name: Run Tests on AppCenter
         run: appcenter test run xcuitest
           --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Falcon-iOS"
+          --app "Picovoice/Cobra-iOS"
           --devices "Picovoice/ios-min-max"
-          --test-series "falcon-ios"
+          --test-series "cobra-ios"
           --locale "en_US"
           --build-dir ddp/Build/Products/Debug-iphoneos
