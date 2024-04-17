@@ -4,6 +4,7 @@
 [![GitHub](https://img.shields.io/github/license/Picovoice/falcon)](https://github.com/Picovoice/falcon/)
 
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/falcon-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/falcon-android/)
+[![CocoaPods](https://img.shields.io/cocoapods/v/Falcon-iOS)](https://cocoapods.org/pods/Falcon-iOS)<!-- markdown-link-check-disable-line -->
 [![npm](https://img.shields.io/npm/v/@picovoice/falcon-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/falcon-web)
 [![PyPI](https://img.shields.io/pypi/v/pvfalcon)](https://pypi.org/project/pvfalcon/)
 
@@ -16,9 +17,10 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 
 - Private; All voice processing runs locally.
 - Cross-Platform:
-    - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
-    - Raspberry Pi (3, 4, 5) and NVIDIA Jetson Nano
-    - Chrome, Safari, Firefox, and Edge
+  - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
+  - Raspberry Pi (3, 4, 5) and NVIDIA Jetson Nano
+  - Android and iOS
+  - Chrome, Safari, Firefox, and Edge
 
 ## Table of Contents
 
@@ -220,18 +222,17 @@ npm install --save @picovoice/falcon-web
 Create an instance of the engine using `FalconWorker` and diarize an audio file:
 
 ```typescript
-import { Falcon } from "@picovoice/falcon-web";
-import falconParams from "${PATH_TO_BASE64_FALCON_PARAMS}";
+import { Falcon } from '@picovoice/falcon-web';
+import falconParams from '${PATH_TO_BASE64_FALCON_PARAMS}';
 
 function getAudioData(): Int16Array {
   // ... function to get audio data
   return new Int16Array();
 }
 
-const falcon = await FalconWorker.create(
-  "${ACCESS_KEY}",
-  { base64: falconParams }
-);
+const falcon = await FalconWorker.create('${ACCESS_KEY}', {
+  base64: falconParams,
+});
 
 const { segments } = await falcon.process(getAudioData());
 console.log(segments);
@@ -240,9 +241,13 @@ console.log(segments);
 Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/). Finally, when done release the resources using `falcon.release()`.
 
 ### iOS
+
 <!-- markdown-link-check-disable -->
+
 The Falcon iOS binding is available via [CocoaPods](https://cocoapods.org/pods/Falcon-iOS). To import it into your iOS project, add the following line to your Podfile and run `pod install`:
+
 <!-- markdown-link-check-enable -->
+
 ```ruby
 pod 'Falcon-iOS'
 ```
