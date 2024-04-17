@@ -74,7 +74,7 @@ jobs:
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing
           -configuration Debug
-          -workspace CobraAppTest.xcworkspace
+          -workspace FalconAppTest.xcworkspace
           -sdk iphoneos
           -scheme PerformanceTest
           -derivedDataPath ddp
@@ -83,8 +83,8 @@ jobs:
       - name: Run Tests on AppCenter
         run: appcenter test run xcuitest
           --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Cobra-iOS"
+          --app "Picovoice/Falcon-iOS"
           --devices "Picovoice/${{ matrix.device }}"
-          --test-series "cobra-ios"
+          --test-series "falcon-ios"
           --locale "en_US"
           --build-dir ddp/Build/Products/Debug-iphoneos
