@@ -54,7 +54,7 @@ jobs:
 
       - name: Copy test_resources
         run: ./copy_test_resources.sh
-        
+
       - name: Run Cocoapods
         run: pod install
 
