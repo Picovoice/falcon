@@ -28,17 +28,15 @@ jobs:
       matrix:
         device: [ios-perf]
         include:
-        - device: ios-perf
-          procPerformanceThresholdSec: 0.5
+          - device: ios-perf
+            procPerformanceThresholdSec: 0.5
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Node.js LTS
+      - name: Setup Node.js environment
         uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
 
       - name: Install Cocoapods
         run: gem install cocoapods
@@ -62,7 +60,7 @@ jobs:
           PerformanceTest/PerformanceTest.swift
 
       - name: Inject Number of Iterations
-        run: sed -i '.bak' 's:{NUM_TEST_ITERATIONS}:30:'
+        run: sed -i '.bak' 's:{NUM_TEST_ITERATIONS}:100:'
           PerformanceTest/PerformanceTest.swift
 
       - name: Inject Performance Threshold

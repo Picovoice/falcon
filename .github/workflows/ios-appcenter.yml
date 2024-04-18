@@ -5,13 +5,15 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'binding/ios/FalconAppTest/Podfile.lock'
       - '.github/workflows/ios-appcenter.yml'
+      - 'binding/ios/FalconAppTest/**'
+      - 'resources/audio_samples/**'
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
-      - 'binding/ios/FalconAppTest/Podfile.lock'
       - '.github/workflows/ios-appcenter.yml'
+      - 'binding/ios/FalconAppTest/**'
+      - 'resources/audio_samples/**'
 
 defaults:
   run:
@@ -26,10 +28,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Node.js LTS
+      - name: Setup Node.js environment
         uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
 
       - name: Install Cocoapods
         run: gem install cocoapods
