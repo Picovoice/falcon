@@ -89,12 +89,12 @@ public class Falcon {
             modelPathArg = try self.getResourcePath(modelPathArg!)
         }
 
+        pv_set_sdk(Falcon.sdk)
+
         let status = pv_falcon_init(
                 accessKey,
                 modelPathArg,
                 &handle)
-
-        pv_set_sdk(Falcon.sdk)
 
         if status != PV_STATUS_SUCCESS {
             let messageStack = try getMessageStack()
