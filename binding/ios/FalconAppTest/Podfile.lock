@@ -1,0 +1,21 @@
+PODS:
+  - Falcon-iOS (1.0.0)
+
+DEPENDENCIES:
+  - Falcon-iOS (from `https://raw.githubusercontent.com/Picovoice/falcon/falcon-ios/binding/ios/Falcon-iOS.podspec`)
+
+EXTERNAL SOURCES:
+  Falcon-iOS:
+    :podspec: https://raw.githubusercontent.com/Picovoice/falcon/falcon-ios/binding/ios/Falcon-iOS.podspec
+
+CHECKOUT OPTIONS:
+  Falcon-iOS:
+    :commit: a93b6228a744a193888ffca9c67d46870534474f
+    :git: https://github.com/Picovoice/falcon.git
+
+SPEC CHECKSUMS:
+  Falcon-iOS: 25c9fae01f2d395ba6d4dc8744fedb5275a20af2
+
+PODFILE CHECKSUM: 6f1b6336202fa03a7de412cb08ac53bb247a2369
+
+COCOAPODS: 1.15.2

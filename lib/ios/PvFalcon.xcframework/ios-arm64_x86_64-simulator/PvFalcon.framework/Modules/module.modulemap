@@ -1,0 +1,7 @@
+framework module PvFalcon {
+  umbrella header "PvFalcon.h"
+  header "pv_falcon.h"
+  header "picovoice.h"
+  export *
+  module * {export *}
+}
