@@ -1,3 +1,4 @@
+binding/android/FalconTestApp linguist-detectable=false
 binding/web/** linguist-detectable=false
 binding/web/src/falcon.ts linguist-detectable=true
 demo/** linguist-detectable=false
