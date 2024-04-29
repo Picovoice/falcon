@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   DESC
   s.homepage = 'https://github.com/Picovoice/falcon/tree/main/binding/ios'
   s.author = { 'Picovoice' => 'hello@picovoice.ai' }
-  s.source = { :git => "https://github.com/Picovoice/falcon.git", :branch => "falcon-ios" }
+  s.source = { :git => "https://github.com/Picovoice/falcon.git", :tag => "Falcon-iOS-v1.0.0" }
   s.ios.deployment_target = '13.0'
   s.swift_version = '5.0'
   s.vendored_frameworks = 'lib/ios/PvFalcon.xcframework'
