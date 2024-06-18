@@ -13,7 +13,7 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 
 ## Compatibility
 
-- Python 3.7+
+- Python 3.8+
 - Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi (3, 4, 5), and NVIDIA Jetson Nano.
 
 ## Installation
