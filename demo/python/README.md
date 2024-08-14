@@ -9,12 +9,12 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 - Private; All voice processing runs locally.
 - Cross-Platform:
   - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
-  - Raspberry Pi (3, 4, 5) and NVIDIA Jetson Nano
+  - Raspberry Pi (3, 4, 5)
 
 ## Compatibility
 
 - Python 3.8+
-- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi (3, 4, 5), and NVIDIA Jetson Nano.
+- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), and Raspberry Pi (3, 4, 5).
 
 ## Installation
 

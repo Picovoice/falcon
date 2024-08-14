@@ -9,7 +9,6 @@ on:
       - "binding/python/test_falcon_perf.py"
       - "lib/common/**"
       - "lib/linux/**"
-      - "lib/jetson/**"
       - "lib/mac/**"
       - "lib/raspberry-pi/**"
       - "lib/windows/**"
@@ -20,7 +19,6 @@ on:
       - "binding/python/test_falcon_perf.py"
       - "lib/common/**"
       - "lib/linux/**"
-      - "lib/jetson/**"
       - "lib/mac/**"
       - "lib/raspberry-pi/**"
       - "lib/windows/**"
@@ -72,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson]
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64]
         include:
           - machine: rpi3-32
             performance_threshold_sec: 5.0
@@ -84,8 +82,6 @@ jobs:
             performance_threshold_sec: 2.5
           - machine: rpi5-64
             performance_threshold_sec: 1.0
-          - machine: jetson
-            performance_threshold_sec: 2.5
 
     steps:
       - uses: actions/checkout@v3
