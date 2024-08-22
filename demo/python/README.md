@@ -35,7 +35,7 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 Run the following in the terminal:
 
 ```console
-falcon_demo_file --access_key ${ACCESS_KEY} --audio_paths ${AUDIO_PATH}
+falcon_demo_file --access_key ${ACCESS_KEY} --wav_paths ${AUDIO_PATH}
 ```
 
 Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console and `${AUDIO_PATH}` with a path to an audio file.
