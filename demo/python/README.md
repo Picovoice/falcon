@@ -9,12 +9,12 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 - Private; All voice processing runs locally.
 - Cross-Platform:
   - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
-  - Raspberry Pi (3, 4, 5) and NVIDIA Jetson Nano
+  - Raspberry Pi (3, 4, 5)
 
 ## Compatibility
 
 - Python 3.8+
-- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi (3, 4, 5), and NVIDIA Jetson Nano.
+- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), and Raspberry Pi (3, 4, 5).
 
 ## Installation
 
@@ -35,7 +35,7 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 Run the following in the terminal:
 
 ```console
-falcon_demo_file --access_key ${ACCESS_KEY} --audio_paths ${AUDIO_PATH}
+falcon_demo_file --access_key ${ACCESS_KEY} --wav_paths ${AUDIO_PATH}
 ```
 
 Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console and `${AUDIO_PATH}` with a path to an audio file.
