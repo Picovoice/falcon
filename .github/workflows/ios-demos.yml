@@ -30,9 +30,6 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Install AppCenter CLI
-        run: npm install -g appcenter-cli
-
       - name: Make build dir
         run: mkdir ddp
 
