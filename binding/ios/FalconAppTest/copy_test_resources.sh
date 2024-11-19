@@ -11,6 +11,3 @@ cp ${RESOURCE_DIR}/audio_samples/*.wav ${ASSETS_DIR}/audio_samples
 
 echo "Copying test data file..."
 cp ${RESOURCE_DIR}/.test/test_data.json ${ASSETS_DIR}
-
-echo "Fixing filename encodings for Appcenter compatibility"
-convmv --notest -f utf8 -t utf8 --nfd -r ${ASSETS_DIR}

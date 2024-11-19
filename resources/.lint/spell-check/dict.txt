@@ -33,8 +33,6 @@ falcondemo
 recyclerview
 constraintlayout
 gradlew
-Appcenter
-convmv
 notest
 Podfile
 xcuitest
