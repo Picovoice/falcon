@@ -37,4 +37,5 @@ Appcenter
 convmv
 notest
 Podfile
+xcuitest
 xcworkspace
