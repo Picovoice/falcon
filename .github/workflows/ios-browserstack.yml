@@ -54,7 +54,7 @@ jobs:
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing
           -configuration Debug
-          -project FalconAppTest.xcodeproj
+          -workspace FalconAppTest.xcworkspace
           -sdk iphoneos
           -scheme FalconAppTest
           -derivedDataPath ddp
