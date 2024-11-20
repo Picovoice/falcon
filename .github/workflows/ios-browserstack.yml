@@ -51,6 +51,15 @@ jobs:
         run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
           FalconAppTestUITests/FalconAppTestUITests.swift
 
+      - name: XCode Build
+        run: xcrun xcodebuild build-for-testing
+          -configuration Debug
+          -project FalconAppTest.xcodeproj
+          -sdk iphoneos
+          -scheme FalconAppTest
+          -derivedDataPath ddp
+          CODE_SIGNING_ALLOWED=NO
+
       - name: Generating ipa
         run: cd ddp/Build/Products/Debug-iphoneos/ &&
           mkdir Payload &&
