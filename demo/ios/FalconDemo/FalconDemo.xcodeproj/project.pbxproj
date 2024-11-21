@@ -11,18 +11,18 @@
 		3276967434C9CEBD0AF09237 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 327694975368499C3B7946DD /* Assets.xcassets */; };
 		327698EADFD16D8F70823520 /* FalconDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327697358B823E5B2EF0FA8C /* FalconDemoApp.swift */; };
 		32769B2E1B2C5A2A897FFB10 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32769F3923C69C8C0C435CCF /* ContentView.swift */; };
-		620984C5E8341368C1451E09 /* libPods-FalconDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA58F77E1B131740569D44F3 /* libPods-FalconDemo.a */; };
+		467D8E38BB3521519FB3E678 /* libPods-FalconDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA58F77E1B131740569D44F3 /* libPods-FalconDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1449455E6EE77D08E73952D5 /* Pods-FalconDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconDemo.release.xcconfig"; path = "Target Support Files/Pods-FalconDemo/Pods-FalconDemo.release.xcconfig"; sourceTree = "<group>"; };
 		327694975368499C3B7946DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		327695EA9D71F6A29C6D079A /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		327697358B823E5B2EF0FA8C /* FalconDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FalconDemoApp.swift; sourceTree = "<group>"; };
 		327699927E572962C40A7A04 /* FalconDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FalconDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32769E49F724E169E0E13E27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32769F3923C69C8C0C435CCF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		85C2D0CD605760D75470AB6A /* Pods-FalconDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconDemo.release.xcconfig"; path = "Target Support Files/Pods-FalconDemo/Pods-FalconDemo.release.xcconfig"; sourceTree = "<group>"; };
-		8AEA9CD41B10DC71401F3273 /* Pods-FalconDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconDemo.debug.xcconfig"; path = "Target Support Files/Pods-FalconDemo/Pods-FalconDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		B6FB75AA0D3B7FBE121325BC /* Pods-FalconDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconDemo.debug.xcconfig"; path = "Target Support Files/Pods-FalconDemo/Pods-FalconDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		FA58F77E1B131740569D44F3 /* libPods-FalconDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FalconDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -31,29 +31,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				620984C5E8341368C1451E09 /* libPods-FalconDemo.a in Frameworks */,
+				467D8E38BB3521519FB3E678 /* libPods-FalconDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1918003DDB7013A004865A81 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				8AEA9CD41B10DC71401F3273 /* Pods-FalconDemo.debug.xcconfig */,
-				85C2D0CD605760D75470AB6A /* Pods-FalconDemo.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		327692BCE8C735F3534C318E = {
 			isa = PBXGroup;
 			children = (
 				32769B87809678D96B1C6C55 /* Products */,
 				32769C17C8FD0599F872D3D1 /* FalconDemo */,
-				1918003DDB7013A004865A81 /* Pods */,
 				B33A5E35B83D1A4F9DED308C /* Frameworks */,
+				77A75FFA94942AD5A249D70D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,6 +66,15 @@
 				32769E49F724E169E0E13E27 /* Info.plist */,
 			);
 			path = FalconDemo;
+			sourceTree = "<group>";
+		};
+		77A75FFA94942AD5A249D70D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B6FB75AA0D3B7FBE121325BC /* Pods-FalconDemo.debug.xcconfig */,
+				1449455E6EE77D08E73952D5 /* Pods-FalconDemo.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		B33A5E35B83D1A4F9DED308C /* Frameworks */ = {
@@ -117,7 +117,7 @@
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					327696DE3A6139B4D33CA898 = {
-						DevelopmentTeam = Y6S42VUYBV;
+						DevelopmentTeam = 65723695GD;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -285,13 +285,13 @@
 		};
 		3276957BE00965E54B1F13C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8AEA9CD41B10DC71401F3273 /* Pods-FalconDemo.debug.xcconfig */;
+			baseConfigurationReference = B6FB75AA0D3B7FBE121325BC /* Pods-FalconDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Y6S42VUYBV;
+				DEVELOPMENT_TEAM = 65723695GD;
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FalconDemo/Info.plist;
@@ -303,7 +303,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.FalconDemo.albert;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.FalconDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -313,13 +313,13 @@
 		};
 		327698DB666EFBD22F7AB2D5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 85C2D0CD605760D75470AB6A /* Pods-FalconDemo.release.xcconfig */;
+			baseConfigurationReference = 1449455E6EE77D08E73952D5 /* Pods-FalconDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Y6S42VUYBV;
+				DEVELOPMENT_TEAM = 65723695GD;
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FalconDemo/Info.plist;
@@ -331,7 +331,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.FalconDemo.albert;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.FalconDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

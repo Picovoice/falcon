@@ -1,4 +1,4 @@
-name: Android AppCenter Tests
+name: Android BrowserStack Tests
 
 on:
   workflow_dispatch:
@@ -6,13 +6,13 @@ on:
     branches: [ main ]
     paths:
       - 'binding/android/FalconTestApp/**'
-      - '.github/workflows/android-appcenter.yml'
+      - '.github/workflows/android-browserstack.yml'
       - 'resources/audio_samples/**'
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/android/FalconTestApp/**'
-      - '.github/workflows/android-appcenter.yml'
+      - '.github/workflows/android-browserstack.yml'
       - 'resources/audio_samples/**'
 
 defaults:
@@ -21,19 +21,18 @@ defaults:
 
 jobs:
   build:
-    name: Run Android Tests on AppCenter
+    name: Run Android Tests on BrowserStack
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Node.js LTS
-        uses: actions/setup-node@v3
+      - name: Installing Python
+        uses: actions/setup-python@v5
         with:
-          node-version: lts/*
-
-      - name: Install AppCenter CLI
-        run: npm install -g appcenter-cli
+          python-version: '3.10'
+      - run:
+          pip3 install requests
 
       - name: set up JDK 11
         uses: actions/setup-java@v3
@@ -66,30 +65,29 @@ jobs:
       - name: Build androidTest
         run: ./gradlew assembleDebugAndroidTest
 
-      - name: Run tests on AppCenter
-        run: appcenter test run espresso
-          --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Falcon-Android"
-          --devices "Picovoice/android-min-max"
-          --app-path falcon-test-app/build/outputs/apk/debug/falcon-test-app-debug.apk
-          --test-series "falcon-android"
-          --locale "en_US"
-          --build-dir falcon-test-app/build/outputs/apk/androidTest/debug
+      - name: Run tests on BrowserStack
+        run: python3 ../../../script/automation/browserstack.py
+          --type espresso
+          --username "${{secrets.BROWSERSTACK_USERNAME}}"
+          --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
+          --project_name "Falcon-Android"
+          --devices "android-min-max"
+          --app_path "falcon-test-app/build/outputs/apk/debug/falcon-test-app-debug.apk"
+          --test_path "falcon-test-app/build/outputs/apk/androidTest/debug/falcon-test-app-debug-androidTest.apk"
 
   build-integ:
-    name: Run Android Integration Tests on AppCenter
+    name: Run Android Integration Tests on BrowserStack
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Node.js LTS
-        uses: actions/setup-node@v3
+      - name: Installing Python
+        uses: actions/setup-python@v5
         with:
-          node-version: lts/*
-
-      - name: Install AppCenter CLI
-        run: npm install -g appcenter-cli
+          python-version: '3.10'
+      - run:
+          pip3 install requests
 
       - name: set up JDK 11
         uses: actions/setup-java@v3
@@ -122,12 +120,12 @@ jobs:
       - name: Build androidTest
         run: ./gradlew assembleReleaseAndroidTest -DtestBuildType=integ
 
-      - name: Run tests on AppCenter
-        run: appcenter test run espresso
-          --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Falcon-Android"
-          --devices "Picovoice/android-min-max"
-          --app-path falcon-test-app/build/outputs/apk/release/falcon-test-app-release.apk
-          --test-series "falcon-android"
-          --locale "en_US"
-          --build-dir falcon-test-app/build/outputs/apk/androidTest/release
+      - name: Run tests on BrowserStack
+        run: python3 ../../../script/automation/browserstack.py
+          --type espresso
+          --username "${{secrets.BROWSERSTACK_USERNAME}}"
+          --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
+          --project_name "Falcon-Android-Integration"
+          --devices "android-min-max"
+          --app_path "falcon-test-app/build/outputs/apk/release/falcon-test-app-release.apk"
+          --test_path "falcon-test-app/build/outputs/apk/androidTest/release/falcon-test-app-release-androidTest.apk"

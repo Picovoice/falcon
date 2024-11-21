@@ -21,28 +21,26 @@ defaults:
 
 jobs:
   build:
-    name: Run Android Speed Tests on AppCenter
+    name: Run Android Speed Tests on BrowserStack
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        device: [single-android, 32bit-android]
+        device: [ android-perf ]
         include:
-          - device: single-android
+          - device: android-perf
             initPerformanceThresholdSec: 1.0
-            procPerformanceThresholdSec: 1.0
-          - device: 32bit-android
-            initPerformanceThresholdSec: 1.0
-            procPerformanceThresholdSec: 7.0
+            procPerformanceThresholdSec: 2.0
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-
-      - name: Install AppCenter CLI
-        run: npm install -g appcenter-cli
+      - name: Installing Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run:
+          pip3 install requests
 
       - name: set up JDK 11
         uses: actions/setup-java@v3
@@ -84,12 +82,12 @@ jobs:
       - name: Build androidTest
         run: ./gradlew assembleDebugAndroidTest -DtestBuildType=perf
 
-      - name: Run tests on AppCenter
-        run: appcenter test run espresso
-          --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Falcon-Android"
-          --devices "Picovoice/${{ matrix.device }}"
-          --app-path falcon-test-app/build/outputs/apk/debug/falcon-test-app-debug.apk
-          --test-series "falcon-android"
-          --locale "en_US"
-          --build-dir falcon-test-app/build/outputs/apk/androidTest/debug
+      - name: Run tests on BrowserStack
+        run: python3 ../../../script/automation/browserstack.py
+          --type espresso
+          --username "${{secrets.BROWSERSTACK_USERNAME}}"
+          --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
+          --project_name "Falcon-Android-Performance"
+          --devices "${{ matrix.device }}"
+          --app_path "falcon-test-app/build/outputs/apk/debug/falcon-test-app-debug.apk"
+          --test_path "falcon-test-app/build/outputs/apk/androidTest/debug/falcon-test-app-debug-androidTest.apk"
