@@ -35,5 +35,7 @@ constraintlayout
 gradlew
 notest
 Podfile
+xcframework
+xcodeproj
 xcuitest
 xcworkspace

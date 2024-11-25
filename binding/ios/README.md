@@ -18,7 +18,7 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 ## Installation
 
 <!-- markdown-link-check-disable -->
-The Falcon iOS binding is available via [CocoaPods](https://cocoapods.org/pods/Falcon-iOS). The Falcon iOS binding is available via [Swift Package Manger](https://www.swift.org/documentation/package-manager/) or [CocoaPods](https://cocoapods.org/pods/Falcon-iOS).
+The Falcon iOS binding is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/) or [CocoaPods](https://cocoapods.org/pods/Falcon-iOS).
 <!-- markdown-link-check-enable -->
 
 To import the package using SPM, open up your project's Package Dependencies in XCode and add:
