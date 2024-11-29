@@ -86,9 +86,9 @@ public class Falcon {
                 throw FalconIOError("Could not retrieve default model from the package bundle")
             }
 
-            let bundle = Bundle(for: type(of: self))
-
 #else
+
+            let bundle = Bundle(for: type(of: self))
 
             modelPathArg = bundle.path(forResource: "falcon_params", ofType: "pv")
             if modelPathArg == nil {
