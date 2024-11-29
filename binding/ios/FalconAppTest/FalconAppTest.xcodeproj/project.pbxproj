@@ -3,11 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0BDFC0A822E9A2F6228E92A8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		0BDFC0A822E9A2F6228E92A8 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		1E00651627CFEF00006FF6E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E00651527CFEF00006FF6E9 /* AppDelegate.swift */; };
 		1E00651A27CFEF00006FF6E9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E00651927CFEF00006FF6E9 /* ViewController.swift */; };
 		1E00651D27CFEF00006FF6E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E00651B27CFEF00006FF6E9 /* Main.storyboard */; };
@@ -16,10 +16,10 @@
 		1E00653727CFEF02006FF6E9 /* FalconAppTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E00653627CFEF02006FF6E9 /* FalconAppTestUITests.swift */; };
 		1E5B7B1A2800E2B200F8BDDB /* PerformanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5B7B192800E2B200F8BDDB /* PerformanceTest.swift */; };
 		1E5B7B1E2800E2DA00F8BDDB /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E5B7B1D2800E2DA00F8BDDB /* test.wav */; };
-		43BA5215E3082819E42E3068 /* libPods-FalconAppTestUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A1D724DE51E91146A45DC4D /* libPods-FalconAppTestUITests.a */; };
-		43FE79A49DD0581ED9C62EF9 /* libPods-FalconAppTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68570F666E1695DFB4659060 /* libPods-FalconAppTest.a */; };
-		64DB20CA9E8547C32CB210F6 /* libPods-PerformanceTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F17AEF70BAD2BD9481BBA2 /* libPods-PerformanceTest.a */; };
 		C7C8601229CBA3A300EB6E87 /* test_resources in Resources */ = {isa = PBXBuildFile; fileRef = C7C8601129CBA3A300EB6E87 /* test_resources */; };
+		E1CF9E262CFA65F5004BA9A9 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = E1CF9E252CFA65F5004BA9A9 /* Falcon */; };
+		E1CF9E282CFA65F9004BA9A9 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = E1CF9E272CFA65F9004BA9A9 /* Falcon */; };
+		E1CF9E2A2CFA65FD004BA9A9 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = E1CF9E292CFA65FD004BA9A9 /* Falcon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,15 +55,6 @@
 		1E5B7B1B2800E2C500F8BDDB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E5B7B1D2800E2DA00F8BDDB /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = test.wav; path = ../../../../resources/audio_samples/test.wav; sourceTree = "<group>"; };
 		1E5B7B1F2800E2E300F8BDDB /* falcon_params.pv */ = {isa = PBXFileReference; lastKnownFileType = file; name = falcon_params.pv; path = ../../../../lib/common/falcon_params.pv; sourceTree = "<group>"; };
-		22D92E6E58A9CB8D127AC856 /* Pods-FalconAppTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconAppTest.release.xcconfig"; path = "Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest.release.xcconfig"; sourceTree = "<group>"; };
-		60F17AEF70BAD2BD9481BBA2 /* libPods-PerformanceTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PerformanceTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		68570F666E1695DFB4659060 /* libPods-FalconAppTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FalconAppTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B6EF088A15854942D133515 /* Pods-PerformanceTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceTest.debug.xcconfig"; path = "Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest.debug.xcconfig"; sourceTree = "<group>"; };
-		7CD6CD38A971C75F43DA7C65 /* Pods-FalconAppTestUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconAppTestUITests.release.xcconfig"; path = "Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests.release.xcconfig"; sourceTree = "<group>"; };
-		8CC29DC2C8EEA2E02313E3CE /* Pods-FalconAppTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconAppTest.debug.xcconfig"; path = "Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest.debug.xcconfig"; sourceTree = "<group>"; };
-		9A1D724DE51E91146A45DC4D /* libPods-FalconAppTestUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FalconAppTestUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4D77AE6DF2F1B3CE8D58A7C /* Pods-PerformanceTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceTest.release.xcconfig"; path = "Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest.release.xcconfig"; sourceTree = "<group>"; };
-		B55F99B23072BB0B53E10F7E /* Pods-FalconAppTestUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconAppTestUITests.debug.xcconfig"; path = "Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		C7C8601129CBA3A300EB6E87 /* test_resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = test_resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43FE79A49DD0581ED9C62EF9 /* libPods-FalconAppTest.a in Frameworks */,
+				E1CF9E262CFA65F5004BA9A9 /* Falcon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,8 +71,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BDFC0A822E9A2F6228E92A8 /* BuildFile in Frameworks */,
-				43BA5215E3082819E42E3068 /* libPods-FalconAppTestUITests.a in Frameworks */,
+				0BDFC0A822E9A2F6228E92A8 /* (null) in Frameworks */,
+				E1CF9E282CFA65F9004BA9A9 /* Falcon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64DB20CA9E8547C32CB210F6 /* libPods-PerformanceTest.a in Frameworks */,
+				E1CF9E2A2CFA65FD004BA9A9 /* Falcon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,9 +93,8 @@
 				1E5B7B182800E2A100F8BDDB /* PerformanceTest */,
 				1E00651427CFEF00006FF6E9 /* FalconAppTest */,
 				1E00653527CFEF02006FF6E9 /* FalconAppTestUITests */,
+				E1CF9E242CFA65F5004BA9A9 /* Frameworks */,
 				1E00651327CFEF00006FF6E9 /* Products */,
-				7F107A0FFAA38E2C00DE9330 /* Pods */,
-				CEE4AEA69454A6E583EE868B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -152,26 +142,9 @@
 			path = PerformanceTest;
 			sourceTree = "<group>";
 		};
-		7F107A0FFAA38E2C00DE9330 /* Pods */ = {
+		E1CF9E242CFA65F5004BA9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8CC29DC2C8EEA2E02313E3CE /* Pods-FalconAppTest.debug.xcconfig */,
-				22D92E6E58A9CB8D127AC856 /* Pods-FalconAppTest.release.xcconfig */,
-				B55F99B23072BB0B53E10F7E /* Pods-FalconAppTestUITests.debug.xcconfig */,
-				7CD6CD38A971C75F43DA7C65 /* Pods-FalconAppTestUITests.release.xcconfig */,
-				7B6EF088A15854942D133515 /* Pods-PerformanceTest.debug.xcconfig */,
-				A4D77AE6DF2F1B3CE8D58A7C /* Pods-PerformanceTest.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		CEE4AEA69454A6E583EE868B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				68570F666E1695DFB4659060 /* libPods-FalconAppTest.a */,
-				9A1D724DE51E91146A45DC4D /* libPods-FalconAppTestUITests.a */,
-				60F17AEF70BAD2BD9481BBA2 /* libPods-PerformanceTest.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -183,12 +156,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1E00653C27CFEF02006FF6E9 /* Build configuration list for PBXNativeTarget "FalconAppTest" */;
 			buildPhases = (
-				34CD95D941A8673474CE8B22 /* [CP] Check Pods Manifest.lock */,
 				1E00650E27CFEF00006FF6E9 /* Sources */,
 				1E00650F27CFEF00006FF6E9 /* Frameworks */,
 				1E00651027CFEF00006FF6E9 /* Resources */,
-				D105CA2C290337FA0E732DC7 /* [CP] Embed Pods Frameworks */,
-				13158B894EF82D8A77AD626E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -203,12 +173,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1E00654227CFEF02006FF6E9 /* Build configuration list for PBXNativeTarget "FalconAppTestUITests" */;
 			buildPhases = (
-				48DADE3F620835A5CF8D17E8 /* [CP] Check Pods Manifest.lock */,
 				1E00652E27CFEF02006FF6E9 /* Sources */,
 				1E00652F27CFEF02006FF6E9 /* Frameworks */,
 				1E00653027CFEF02006FF6E9 /* Resources */,
-				A783BF8E6EF8B702FBEB11B3 /* [CP] Embed Pods Frameworks */,
-				2090E4B89248C71BD11D3B31 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -224,12 +191,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1E5B7B142800E21D00F8BDDB /* Build configuration list for PBXNativeTarget "PerformanceTest" */;
 			buildPhases = (
-				0D53AB14AD24B3C9DAE0A480 /* [CP] Check Pods Manifest.lock */,
 				1E5B7B0C2800E21D00F8BDDB /* Sources */,
 				1E5B7B0E2800E21D00F8BDDB /* Frameworks */,
 				1E5B7B102800E21D00F8BDDB /* Resources */,
-				FFE0BBD462CDB58A76751BAD /* [CP] Embed Pods Frameworks */,
-				5857DA943FDB35891A771F88 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -272,6 +236,9 @@
 				Base,
 			);
 			mainGroup = 1E00650927CFEF00006FF6E9;
+			packageReferences = (
+				E1CF9E232CFA65D0004BA9A9 /* XCLocalSwiftPackageReference "../../../../falcon" */,
+			);
 			productRefGroup = 1E00651327CFEF00006FF6E9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -311,177 +278,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		0D53AB14AD24B3C9DAE0A480 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PerformanceTest-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		13158B894EF82D8A77AD626E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2090E4B89248C71BD11D3B31 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		34CD95D941A8673474CE8B22 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FalconAppTest-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		48DADE3F620835A5CF8D17E8 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FalconAppTestUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5857DA943FDB35891A771F88 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A783BF8E6EF8B702FBEB11B3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FalconAppTestUITests/Pods-FalconAppTestUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D105CA2C290337FA0E732DC7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FalconAppTest/Pods-FalconAppTest-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FFE0BBD462CDB58A76751BAD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1E00650E27CFEF00006FF6E9 /* Sources */ = {
@@ -660,7 +456,6 @@
 		};
 		1E00653D27CFEF02006FF6E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8CC29DC2C8EEA2E02313E3CE /* Pods-FalconAppTest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -692,7 +487,6 @@
 		};
 		1E00653E27CFEF02006FF6E9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22D92E6E58A9CB8D127AC856 /* Pods-FalconAppTest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -724,7 +518,6 @@
 		};
 		1E00654327CFEF02006FF6E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B55F99B23072BB0B53E10F7E /* Pods-FalconAppTestUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -748,7 +541,6 @@
 		};
 		1E00654427CFEF02006FF6E9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7CD6CD38A971C75F43DA7C65 /* Pods-FalconAppTestUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -772,7 +564,6 @@
 		};
 		1E5B7B152800E21D00F8BDDB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B6EF088A15854942D133515 /* Pods-PerformanceTest.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -796,7 +587,6 @@
 		};
 		1E5B7B162800E21D00F8BDDB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A4D77AE6DF2F1B3CE8D58A7C /* Pods-PerformanceTest.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -858,6 +648,31 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E1CF9E232CFA65D0004BA9A9 /* XCLocalSwiftPackageReference "../../../../falcon" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../falcon;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E1CF9E252CFA65F5004BA9A9 /* Falcon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1CF9E232CFA65D0004BA9A9 /* XCLocalSwiftPackageReference "../../../../falcon" */;
+			productName = Falcon;
+		};
+		E1CF9E272CFA65F9004BA9A9 /* Falcon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1CF9E232CFA65D0004BA9A9 /* XCLocalSwiftPackageReference "../../../../falcon" */;
+			productName = Falcon;
+		};
+		E1CF9E292CFA65FD004BA9A9 /* Falcon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1CF9E232CFA65D0004BA9A9 /* XCLocalSwiftPackageReference "../../../../falcon" */;
+			productName = Falcon;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1E00650A27CFEF00006FF6E9 /* Project object */;
 }

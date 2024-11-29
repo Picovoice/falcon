@@ -77,12 +77,26 @@ public class Falcon {
         var modelPathArg = modelPath
 
         if modelPath == nil {
+
+#if SWIFT_PACKAGE
+
+            if let bundleURL = Bundle.module.url(forResource: "falcon_params", withExtension: "pv") {
+                modelPathArg = bundleURL.path
+            } else {
+                throw FalconIOError("Could not retrieve default model from the package bundle")
+            }
+
             let bundle = Bundle(for: type(of: self))
+
+#else
 
             modelPathArg = bundle.path(forResource: "falcon_params", ofType: "pv")
             if modelPathArg == nil {
                 throw FalconIOError("Could not retrieve default model from app bundle")
             }
+
+#endif
+
         }
 
         if !FileManager().fileExists(atPath: modelPathArg!) {
