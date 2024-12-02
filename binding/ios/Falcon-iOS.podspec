@@ -16,7 +16,11 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
   s.swift_version = '5.0'
   s.vendored_frameworks = 'lib/ios/PvFalcon.xcframework'
-  s.resources = 'lib/common/falcon_params.pv'
+  s.resource_bundles = {
+    'FalconResources' => [
+      'lib/common/falcon_params.pv'
+    ]
+  }
   s.source_files = 'binding/ios/*.{swift}'
   s.exclude_files = 'binding/ios/FalconTestApp/**'
 end
