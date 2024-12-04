@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,19 +11,17 @@
 		3276967434C9CEBD0AF09237 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 327694975368499C3B7946DD /* Assets.xcassets */; };
 		327698EADFD16D8F70823520 /* FalconDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327697358B823E5B2EF0FA8C /* FalconDemoApp.swift */; };
 		32769B2E1B2C5A2A897FFB10 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32769F3923C69C8C0C435CCF /* ContentView.swift */; };
-		467D8E38BB3521519FB3E678 /* libPods-FalconDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA58F77E1B131740569D44F3 /* libPods-FalconDemo.a */; };
+		E1CF9E2D2CFA698C004BA9A9 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = E1CF9E2C2CFA698C004BA9A9 /* Falcon */; };
+		E1F352F82D00D81A0069B0E6 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = E1F352F72D00D81A0069B0E6 /* Falcon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1449455E6EE77D08E73952D5 /* Pods-FalconDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconDemo.release.xcconfig"; path = "Target Support Files/Pods-FalconDemo/Pods-FalconDemo.release.xcconfig"; sourceTree = "<group>"; };
 		327694975368499C3B7946DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		327695EA9D71F6A29C6D079A /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		327697358B823E5B2EF0FA8C /* FalconDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FalconDemoApp.swift; sourceTree = "<group>"; };
 		327699927E572962C40A7A04 /* FalconDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FalconDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32769E49F724E169E0E13E27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32769F3923C69C8C0C435CCF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		B6FB75AA0D3B7FBE121325BC /* Pods-FalconDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FalconDemo.debug.xcconfig"; path = "Target Support Files/Pods-FalconDemo/Pods-FalconDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		FA58F77E1B131740569D44F3 /* libPods-FalconDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FalconDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +29,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				467D8E38BB3521519FB3E678 /* libPods-FalconDemo.a in Frameworks */,
+				E1CF9E2D2CFA698C004BA9A9 /* Falcon in Frameworks */,
+				E1F352F82D00D81A0069B0E6 /* Falcon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,8 +42,6 @@
 			children = (
 				32769B87809678D96B1C6C55 /* Products */,
 				32769C17C8FD0599F872D3D1 /* FalconDemo */,
-				B33A5E35B83D1A4F9DED308C /* Frameworks */,
-				77A75FFA94942AD5A249D70D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,23 +65,6 @@
 			path = FalconDemo;
 			sourceTree = "<group>";
 		};
-		77A75FFA94942AD5A249D70D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B6FB75AA0D3B7FBE121325BC /* Pods-FalconDemo.debug.xcconfig */,
-				1449455E6EE77D08E73952D5 /* Pods-FalconDemo.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		B33A5E35B83D1A4F9DED308C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				FA58F77E1B131740569D44F3 /* libPods-FalconDemo.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -92,12 +72,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32769440EBAF1B96C25C64E5 /* Build configuration list for PBXNativeTarget "FalconDemo" */;
 			buildPhases = (
-				C840BDAD8FD210974A550955 /* [CP] Check Pods Manifest.lock */,
 				32769E8C15D0D566DE02D742 /* Sources */,
 				32769FD78B69EE3D028A9BD8 /* Frameworks */,
 				327698D80053ADD919041906 /* Resources */,
-				7585D986E68559590C0FC8E7 /* [CP] Embed Pods Frameworks */,
-				C51691C8D18CE69EE82647B3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -131,6 +108,9 @@
 				en,
 			);
 			mainGroup = 327692BCE8C735F3534C318E;
+			packageReferences = (
+				E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */,
+			);
 			productRefGroup = 32769B87809678D96B1C6C55 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -150,67 +130,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7585D986E68559590C0FC8E7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconDemo/Pods-FalconDemo-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Falcon-iOS/PvFalcon.framework/PvFalcon",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PvFalcon.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FalconDemo/Pods-FalconDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C51691C8D18CE69EE82647B3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FalconDemo/Pods-FalconDemo-resources.sh",
-				"${PODS_ROOT}/Falcon-iOS/lib/common/falcon_params.pv",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/falcon_params.pv",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FalconDemo/Pods-FalconDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C840BDAD8FD210974A550955 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FalconDemo-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		32769E8C15D0D566DE02D742 /* Sources */ = {
@@ -277,15 +196,15 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_INCLUDE_PATHS = "${SRCROOT}";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		3276957BE00965E54B1F13C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B6FB75AA0D3B7FBE121325BC /* Pods-FalconDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -301,7 +220,10 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.FalconDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -313,7 +235,6 @@
 		};
 		327698DB666EFBD22F7AB2D5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1449455E6EE77D08E73952D5 /* Pods-FalconDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -329,7 +250,10 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.FalconDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -425,6 +349,29 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Picovoice/falcon";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E1CF9E2C2CFA698C004BA9A9 /* Falcon */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Falcon;
+		};
+		E1F352F72D00D81A0069B0E6 /* Falcon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */;
+			productName = Falcon;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 32769964E3C57B4A4BE3CC9E /* Project object */;
 }

@@ -39,6 +39,32 @@ public struct FalconSegment {
 
 /// iOS binding for Falcon speaker diarization engine. Provides a Swift interface to the Falcon library.
 public class Falcon {
+    
+#if SWIFT_PACKAGE
+
+    static let resourceBundle = Bundle.module
+
+#else
+
+    static let resourceBundle: Bundle = {
+        let myBundle = Bundle(for: Falcon.self)
+
+        guard let resourceBundleURL = myBundle.url(
+                forResource: "FalconResources", withExtension: "bundle")
+                else {
+            fatalError("FalconResources.bundle not found")
+        }
+
+        guard let resourceBundle = Bundle(url: resourceBundleURL)
+                else {
+            fatalError("Could not open FalconResources.bundle")
+        }
+
+        return resourceBundle
+    }()
+
+#endif
+    
     private static let supportedAudioTypes: Set = [
         "3gp",
         "flac",
@@ -75,13 +101,10 @@ public class Falcon {
         }
 
         var modelPathArg = modelPath
-
-        if modelPath == nil {
-            let bundle = Bundle(for: type(of: self))
-
-            modelPathArg = bundle.path(forResource: "falcon_params", ofType: "pv")
+        if modelPathArg == nil {
+            modelPathArg = Falcon.resourceBundle.path(forResource: "falcon_params", ofType: "pv")
             if modelPathArg == nil {
-                throw FalconIOError("Could not retrieve default model from app bundle")
+                throw FalconIOError("Could not find default model file in app bundle.")
             }
         }
 
