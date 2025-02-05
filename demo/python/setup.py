@@ -52,6 +52,6 @@ setuptools.setup(
             'falcon_demo_mic=pvfalcondemo.falcon_demo_mic:main',
         ],
     ),
-    python_requires='>=3.8',
+    python_requires='>=3.9',
     keywords="Speaker Diarization, Speaker Identification, Voice Identification",
 )
