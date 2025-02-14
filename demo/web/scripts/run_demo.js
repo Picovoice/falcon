@@ -17,7 +17,7 @@ const modelDir = path.join(rootDir, "lib", "common");
 const modelName = "falcon_params.pv";
 fs.copyFileSync(
   path.join(modelDir, modelName),
-  path.join(outputDirectory, modelName)
+  path.join(outputDirectory, modelName),
 );
 
 fs.writeFileSync(
@@ -30,12 +30,12 @@ fs.writeFileSync(
 (function () {
   if (typeof module !== "undefined" && typeof module.exports !== "undefined")
     module.exports = falconModel;
-})();`
+})();`,
 );
 
-const command = (process.platform === "win32") ? "npx.cmd" : "npx";
+const command = process.platform === "win32" ? "npx.cmd" : "npx";
 
 child_process.execSync(`${command} http-server -a localhost -p 5000`, {
   shell: true,
-  stdio: 'inherit'
+  stdio: "inherit",
 });

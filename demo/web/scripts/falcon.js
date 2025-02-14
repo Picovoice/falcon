@@ -1,8 +1,9 @@
 let falcon = null;
 
 window.onload = function () {
-  const audioContext = new (window.AudioContext ||
-    window.webKitAudioContext)({ sampleRate: 16000 });
+  const audioContext = new (window.AudioContext || window.webKitAudioContext)({
+    sampleRate: 16000,
+  });
 
   function readAudioFile(selectedFile, callback) {
     let reader = new FileReader();
@@ -29,7 +30,7 @@ window.onload = function () {
           if (f > INT16_MAX) i = INT16_MAX;
           if (f < INT16_MIN) i = INT16_MIN;
           return i;
-        })
+        }),
       );
 
       writeMessage("Diarizing audio file...");
@@ -71,7 +72,7 @@ window.onload = function () {
     try {
       writeMessage("Recording audio...");
       await window.WebVoiceProcessor.WebVoiceProcessor.subscribe(
-        recorderEngine
+        recorderEngine,
       );
       timer = setInterval(() => {
         currentTimer += 0.1;
@@ -91,7 +92,7 @@ window.onload = function () {
     recordButton.style.display = "inline";
 
     await window.WebVoiceProcessor.WebVoiceProcessor.unsubscribe(
-      recorderEngine
+      recorderEngine,
     );
     clearInterval(timer);
 
