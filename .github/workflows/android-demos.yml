@@ -49,5 +49,10 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
 
+      - name: Use Gradle ${{ matrix.gradle-version }}
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: ${{ matrix.gradle-version }}
+
       - name: Build
         run: gradle assembleDebug
