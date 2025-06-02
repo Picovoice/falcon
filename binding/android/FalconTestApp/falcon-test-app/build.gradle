@@ -115,7 +115,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.10'
-    implementation 'ai.picovoice:falcon-android:1.0.0'
+    implementation files("../../Falcon/falcon/build/outputs/aar/falcon-release.aar")
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
