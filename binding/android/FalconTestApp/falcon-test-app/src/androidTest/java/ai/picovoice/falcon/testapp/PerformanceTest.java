@@ -81,7 +81,7 @@ public class PerformanceTest extends BaseTest {
         Falcon falcon = new Falcon.Builder().setAccessKey(accessKey)
                 .build(appContext);
 
-        File audioFile = new File(testResourcesPath, "audio_samples/test.wav");
+        File audioFile = new File(getAudioFilepath("test.wav"));
 
         long totalNSec = 0;
         for (int i = 0; i < numTestIterations + 1; i++) {

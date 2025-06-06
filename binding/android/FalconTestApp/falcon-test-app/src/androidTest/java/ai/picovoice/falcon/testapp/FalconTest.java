@@ -152,10 +152,8 @@ public class FalconTest {
             for (int i = 0; i < diarizationTests.size(); i++) {
                 JsonObject testData = diarizationTests.get(i).getAsJsonObject();
 
-                String audioFile = testData.get("audio_file").getAsString();
+                String testAudioFile = testData.get("audio_file").getAsString();
                 JsonArray segments = testData.get("segments").getAsJsonArray();
-
-                String testAudioFile = String.format("audio_samples/%s", audioFile);
 
                 FalconSegment[] paramSegments = new FalconSegment[segments.size()];
                 for (int j = 0; j < segments.size(); j++) {
@@ -187,8 +185,7 @@ public class FalconTest {
                     .setAccessKey(accessKey)
                     .build(appContext);
 
-            File audioFile = new File(testResourcesPath, testAudioFile);
-            short[] pcm = readAudioFile(audioFile.getAbsolutePath());
+            short[] pcm = readAudioFile(getAudioFilepath(testAudioFile));
 
             FalconSegment[] result = falcon.process(pcm);
 
