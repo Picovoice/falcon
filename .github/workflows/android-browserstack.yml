@@ -8,12 +8,14 @@ on:
       - 'binding/android/FalconTestApp/**'
       - '.github/workflows/android-browserstack.yml'
       - 'resources/audio_samples/**'
+      - 'script/automation/browserstack.py'
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/android/FalconTestApp/**'
       - '.github/workflows/android-browserstack.yml'
       - 'resources/audio_samples/**'
+      - 'script/automation/browserstack.py'
 
 defaults:
   run:
