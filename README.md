@@ -5,7 +5,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/falcon-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/falcon-android/)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Falcon-iOS)](https://cocoapods.org/pods/Falcon-iOS)<!-- markdown-link-check-disable-line -->
-[![npm](https://img.shields.io/npm/v/@picovoice/falcon-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/falcon-web)
+[![npm](https://img.shields.io/npm/v/@picovoice/falcon-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/falcon-web)<!-- markdown-link-check-disable-line -->
 [![PyPI](https://img.shields.io/pypi/v/pvfalcon)](https://pypi.org/project/pvfalcon/)
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
