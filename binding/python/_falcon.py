@@ -129,12 +129,17 @@ class Falcon(object):
         """
         _fields_ = [("start_sec", c_float), ("end_sec", c_float), ("speaker_tag", c_int32)]
 
-    def __init__(self, access_key: str, model_path: str, library_path: str) -> None:
+    def __init__(self, access_key: str, model_path: str, device: str, library_path: str) -> None:
         """
         Constructor.
 
         :param access_key: AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
         :param model_path: Absolute path to the file containing model parameters.
+        :param device: String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+        suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+        GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+        `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+        argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
         :param library_path: Absolute path to Falcon's dynamic library.
         """
 
@@ -143,6 +148,9 @@ class Falcon(object):
 
         if not os.path.exists(model_path):
             raise FalconIOError("Could not find model file at `%s`." % model_path)
+
+        if not isinstance(device, str) or len(device) == 0:
+            raise FalconInvalidArgumentError("`device` should be a non-empty string.")
 
         if not os.path.exists(library_path):
             raise FalconIOError("Could not find Falcon's dynamic library at `%s`." % library_path)
@@ -164,12 +172,12 @@ class Falcon(object):
         self._free_error_stack_func.restype = None
 
         init_func = library.pv_falcon_init
-        init_func.argtypes = [c_char_p, c_char_p, POINTER(POINTER(self.CFalcon))]
+        init_func.argtypes = [c_char_p, c_char_p, c_char_p, POINTER(POINTER(self.CFalcon))]
         init_func.restype = self.PicovoiceStatuses
 
         self._handle = POINTER(self.CFalcon)()
 
-        status = init_func(access_key.encode(), model_path.encode(), byref(self._handle))
+        status = init_func(access_key.encode(), model_path.encode(), device.encode(), byref(self._handle))
         if status is not self.PicovoiceStatuses.SUCCESS:
             raise self._PICOVOICE_STATUS_TO_EXCEPTION[status](
                 message="Initialization failed", message_stack=self._get_error_stack()
