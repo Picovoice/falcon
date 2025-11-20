@@ -78,6 +78,7 @@ PV_API pv_status_t pv_get_error_stack(
 PV_API void pv_free_error_stack(char **message_stack);
 
 #ifdef __cplusplus
+
 }
 
 #endif
