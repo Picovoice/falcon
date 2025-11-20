@@ -1,5 +1,5 @@
 #
-# Copyright 2023-2024 Picovoice Inc.
+# Copyright 2023-2025 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -42,7 +42,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.md"), "r") as f:
 
 setuptools.setup(
     name="pvfalcon",
-    version="1.0.4",
+    version="2.0.0",
     author="Picovoice",
     author_email="hello@picovoice.ai",
     description="Falcon Speaker Diarization Engine",
@@ -59,6 +59,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Multimedia :: Sound/Audio :: Speech",
     ],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     keywords="Speaker Diarization, Speaker Identification, Voice Identification",
 )

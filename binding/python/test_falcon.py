@@ -1,5 +1,5 @@
 #
-#    Copyright 2023 Picovoice Inc.
+#    Copyright 2023-2025 Picovoice Inc.
 #
 #    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 #    file accompanying this source.
@@ -12,6 +12,7 @@
 import os
 import sys
 import unittest
+from parameterized import parameterized
 from typing import *
 
 from _falcon import *
@@ -20,11 +21,28 @@ from test_util import *
 
 diarization_tests = load_test_data()
 
+def get_test_devices():
+    result = list()
+
+    device = sys.argv[2] if len(sys.argv) == 3 else None
+    if device == "cpu":
+        max_threads = os.cpu_count() // 2
+        i = 1
+
+        while i <= max_threads:
+            result.append(f"cpu:{i}")
+            i *= 2
+    else:
+        result.append(device)
+
+    return result
+
 
 class FalconTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._access_key = sys.argv[1]
+        cls._device = sys.argv[2]
         cls._audio_directory = os.path.join(os.path.dirname(__file__), "..", "..", "resources", "audio_samples")
         cls._error_threshold = 0.05
 
@@ -43,33 +61,41 @@ class FalconTestCase(unittest.TestCase):
             Falcon(
                 access_key="invalid",
                 model_path=default_model_path("../../"),
+                device=self._device,
                 library_path=default_library_path("../../"),
             )
 
     def test_invalid_model_path(self):
         with self.assertRaises(FalconIOError):
-            Falcon(access_key=self._access_key, model_path="invalid", library_path=default_library_path("../../"))
+            Falcon(access_key=self._access_key, model_path="invalid", device=self._device, library_path=default_library_path("../../"))
+
+    def test_invalid_device(self):
+        with self.assertRaises(FalconInvalidArgumentError):
+            Falcon(access_key=self._access_key, model_path=default_model_path("../../"), device="invalid", library_path=default_library_path("../../"))
 
     def test_invalid_library_path(self):
         with self.assertRaises(FalconIOError):
-            Falcon(access_key=self._access_key, model_path=default_model_path("../../"), library_path="invalid")
+            Falcon(access_key=self._access_key, model_path=default_model_path("../../"), device=self._device, library_path="invalid")
 
     def test_version(self):
         o = Falcon(
             access_key=self._access_key,
             model_path=default_model_path("../../"),
+            device=self._device,
             library_path=default_library_path("../../"),
         )
         self.assertIsInstance(o.version, str)
         self.assertGreater(len(o.version), 0)
 
-    def test_falcon_process(self):
+    @parameterized.expand(get_test_devices, skip_on_empty=True)
+    def test_falcon_process(self, device):
         o = None
 
         try:
             o = Falcon(
                 access_key=self._access_key,
                 model_path=default_model_path("../../"),
+                device=device,
                 library_path=default_library_path("../../"),
             )
 
@@ -83,13 +109,15 @@ class FalconTestCase(unittest.TestCase):
             if o is not None:
                 o.delete()
 
-    def test_falcon_process_file(self):
+    @parameterized.expand(get_test_devices, skip_on_empty=True)
+    def test_falcon_process_file(self, device):
         o = None
 
         try:
             o = Falcon(
                 access_key=self._access_key,
                 model_path=default_model_path("../../"),
+                device=device,
                 library_path=default_library_path("../../"),
             )
 
@@ -111,6 +139,7 @@ class FalconTestCase(unittest.TestCase):
             f = Falcon(
                 access_key="invalid",
                 model_path=default_model_path(relative_path),
+                device=self._device,
                 library_path=default_library_path(relative_path),
             )
             self.assertIsNone(f)
@@ -124,6 +153,7 @@ class FalconTestCase(unittest.TestCase):
             f = Falcon(
                 access_key="invalid",
                 model_path=default_model_path(relative_path),
+                device=self._device,
                 library_path=default_library_path(relative_path),
             )
             self.assertIsNone(f)
@@ -137,6 +167,7 @@ class FalconTestCase(unittest.TestCase):
         f = Falcon(
             access_key=self._access_key,
             model_path=default_model_path(relative_path),
+            device=self._device,
             library_path=default_library_path(relative_path),
         )
 
@@ -156,8 +187,8 @@ class FalconTestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("usage: %s ${ACCESS_KEY}" % sys.argv[0])
+    if len(sys.argv) != 3:
+        print("usage: %s ${ACCESS_KEY} ${DEVICE}" % sys.argv[0])
         exit(1)
 
     unittest.main(argv=sys.argv[:1])

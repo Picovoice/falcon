@@ -1,5 +1,5 @@
 #
-#    Copyright 2023 Picovoice Inc.
+#    Copyright 2023-2025 Picovoice Inc.
 #
 #    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 #    file accompanying this source.
@@ -13,6 +13,7 @@ import argparse
 import os
 import sys
 import unittest
+from parameterized import parameterized
 from time import perf_counter
 
 from _falcon import Falcon
@@ -23,14 +24,16 @@ class FalconPerformanceTestCase(unittest.TestCase):
     TEST_PATH = os.path.join(os.path.dirname(__file__), "../../resources/audio_samples/test.wav")
 
     access_key: str
+    device: str
     num_test_iterations: int
     performance_threshold_sec: float
 
     def test_performance_proc(self):
         falcon = Falcon(
             access_key=self.access_key,
-            library_path=default_library_path("../.."),
             model_path=default_model_path("../.."),
+            device=self.device,
+            library_path=default_library_path("../.."),
         )
 
         perf_results = list()
@@ -52,11 +55,13 @@ class FalconPerformanceTestCase(unittest.TestCase):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--access-key", required=True)
+    parser.add_argument("--device", required=True)
     parser.add_argument("--num-test-iterations", type=int, required=True)
     parser.add_argument("--performance-threshold-sec", type=float, required=True)
     args = parser.parse_args()
 
     FalconPerformanceTestCase.access_key = args.access_key
+    FalconPerformanceTestCase.device = args.device
     FalconPerformanceTestCase.num_test_iterations = args.num_test_iterations
     FalconPerformanceTestCase.performance_threshold_sec = args.performance_threshold_sec
 
