@@ -75,6 +75,7 @@ class FalconCTestCase(unittest.TestCase):
         ]
         process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
+        print(stdout, stderr)
         self.assertEqual(process.poll(), 0)
         self.assertEqual(stderr.decode('utf-8'), '')
 
