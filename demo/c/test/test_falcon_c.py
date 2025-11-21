@@ -16,6 +16,7 @@ import sys
 import unittest
 from parameterized import parameterized
 
+
 def get_test_devices(device):
     result = list()
 
