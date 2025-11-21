@@ -17,9 +17,10 @@ import unittest
 from parameterized import parameterized
 
 
-def get_test_devices(device):
+def get_test_devices():
     result = list()
-
+    
+    device = sys.argv[3] if len(sys.argv) > 3 else None
     if device == "cpu":
         max_threads = os.cpu_count() // 2
         i = 1
@@ -42,9 +43,6 @@ def get_lib_ext(platform):
         return "so"
 
 
-devices = get_test_devices(sys.argv[3])
-
-
 class FalconCTestCase(unittest.TestCase):
 
     @classmethod
@@ -55,6 +53,10 @@ class FalconCTestCase(unittest.TestCase):
         cls._root_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..")
 
     def _get_library_file(self):
+        if self._platform == "windows":
+            if self._arch == "amd64":
+                os.environ["PATH"] += os.pathsep + os.path.join(self._root_dir, "lib", "windows", "amd64")
+
         return os.path.join(
             self._root_dir,
             "lib",
@@ -63,7 +65,7 @@ class FalconCTestCase(unittest.TestCase):
             "libpv_falcon." + get_lib_ext(self._platform)
         )
 
-    @parameterized.expand(devices)
+    @parameterized.expand(get_test_devices)
     def test_falcon(self, device):
         args = [
             os.path.join(os.path.dirname(__file__), "../build/falcon_demo"),
@@ -75,7 +77,6 @@ class FalconCTestCase(unittest.TestCase):
         ]
         process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
-        print(stdout, stderr)
         self.assertEqual(process.poll(), 0)
         self.assertEqual(stderr.decode('utf-8'), '')
 
