@@ -115,7 +115,7 @@ jobs:
             arch: amd64
             make_file: "MinGW Makefiles"
           - device: gpu
-            machine: pv-windows
+            machine: pv-windows-igpu
             platform: windows
             arch: amd64
             make_file: "MinGW Makefiles"
