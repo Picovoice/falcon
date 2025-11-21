@@ -17,13 +17,19 @@ import {
   FalconWorkerResponse,
 } from './types';
 
-import falconWasm from '../lib/pv_falcon.wasm';
-import falconWasmSimd from '../lib/pv_falcon_simd.wasm';
+import falconWasmSimd from './lib/pv_falcon_simd.wasm';
+import falconWasmSimdLib from './lib/pv_falcon_simd.txt';
+import falconWasmPThread from './lib/pv_falcon_pthread.wasm';
+import falconWasmPThreadLib from './lib/pv_falcon_pthread.txt';
 
-Falcon.setWasm(falconWasm);
 Falcon.setWasmSimd(falconWasmSimd);
-FalconWorker.setWasm(falconWasm);
+Falcon.setWasmSimdLib(falconWasmSimdLib);
+Falcon.setWasmPThread(falconWasmPThread);
+Falcon.setWasmPThreadLib(falconWasmPThreadLib);
 FalconWorker.setWasmSimd(falconWasmSimd);
+FalconWorker.setWasmSimdLib(falconWasmSimdLib);
+FalconWorker.setWasmPThread(falconWasmPThread);
+FalconWorker.setWasmPThreadLib(falconWasmPThreadLib);
 
 export {
   Falcon,

@@ -8,6 +8,22 @@ import { FalconSegment } from '../src';
 import { FalconError } from '../src/falcon_errors';
 
 const ACCESS_KEY = Cypress.env('ACCESS_KEY');
+const DEVICE = Cypress.env('DEVICE');
+
+const getDeviceList = () => {
+  const result: string[] = [];
+  if (DEVICE === 'cpu') {
+    const maxThreads = self.navigator.hardwareConcurrency / 2;
+
+    for (let i = 1; i <= maxThreads; i *= 2) {
+      result.push(`cpu:${i}`);
+    }
+  } else {
+    result.push(DEVICE);
+  }
+
+  return result;
+};
 
 const validateMetadata = (
   segments: FalconSegment[],
@@ -29,19 +45,21 @@ const runInitTest = async (
   params: {
     accessKey?: string;
     model?: PvModel;
+    device?: string;
     expectFailure?: boolean;
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
     model = { publicPath: '/test/falcon_params.pv', forceWrite: true },
+    device = undefined,
     expectFailure = false,
   } = params;
 
   let isFailed = false;
 
   try {
-    const falcon = await instance.create(accessKey, model);
+    const falcon = await instance.create(accessKey, model, device);
     expect(falcon.sampleRate).to.be.eq(16000);
     expect(typeof falcon.version).to.eq('string');
     expect(falcon.version.length).to.be.greaterThan(0);
@@ -71,15 +89,17 @@ const runProcTest = async (
   params: {
     accessKey?: string;
     model?: PvModel;
+    device?: string;
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
     model = { publicPath: '/test/falcon_params.pv', forceWrite: true },
+    device = undefined,
   } = params;
 
   try {
-    const falcon = await instance.create(accessKey, model);
+    const falcon = await instance.create(accessKey, model, device);
 
     const { segments } = await falcon.process(inputPcm);
 
@@ -200,6 +220,15 @@ describe('Falcon Binding', function () {
       });
     });
 
+    it(`should be able to handle invalid device (${instanceString})`, () => {
+      cy.wrap(null).then(async () => {
+        await runInitTest(instance, {
+          device: 'invalid',
+          expectFailure: true,
+        });
+      });
+    });
+
     it(`should be able to handle invalid access key (${instanceString})`, () => {
       cy.wrap(null).then(async () => {
         await runInitTest(instance, {
@@ -209,26 +238,29 @@ describe('Falcon Binding', function () {
       });
     });
 
-    for (const testParam of testData.tests.diarization_tests) {
-      it(`should be able to process (${instanceString})`, () => {
-        try {
-          cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
-            async pcm => {
-              await runProcTest(
-                instance,
-                pcm,
-                testParam.segments.map((s: any) => ({
-                  startSec: s.start_sec,
-                  endSec: s.end_sec,
-                  speakerTag: s.speaker_tag,
-                }))
-              );
-            }
-          );
-        } catch (e) {
-          expect(e).to.be.undefined;
-        }
-      });
+    for (const device of getDeviceList()) {
+      for (const testParam of testData.tests.diarization_tests) {
+        it(`should be able to process (${instanceString}) (${device})`, () => {
+          try {
+            cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
+              async pcm => {
+                await runProcTest(
+                  instance,
+                  pcm,
+                  testParam.segments.map((s: any) => ({
+                    startSec: s.start_sec,
+                    endSec: s.end_sec,
+                    speakerTag: s.speaker_tag,
+                  })),
+                  { device: device }
+                );
+              }
+            );
+          } catch (e) {
+            expect(e).to.be.undefined;
+          }
+        });
+      }
     }
 
     it(`should be able to transfer buffer`, () => {
