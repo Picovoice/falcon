@@ -107,7 +107,7 @@ int picovoice_main(int argc, char **argv) {
             case 'l':
                 library_path = optarg;
                 break;
-            case 'd':
+            case 'y':
                 device = optarg;
                 break;
             default:
@@ -116,7 +116,7 @@ int picovoice_main(int argc, char **argv) {
     }
 
     if (!(access_key && library_path && model_path && (optind < argc))) {
-        fprintf(stderr, "usage: -a ACCESS_KEY -m MODEL_PATH -l LIBRARY_PATH [-d DEVICE] audio_path0 audio_path1 ...\n");
+        fprintf(stderr, "usage: -a ACCESS_KEY -m MODEL_PATH -l LIBRARY_PATH [-y DEVICE] audio_path0 audio_path1 ...\n");
         exit(1);
     }
 
@@ -127,6 +127,28 @@ int picovoice_main(int argc, char **argv) {
     void *dl_handle = open_dl(library_path);
     if (!dl_handle) {
         fprintf(stderr, "failed to load library at `%s`.\n", library_path);
+
+#if defined(_WIN32) || defined(_WIN64)
+
+        DWORD errorCode = GetLastError();
+
+        LPVOID msgBuffer;
+        FormatMessage(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            errorCode,
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            (LPTSTR)&msgBuffer,
+            0,
+            NULL
+        );
+
+        printf("LoadLibrary failed with error %lu: %s\n", errorCode, (char*)msgBuffer);
+
+        LocalFree(msgBuffer);
+
+#endif
+
         exit(1);
     }
 
