@@ -52,7 +52,7 @@ class FalconCTestCase(unittest.TestCase):
         cls._access_key = sys.argv[1]
         cls._platform = sys.argv[2]
         cls._arch = "" if len(sys.argv) != 5 else sys.argv[4]
-        cls._root_dir = os.path.join(os.path.dirname(__file__), "../../..")
+        cls._root_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..")
 
     def _get_library_file(self):
         return os.path.join(
