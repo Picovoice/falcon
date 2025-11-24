@@ -1,5 +1,5 @@
 /*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2024-2025 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -60,16 +60,23 @@ public class Falcon {
      *
      * @param accessKey AccessKey obtained from Picovoice Console
      * @param modelPath Absolute path to the file containing Falcon model parameters.
+     * @param device String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+     * suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+     * GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+     * `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+     * argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
      * @throws FalconException if there is an error while initializing Falcon.
      */
     private Falcon(
             String accessKey,
-            String modelPath) throws FalconException {
+            String modelPath,
+            String device) throws FalconException {
         FalconNative.setSdk(Falcon._sdk);
 
         handle = FalconNative.init(
                 accessKey,
-                modelPath);
+                modelPath,
+                device);
     }
 
     /**
@@ -168,6 +175,7 @@ public class Falcon {
 
         private String accessKey = null;
         private String modelPath = null;
+        private String device = null;
 
         /**
          * Setter the AccessKey.
@@ -186,6 +194,16 @@ public class Falcon {
          */
         public Builder setModelPath(String modelPath) {
             this.modelPath = modelPath;
+            return this;
+        }
+
+        /**
+         * Setter for device.
+         *
+         * @param device String representation of the device
+         */
+        public Builder setDevice(String device) {
+            this.device = device;
             return this;
         }
 
@@ -246,9 +264,14 @@ public class Falcon {
                 }
             }
 
+            if (device == null) {
+                device = "cpu:1";
+            }
+
             return new Falcon(
                     accessKey,
-                    modelPath);
+                    modelPath,
+                    device);
         }
     }
 }
