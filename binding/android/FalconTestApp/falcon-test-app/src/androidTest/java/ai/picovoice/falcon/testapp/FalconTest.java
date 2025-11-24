@@ -14,6 +14,8 @@ package ai.picovoice.falcon.testapp;
 
 import static org.junit.Assert.*;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -138,8 +140,13 @@ public class FalconTest {
         @Parameterized.Parameter(value = 1)
         public FalconSegment[] expectedSegments;
 
+        @Parameterized.Parameter(value = 2)
+        public String device;
+
         @Parameterized.Parameters(name = "{0}")
         public static Collection<Object[]> initParameters() throws IOException {
+            List<String> devices = getTestDevices();
+
             String testDataJsonString = getTestDataString();
 
             JsonParser parser = new JsonParser();
@@ -170,10 +177,13 @@ public class FalconTest {
                     );
                 }
 
-                parameters.add(new Object[]{
-                        testAudioFile,
-                        paramSegments
-                });
+                for (String device : devices) {
+                    parameters.add(new Object[]{
+                            testAudioFile,
+                            paramSegments,
+                            device
+                    });
+                }
             }
 
             return parameters;
@@ -183,6 +193,7 @@ public class FalconTest {
         public void testDiarization() throws Exception {
             Falcon falcon = new Falcon.Builder()
                     .setAccessKey(accessKey)
+                    .setDevice(device)
                     .build(appContext);
 
             short[] pcm = readAudioFile(getAudioFilepath(testAudioFile));
@@ -194,6 +205,24 @@ public class FalconTest {
                 validateMetadata(result, expectedSegments);
             }
             falcon.delete();
+        }
+
+        private static ArrayList<String> getTestDevices() {
+            String device = InstrumentationRegistry.getInstrumentation().getTargetContext().getString(R.string.device);
+
+            ArrayList<String> result = new ArrayList<>();
+            if (device.equals("cpu")) {
+                int cores = Runtime.getRuntime().availableProcessors();
+                int maxThreads = cores / 2;
+
+                for (int i = 1; i <= maxThreads; i *= 2) {
+                    result.add("cpu:" + i);
+                }
+            } else {
+                result.add(device);
+            }
+
+            return result;
         }
     }
 }

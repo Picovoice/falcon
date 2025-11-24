@@ -15,6 +15,9 @@ if (rootProject.file("local.properties").exists()) {
     if (project.hasProperty("procPerformanceThresholdSec")) {
         properties.put("procPerformanceThresholdSec", project.getProperty("procPerformanceThresholdSec"))
     }
+    if (project.hasProperty("device")) {
+        properties.put("device", project.getProperty("device"))
+    }
 
     if (project.hasProperty("storePassword")) {
         properties.put("storePassword", project.getProperty("storePassword"))
@@ -46,6 +49,7 @@ android {
         resValue 'string', 'numTestIterations', properties.getProperty("numTestIterations", "")
         resValue 'string', 'initPerformanceThresholdSec', properties.getProperty("initPerformanceThresholdSec", "")
         resValue 'string', 'procPerformanceThresholdSec', properties.getProperty("procPerformanceThresholdSec", "")
+        resValue 'string', 'device', properties.getProperty("device", "")
     }
 
     signingConfigs {
@@ -115,7 +119,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.10'
-    implementation 'ai.picovoice:falcon-android:1.0.1'
+    implementation files('../../binding/android/Falcon/falcon/build/outputs/aar/falcon-release.aar')
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
