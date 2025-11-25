@@ -22,13 +22,9 @@ defaults:
 jobs:
   build:
     name: Run iOS Tests on BrowserStack
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '15.2'
-
       - name: Checkout
         uses: actions/checkout@v3
 
