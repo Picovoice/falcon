@@ -14,6 +14,8 @@ package ai.picovoice.falcon.testapp;
 
 import static org.junit.Assert.*;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -31,7 +33,8 @@ import java.util.List;
 
 import ai.picovoice.falcon.Falcon;
 import ai.picovoice.falcon.FalconException;
-import ai.picovoice.falcon.FalconSegment;
+import ai.picovoice.falcon.FalconSegments;
+import ai.picovoice.falcon.FalconSegments.Segment;
 
 
 @RunWith(Enclosed.class)
@@ -136,10 +139,15 @@ public class FalconTest {
         public String testAudioFile;
 
         @Parameterized.Parameter(value = 1)
-        public FalconSegment[] expectedSegments;
+        public Segment[] expectedSegments;
+
+        @Parameterized.Parameter(value = 2)
+        public String device;
 
         @Parameterized.Parameters(name = "{0}")
         public static Collection<Object[]> initParameters() throws IOException {
+            List<String> devices = getTestDevices();
+
             String testDataJsonString = getTestDataString();
 
             JsonParser parser = new JsonParser();
@@ -155,7 +163,7 @@ public class FalconTest {
                 String testAudioFile = testData.get("audio_file").getAsString();
                 JsonArray segments = testData.get("segments").getAsJsonArray();
 
-                FalconSegment[] paramSegments = new FalconSegment[segments.size()];
+                Segment[] paramSegments = new Segment[segments.size()];
                 for (int j = 0; j < segments.size(); j++) {
                     JsonObject segmentObject = segments.get(j).getAsJsonObject();
 
@@ -163,17 +171,20 @@ public class FalconTest {
                     float endSec = segmentObject.get("end_sec").getAsFloat();
                     int speakerTag = segmentObject.get("speaker_tag").getAsInt();
 
-                    paramSegments[j] = new FalconSegment(
+                    paramSegments[j] = new Segment(
                             startSec,
                             endSec,
                             speakerTag
                     );
                 }
 
-                parameters.add(new Object[]{
-                        testAudioFile,
-                        paramSegments
-                });
+                for (String device : devices) {
+                    parameters.add(new Object[]{
+                            testAudioFile,
+                            paramSegments,
+                            device
+                    });
+                }
             }
 
             return parameters;
@@ -183,17 +194,36 @@ public class FalconTest {
         public void testDiarization() throws Exception {
             Falcon falcon = new Falcon.Builder()
                     .setAccessKey(accessKey)
+                    .setDevice(device)
                     .build(appContext);
 
             short[] pcm = readAudioFile(getAudioFilepath(testAudioFile));
 
-            FalconSegment[] result = falcon.process(pcm);
+            FalconSegments result = falcon.process(pcm);
 
-            assertEquals(result.length, expectedSegments.length);
-            for (int i = 0; i < result.length; i++) {
-                validateMetadata(result, expectedSegments);
+            assertEquals(result.getSegmentArray().length, expectedSegments.length);
+            for (int i = 0; i < result.getSegmentArray().length; i++) {
+                validateMetadata(result.getSegmentArray(), expectedSegments);
             }
             falcon.delete();
+        }
+
+        private static ArrayList<String> getTestDevices() {
+            String device = InstrumentationRegistry.getInstrumentation().getTargetContext().getString(R.string.device);
+
+            ArrayList<String> result = new ArrayList<>();
+            if (device.equals("cpu")) {
+                int cores = Runtime.getRuntime().availableProcessors();
+                int maxThreads = cores / 2;
+
+                for (int i = 1; i <= maxThreads; i *= 2) {
+                    result.add("cpu:" + i);
+                }
+            } else {
+                result.add(device);
+            }
+
+            return result;
         }
     }
 }
