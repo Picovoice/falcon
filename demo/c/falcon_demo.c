@@ -294,6 +294,8 @@ int picovoice_main(int argc, char **argv) {
         pv_falcon_segments_delete_func(segments);
     }
 
+    pv_falcon_delete_func(falcon);
+
     fprintf(stdout, "proc took %.2f sec\n", proc_sec);
 
     close_dl(dl_handle);
