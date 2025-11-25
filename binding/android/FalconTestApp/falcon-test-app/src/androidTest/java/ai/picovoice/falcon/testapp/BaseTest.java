@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ai.picovoice.falcon.FalconSegment;
+import ai.picovoice.falcon.FalconSegments.Segment;
 
 public class BaseTest {
 
@@ -94,8 +94,8 @@ public class BaseTest {
     }
 
     protected void validateMetadata(
-            FalconSegment[] segments,
-            FalconSegment[] expectedSegments
+            Segment[] segments,
+            Segment[] expectedSegments
     ) {
         assertEquals(segments.length, expectedSegments.length);
         for (int i = 0; i < segments.length; i++) {

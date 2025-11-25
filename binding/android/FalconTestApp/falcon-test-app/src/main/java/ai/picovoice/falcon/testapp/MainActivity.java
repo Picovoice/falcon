@@ -40,7 +40,7 @@ import java.util.HashMap;
 
 import ai.picovoice.falcon.Falcon;
 import ai.picovoice.falcon.FalconException;
-import ai.picovoice.falcon.FalconSegment;
+import ai.picovoice.falcon.FalconSegments;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         result = new TestResult();
         result.testName = "Test Process";
         try {
-            FalconSegment[] processResult = processTestAudio(falcon, "audio_samples/test.wav");
+            FalconSegments processResult = processTestAudio(falcon, "audio_samples/test.wav");
             if (processResult != null) {
                 result.success = true;
             } else {
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         return "models/falcon_params.pv";
     }
 
-    private FalconSegment[] processTestAudio(@NonNull Falcon l, String audioPath) throws Exception {
+    private FalconSegments processTestAudio(@NonNull Falcon l, String audioPath) throws Exception {
         File testAudio = new File(getApplicationContext().getFilesDir(), audioPath);
 
         if (!testAudio.exists()) {

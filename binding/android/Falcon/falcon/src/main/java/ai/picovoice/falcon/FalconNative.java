@@ -23,16 +23,16 @@ class FalconNative {
     static native long init(
             String accessKey,
             String modelPath,
-            String device) throws FalconException;
+            String deviceString) throws FalconException;
 
     static native void delete(long object);
 
-    static native FalconSegment[] process(
+    static native FalconSegments process(
             long object,
             short[] pcm,
             int numSamples) throws FalconException;
 
-    static native FalconSegment[] processFile(
+    static native FalconSegments processFile(
             long object,
             String path) throws FalconException;
 }
