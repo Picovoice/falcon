@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -109,7 +109,7 @@
 			);
 			mainGroup = 327692BCE8C735F3534C318E;
 			packageReferences = (
-				E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */,
+				1E9C52192ED5414800860AA4 /* XCLocalSwiftPackageReference "../../../../falcon" */,
 			);
 			productRefGroup = 32769B87809678D96B1C6C55 /* Products */;
 			projectDirPath = "";
@@ -349,6 +349,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		1E9C52192ED5414800860AA4 /* XCLocalSwiftPackageReference "../../../../falcon" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../falcon;
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */ = {

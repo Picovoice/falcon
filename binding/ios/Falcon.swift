@@ -1,5 +1,5 @@
 //
-//  Copyright 2024 Picovoice Inc.
+//  Copyright 2024-2025 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -93,8 +93,13 @@ public class Falcon {
     /// - Parameters:
     ///   - accessKey: The AccessKey obtained from Picovoice Console (https://console.picovoice.ai).
     ///   - modelPath: Absolute path to file containing model parameters.
+    ///   - device: String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+    ///     suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+    ///     GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+    ///     `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+    ///     argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
     /// - Throws: FalconError
-    public init(accessKey: String, modelPath: String? = nil) throws {
+    public init(accessKey: String, modelPath: String? = nil, device: String? = nil) throws {
 
         if accessKey.count == 0 {
             throw FalconInvalidArgumentError("AccessKey is required for Falcon initialization")
@@ -112,11 +117,17 @@ public class Falcon {
             modelPathArg = try self.getResourcePath(modelPathArg!)
         }
 
+        var deviceArg = device
+        if deviceArg == nil {
+            deviceArg = "cpu:1"
+        }
+
         pv_set_sdk(Falcon.sdk)
 
         let status = pv_falcon_init(
                 accessKey,
                 modelPathArg,
+                deviceArg,
                 &handle)
 
         if status != PV_STATUS_SUCCESS {

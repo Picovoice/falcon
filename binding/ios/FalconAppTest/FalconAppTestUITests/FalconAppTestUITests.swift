@@ -1,5 +1,5 @@
 //
-//  Copyright 2024 Picovoice Inc.
+//  Copyright 2024-2025 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -38,6 +38,7 @@ struct DiarizationTestSegment: Decodable {
 
 class FalconAppTestUITests: XCTestCase {
     let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
+    let device: String = "{TESTING_DEVICE_HERE}"
 
     override func setUpWithError() throws {
         continueAfterFailure = true
@@ -53,6 +54,7 @@ class FalconAppTestUITests: XCTestCase {
     }
 
     func runTestProcess(
+            device: String,
             expectedSegments: [DiarizationTestSegment],
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
@@ -61,7 +63,7 @@ class FalconAppTestUITests: XCTestCase {
                 withExtension: "",
                 subdirectory: "test_resources/audio_samples")!
 
-        let falcon = try! Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey, device: device)
         
         let data = try Data(contentsOf: audioFileURL)
         var pcmBuffer = [Int16](repeating: 0, count: ((data.count - 44) / MemoryLayout<Int16>.size))
@@ -78,11 +80,12 @@ class FalconAppTestUITests: XCTestCase {
     }
 
     func runTestProcessFile(
+            device: String,
             expectedSegments: [DiarizationTestSegment],
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
 
-        let falcon = try! Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey, device: device)
 
         let audioFilePath: String = bundle.path(
                 forResource: testAudio,
@@ -97,6 +100,7 @@ class FalconAppTestUITests: XCTestCase {
     }
 
     func runTestProcessURL(
+            device: String,
             expectedSegments: [DiarizationTestSegment],
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
@@ -105,7 +109,7 @@ class FalconAppTestUITests: XCTestCase {
                 withExtension: "",
                 subdirectory: "test_resources/audio_samples")!
 
-        let falcon = try! Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey, device: device)
 
         let falconSegments = try falcon.processFile(audioFileURL)
         falcon.delete()
@@ -123,12 +127,17 @@ class FalconAppTestUITests: XCTestCase {
             subdirectory: "test_resources")!
         let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
+        
+        let devices = getTestDevices()
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
-                try runTestProcess(
-                        expectedSegments: testCase.segments,
-                        testAudio: testCase.audio_file)
+            for device in devices {
+                try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
+                    try runTestProcess(
+                            device: device,
+                            expectedSegments: testCase.segments,
+                            testAudio: testCase.audio_file)
+                }
             }
         }
     }
@@ -141,12 +150,17 @@ class FalconAppTestUITests: XCTestCase {
             subdirectory: "test_resources")!
         let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
+        
+        let devices = getTestDevices()
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
-                try runTestProcessFile(
-                        expectedSegments: testCase.segments,
-                        testAudio: testCase.audio_file)
+            for device in devices {
+                try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
+                    try runTestProcessFile(
+                            device: device,
+                            expectedSegments: testCase.segments,
+                            testAudio: testCase.audio_file)
+                }
             }
         }
     }
@@ -159,12 +173,17 @@ class FalconAppTestUITests: XCTestCase {
             subdirectory: "test_resources")!
         let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
+        
+        let devices = getTestDevices()
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
-                try runTestProcessURL(
-                        expectedSegments: testCase.segments,
-                        testAudio: testCase.audio_file)
+            for device in devices {
+                try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
+                    try runTestProcessURL(
+                            device: device,
+                            expectedSegments: testCase.segments,
+                            testAudio: testCase.audio_file)
+                }
             }
         }
     }
@@ -212,5 +231,24 @@ class FalconAppTestUITests: XCTestCase {
         } catch {
             XCTAssert("\(error.localizedDescription)".count > 0)
         }
+    }
+    
+    private func getTestDevices() -> [String] {
+        var result: [String] = []
+
+        if device == "cpu" {
+            let cores = ProcessInfo.processInfo.processorCount
+            let maxThreads = cores / 2
+
+            var i = 1
+            while i <= maxThreads {
+                result.append("cpu:\(i)")
+                i *= 2
+            }
+        } else {
+            result.append(device)
+        }
+
+        return result
     }
 }
