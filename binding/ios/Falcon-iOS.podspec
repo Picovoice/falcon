@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name = 'Falcon-iOS'
   s.module_name = 'Falcon'
-  s.version = '1.0.1'
+  s.version = '2.0.0'
   s.license = {:type => 'Apache 2.0'}
   s.summary = 'iOS SDK for Picovoice\'s Falcon speaker diarization engine.'
   s.description =
