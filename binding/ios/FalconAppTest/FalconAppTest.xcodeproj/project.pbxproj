@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -237,7 +237,7 @@
 			);
 			mainGroup = 1E00650927CFEF00006FF6E9;
 			packageReferences = (
-				E1F352F52D00D7960069B0E6 /* XCRemoteSwiftPackageReference "falcon" */,
+				1E4229AF2ED53B530052E028 /* XCLocalSwiftPackageReference "../../../../falcon" */,
 			);
 			productRefGroup = 1E00651327CFEF00006FF6E9 /* Products */;
 			projectDirPath = "";
@@ -650,22 +650,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		1E4229AF2ED53B530052E028 /* XCLocalSwiftPackageReference "../../../../falcon" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../falcon;
+		};
 		E1CF9E232CFA65D0004BA9A9 /* XCLocalSwiftPackageReference "../../../../falcon" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../../falcon;
 		};
 /* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		E1F352F52D00D7960069B0E6 /* XCRemoteSwiftPackageReference "falcon" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Picovoice/falcon";
-			requirement = {
-				kind = exactVersion;
-				version = 1.0.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		E1CF9E252CFA65F5004BA9A9 /* Falcon */ = {

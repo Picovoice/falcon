@@ -45,6 +45,9 @@ jobs:
         run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
           FalconAppTestUITests/FalconAppTestUITests.swift
 
+      - name: Inject Device
+        run: sed -i '.bak' 's:{TESTING_DEVICE_HERE}:cpu:' FalconAppTestUITests/FalconAppTestUITests.swift
+
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing
           -configuration Debug
