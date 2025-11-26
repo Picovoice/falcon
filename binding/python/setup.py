@@ -59,6 +59,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Multimedia :: Sound/Audio :: Speech",
     ],
-    python_requires=">=3.10",
+    python_requires=">=3.9",
     keywords="Speaker Diarization, Speaker Identification, Voice Identification",
 )
