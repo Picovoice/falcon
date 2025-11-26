@@ -1,6 +1,7 @@
 import { Falcon, FalconWorker } from '../';
 
 const ACCESS_KEY = Cypress.env('ACCESS_KEY');
+const DEVICE = Cypress.env('DEVICE');
 const NUM_TEST_ITERATIONS = Number(Cypress.env('NUM_TEST_ITERATIONS'));
 const INIT_PERFORMANCE_THRESHOLD_SEC = Number(
   Cypress.env('INIT_PERFORMANCE_THRESHOLD_SEC')
@@ -22,7 +23,7 @@ async function testPerformance(
     const falcon = await instance.create(ACCESS_KEY, {
       publicPath: '/test/falcon_params.pv',
       forceWrite: true,
-    });
+    }, DEVICE);
 
     let end = Date.now();
     initPerfResults.push((end - start) / 1000);
