@@ -15,7 +15,7 @@ import time
 from argparse import ArgumentParser
 from threading import Thread
 
-from pvfalcon import create, FalconActivationLimitError
+from pvfalcon import create, available_devices, FalconActivationLimitError
 from pvrecorder import PvRecorder
 from tabulate import tabulate
 

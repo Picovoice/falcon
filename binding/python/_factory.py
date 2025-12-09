@@ -33,10 +33,11 @@ def create(access_key: str, model_path: Optional[str] = None, device: Optional[s
     :param model_path: Absolute path to the file containing model parameters. If not set it will be set to the default
     location.
     :param device: String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
-    suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
-    GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
-    `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
-    argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
+    suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device.
+    To select a specific GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index
+    of the target GPU. If set to `cpu`, the engine will run on the CPU with the default number of threads.
+    To specify the number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}`
+    is the desired number of threads.
     :param library_path: Absolute path to Falcon's dynamic library. If not set it will be set to the default location.
     :return: An instance of Falcon diarization engine.
     """
@@ -45,7 +46,7 @@ def create(access_key: str, model_path: Optional[str] = None, device: Optional[s
         model_path = default_model_path("")
 
     if device is None:
-        device = "cpu:1"
+        device = "best"
 
     if library_path is None:
         library_path = default_library_path("")
