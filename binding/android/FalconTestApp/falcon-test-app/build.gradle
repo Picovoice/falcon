@@ -15,8 +15,8 @@ if (rootProject.file("local.properties").exists()) {
     if (project.hasProperty("procPerformanceThresholdSec")) {
         properties.put("procPerformanceThresholdSec", project.getProperty("procPerformanceThresholdSec"))
     }
-    if (project.hasProperty("device")) {
-        properties.put("device", project.getProperty("device"))
+    if (project.hasProperty("pvTestingDevice")) {
+        properties.put("pvTestingDevice", project.getProperty("pvTestingDevice"))
     }
 
     if (project.hasProperty("storePassword")) {
@@ -49,7 +49,7 @@ android {
         resValue 'string', 'numTestIterations', properties.getProperty("numTestIterations", "")
         resValue 'string', 'initPerformanceThresholdSec', properties.getProperty("initPerformanceThresholdSec", "")
         resValue 'string', 'procPerformanceThresholdSec', properties.getProperty("procPerformanceThresholdSec", "")
-        resValue 'string', 'device', properties.getProperty("device", "")
+        resValue 'string', 'pvTestingDevice', properties.getProperty("pvTestingDevice", "")
     }
 
     signingConfigs {

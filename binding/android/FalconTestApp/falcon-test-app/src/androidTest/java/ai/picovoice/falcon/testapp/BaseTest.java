@@ -48,6 +48,7 @@ public class BaseTest {
     String defaultModelPath;
 
     String accessKey;
+    String device;
 
     @Before
     public void Setup() throws IOException {
@@ -58,6 +59,7 @@ public class BaseTest {
         defaultModelPath = getModelFilepath("falcon_params.pv");
 
         accessKey = appContext.getString(R.string.pvTestingAccessKey);
+        device = appContext.getString(R.string.pvTestingDevice);
     }
 
     public static String getTestDataString() throws IOException {

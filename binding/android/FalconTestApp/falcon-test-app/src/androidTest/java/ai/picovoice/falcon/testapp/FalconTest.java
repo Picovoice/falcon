@@ -1,5 +1,5 @@
 /*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2024-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -141,13 +141,8 @@ public class FalconTest {
         @Parameterized.Parameter(value = 1)
         public Segment[] expectedSegments;
 
-        @Parameterized.Parameter(value = 2)
-        public String device;
-
         @Parameterized.Parameters(name = "{0}")
         public static Collection<Object[]> initParameters() throws IOException {
-            List<String> devices = getTestDevices();
-
             String testDataJsonString = getTestDataString();
 
             JsonParser parser = new JsonParser();
@@ -177,14 +172,6 @@ public class FalconTest {
                             speakerTag
                     );
                 }
-
-                for (String device : devices) {
-                    parameters.add(new Object[]{
-                            testAudioFile,
-                            paramSegments,
-                            device
-                    });
-                }
             }
 
             return parameters;
@@ -206,24 +193,6 @@ public class FalconTest {
                 validateMetadata(result.getSegmentArray(), expectedSegments);
             }
             falcon.delete();
-        }
-
-        private static ArrayList<String> getTestDevices() {
-            String device = InstrumentationRegistry.getInstrumentation().getTargetContext().getString(R.string.device);
-
-            ArrayList<String> result = new ArrayList<>();
-            if (device.equals("cpu")) {
-                int cores = Runtime.getRuntime().availableProcessors();
-                int maxThreads = cores / 2;
-
-                for (int i = 1; i <= maxThreads; i *= 2) {
-                    result.add("cpu:" + i);
-                }
-            } else {
-                result.add(device);
-            }
-
-            return result;
         }
     }
 }

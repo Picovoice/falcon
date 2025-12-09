@@ -1,5 +1,5 @@
 /*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2024-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -51,7 +51,9 @@ public class PerformanceTest extends BaseTest {
         long totalNSec = 0;
         for (int i = 0; i < numTestIterations + 1; i++) {
             long before = System.nanoTime();
-            Falcon falcon = new Falcon.Builder().setAccessKey(accessKey)
+            Falcon falcon = new Falcon.Builder()
+                    .setAccessKey(accessKey)
+                    .setDevice(device)
                     .build(appContext);
             long after = System.nanoTime();
 
@@ -78,7 +80,9 @@ public class PerformanceTest extends BaseTest {
         Assume.assumeFalse(procThresholdString.equals(""));
         double procPerformanceThresholdSec = Double.parseDouble(procThresholdString);
 
-        Falcon falcon = new Falcon.Builder().setAccessKey(accessKey)
+        Falcon falcon = new Falcon.Builder()
+                .setAccessKey(accessKey)
+                .setDevice(device)
                 .build(appContext);
 
         File audioFile = new File(getAudioFilepath("test.wav"));
