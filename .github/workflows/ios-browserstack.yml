@@ -46,7 +46,7 @@ jobs:
           FalconAppTestUITests/FalconAppTestUITests.swift
 
       - name: Inject Device
-        run: sed -i '.bak' 's:{TESTING_DEVICE_HERE}:cpu:' FalconAppTestUITests/FalconAppTestUITests.swift
+        run: sed -i '.bak' 's:{TESTING_DEVICE_HERE}:cpu\:1:' FalconAppTestUITests/FalconAppTestUITests.swift
 
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing

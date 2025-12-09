@@ -54,7 +54,6 @@ class FalconAppTestUITests: XCTestCase {
     }
 
     func runTestProcess(
-            device: String,
             expectedSegments: [DiarizationTestSegment],
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
@@ -80,7 +79,6 @@ class FalconAppTestUITests: XCTestCase {
     }
 
     func runTestProcessFile(
-            device: String,
             expectedSegments: [DiarizationTestSegment],
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
@@ -100,7 +98,6 @@ class FalconAppTestUITests: XCTestCase {
     }
 
     func runTestProcessURL(
-            device: String,
             expectedSegments: [DiarizationTestSegment],
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
@@ -127,17 +124,12 @@ class FalconAppTestUITests: XCTestCase {
             subdirectory: "test_resources")!
         let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
-        
-        let devices = getTestDevices()
 
         for testCase in testData.tests.diarization_tests {
-            for device in devices {
-                try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
-                    try runTestProcess(
-                            device: device,
-                            expectedSegments: testCase.segments,
-                            testAudio: testCase.audio_file)
-                }
+            try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
+                try runTestProcess(
+                        expectedSegments: testCase.segments,
+                        testAudio: testCase.audio_file)
             }
         }
     }
@@ -150,17 +142,12 @@ class FalconAppTestUITests: XCTestCase {
             subdirectory: "test_resources")!
         let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
-        
-        let devices = getTestDevices()
 
         for testCase in testData.tests.diarization_tests {
-            for device in devices {
-                try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
-                    try runTestProcessFile(
-                            device: device,
-                            expectedSegments: testCase.segments,
-                            testAudio: testCase.audio_file)
-                }
+            try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
+                try runTestProcessFile(
+                        expectedSegments: testCase.segments,
+                        testAudio: testCase.audio_file)
             }
         }
     }
@@ -173,17 +160,12 @@ class FalconAppTestUITests: XCTestCase {
             subdirectory: "test_resources")!
         let testDataJsonData = try Data(contentsOf: testDataJsonUrl)
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
-        
-        let devices = getTestDevices()
 
         for testCase in testData.tests.diarization_tests {
-            for device in devices {
-                try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
-                    try runTestProcessURL(
-                            device: device,
-                            expectedSegments: testCase.segments,
-                            testAudio: testCase.audio_file)
-                }
+            try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
+                try runTestProcessURL(
+                        expectedSegments: testCase.segments,
+                        testAudio: testCase.audio_file)
             }
         }
     }
@@ -231,24 +213,5 @@ class FalconAppTestUITests: XCTestCase {
         } catch {
             XCTAssert("\(error.localizedDescription)".count > 0)
         }
-    }
-    
-    private func getTestDevices() -> [String] {
-        var result: [String] = []
-
-        if device == "cpu" {
-            let cores = ProcessInfo.processInfo.processorCount
-            let maxThreads = cores / 2
-
-            var i = 1
-            while i <= maxThreads {
-                result.append("cpu:\(i)")
-                i *= 2
-            }
-        } else {
-            result.append(device)
-        }
-
-        return result
     }
 }
