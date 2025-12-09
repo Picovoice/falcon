@@ -80,7 +80,7 @@ jobs:
 
     strategy:
       matrix:
-        device: [ cpu, cpu:1 ]
+        device: [ best ]
         machine: [ rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64 ]
         make_file: ["Unix Makefiles"]
         include:
@@ -99,7 +99,7 @@ jobs:
           - machine: rpi5-64
             platform: raspberry-pi
             arch: cortex-a76-aarch64
-          - device: cpu
+          - device: best
             machine: pv-windows-arm64
             platform: windows
             arch: arm64
