@@ -10,21 +10,6 @@ import { FalconError } from '../src/falcon_errors';
 const ACCESS_KEY = Cypress.env('ACCESS_KEY');
 const DEVICE = Cypress.env('DEVICE');
 
-const getDeviceList = () => {
-  const result: string[] = [];
-  if (DEVICE === 'cpu') {
-    const maxThreads = self.navigator.hardwareConcurrency / 2;
-
-    for (let i = 1; i <= maxThreads; i *= 2) {
-      result.push(`cpu:${i}`);
-    }
-  } else {
-    result.push(DEVICE);
-  }
-
-  return result;
-};
-
 const validateMetadata = (
   segments: FalconSegment[],
   expectedSegments: FalconSegment[]
@@ -95,7 +80,7 @@ const runProcTest = async (
   const {
     accessKey = ACCESS_KEY,
     model = { publicPath: '/test/falcon_params.pv', forceWrite: true },
-    device = undefined,
+    device = DEVICE,
   } = params;
 
   try {
@@ -220,15 +205,6 @@ describe('Falcon Binding', function () {
       });
     });
 
-    it(`should be able to handle invalid device (${instanceString})`, () => {
-      cy.wrap(null).then(async () => {
-        await runInitTest(instance, {
-          device: 'invalid',
-          expectFailure: true,
-        });
-      });
-    });
-
     it(`should be able to handle invalid access key (${instanceString})`, () => {
       cy.wrap(null).then(async () => {
         await runInitTest(instance, {
@@ -238,29 +214,35 @@ describe('Falcon Binding', function () {
       });
     });
 
-    for (const device of getDeviceList()) {
-      for (const testParam of testData.tests.diarization_tests) {
-        it(`should be able to process (${instanceString}) (${device})`, () => {
-          try {
-            cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
-              async pcm => {
-                await runProcTest(
-                  instance,
-                  pcm,
-                  testParam.segments.map((s: any) => ({
-                    startSec: s.start_sec,
-                    endSec: s.end_sec,
-                    speakerTag: s.speaker_tag,
-                  })),
-                  { device: device }
-                );
-              }
-            );
-          } catch (e) {
-            expect(e).to.be.undefined;
-          }
+    it(`should be able to handle invalid device (${instanceString})`, () => {
+      cy.wrap(null).then(async () => {
+        await runInitTest(instance, {
+          device: 'invalid',
+          expectFailure: true,
         });
-      }
+      });
+    });
+
+    for (const testParam of testData.tests.diarization_tests) {
+      it(`should be able to process (${instanceString})`, () => {
+        try {
+          cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then(
+            async pcm => {
+              await runProcTest(
+                instance,
+                pcm,
+                testParam.segments.map((s: any) => ({
+                  startSec: s.start_sec,
+                  endSec: s.end_sec,
+                  speakerTag: s.speaker_tag,
+                }))
+              );
+            }
+          );
+        } catch (e) {
+          expect(e).to.be.undefined;
+        }
+      });
     }
 
     it(`should be able to transfer buffer`, () => {

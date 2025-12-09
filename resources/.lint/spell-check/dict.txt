@@ -39,3 +39,8 @@ xcframework
 xcodeproj
 xcuitest
 xcworkspace
+ccall
+cwrap
+Embedder
+Emscripten
+HEAPU
