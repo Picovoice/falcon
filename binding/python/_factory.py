@@ -25,7 +25,11 @@ from ._util import (
 )
 
 
-def create(access_key: str, model_path: Optional[str] = None, device: Optional[str] = None, library_path: Optional[str] = None) -> Falcon:
+def create(
+    access_key: str,
+    model_path: Optional[str] = None,
+    device: Optional[str] = None,
+    library_path: Optional[str] = None) -> Falcon:
     """
     Factory method for Falcon speaker diarization engine.
 
@@ -51,7 +55,11 @@ def create(access_key: str, model_path: Optional[str] = None, device: Optional[s
     if library_path is None:
         library_path = default_library_path("")
 
-    return Falcon(access_key=access_key, model_path=model_path, device=device, library_path=library_path)
+    return Falcon(
+        access_key=access_key,
+        model_path=model_path,
+        device=device,
+        library_path=library_path)
 
 
 def available_devices(library_path: Optional[str] = None) -> Sequence[str]:

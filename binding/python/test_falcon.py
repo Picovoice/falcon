@@ -50,15 +50,27 @@ class FalconTestCase(unittest.TestCase):
 
     def test_invalid_model_path(self):
         with self.assertRaises(FalconIOError):
-            Falcon(access_key=self._access_key, model_path="invalid", device=self._device, library_path=default_library_path("../../"))
+            Falcon(
+                access_key=self._access_key,
+                model_path="invalid",
+                device=self._device,
+                library_path=default_library_path("../../"))
 
     def test_invalid_device(self):
         with self.assertRaises(FalconInvalidArgumentError):
-            Falcon(access_key=self._access_key, model_path=default_model_path("../../"), device="invalid", library_path=default_library_path("../../"))
+            Falcon(
+                access_key=self._access_key,
+                model_path=default_model_path("../../"),
+                device="invalid",
+                library_path=default_library_path("../../"))
 
     def test_invalid_library_path(self):
         with self.assertRaises(FalconIOError):
-            Falcon(access_key=self._access_key, model_path=default_model_path("../../"), device=self._device, library_path="invalid")
+            Falcon(
+                access_key=self._access_key,
+                model_path=default_model_path("../../"),
+                device=self._device,
+                library_path="invalid")
 
     def test_version(self):
         o = Falcon(
