@@ -26,10 +26,10 @@ from ._util import (
 
 
 def create(
-    access_key: str,
-    model_path: Optional[str] = None,
-    device: Optional[str] = None,
-    library_path: Optional[str] = None) -> Falcon:
+        access_key: str,
+        model_path: Optional[str] = None,
+        device: Optional[str] = None,
+        library_path: Optional[str] = None) -> Falcon:
     """
     Factory method for Falcon speaker diarization engine.
 
