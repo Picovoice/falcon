@@ -13,7 +13,6 @@ import argparse
 import os
 import sys
 import unittest
-from parameterized import parameterized
 from time import perf_counter
 
 from _falcon import Falcon

@@ -1,5 +1,5 @@
 #
-#    Copyright 2022-2023 Picovoice Inc.
+#    Copyright 2022-2025 Picovoice Inc.
 #
 #    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 #    file accompanying this source.
@@ -71,11 +71,23 @@ def main():
         default=-1,
         type=int,
         help='Audio device index to use from --show_audio_devices')
+    arser.add_argument(
+        '--device',
+        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
+             'Default: automatically selects best device for `pvfalcon`')
+    parser.add_argument(
+        '--show_inference_devices',
+        action='store_true',
+        help='Show the list of available devices for Flacon inference and exit')
     args = parser.parse_args()
 
     if args.show_audio_devices:
         for index, name in enumerate(PvRecorder.get_available_devices()):
             print('Device #%d: %s' % (index, name))
+        return
+
+    if args.show_inference_devices:
+        print('\n'.join(available_devices(library_path=args.library_path)))
         return
 
     if args.audio_device_index != -1:
@@ -91,6 +103,7 @@ def main():
     falcon = create(
         access_key=args.access_key,
         model_path=args.model_path,
+        device=args.device,
         library_path=args.library_path)
 
     recorder = None

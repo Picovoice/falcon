@@ -12,7 +12,6 @@
 import os
 import sys
 import unittest
-from parameterized import parameterized
 from typing import *
 
 from _falcon import *
@@ -20,22 +19,6 @@ from _util import *
 from test_util import *
 
 diarization_tests = load_test_data()
-
-def get_test_devices():
-    result = list()
-
-    device = sys.argv[2] if len(sys.argv) == 3 else None
-    if device == "cpu":
-        max_threads = os.cpu_count() // 2
-        i = 1
-
-        while i <= max_threads:
-            result.append(f"cpu:{i}")
-            i *= 2
-    else:
-        result.append(device)
-
-    return result
 
 
 class FalconTestCase(unittest.TestCase):
@@ -87,15 +70,14 @@ class FalconTestCase(unittest.TestCase):
         self.assertIsInstance(o.version, str)
         self.assertGreater(len(o.version), 0)
 
-    @parameterized.expand(get_test_devices, skip_on_empty=True)
-    def test_falcon_process(self, device):
+    def test_falcon_process(self):
         o = None
 
         try:
             o = Falcon(
                 access_key=self._access_key,
                 model_path=default_model_path("../../"),
-                device=device,
+                device=self._device,
                 library_path=default_library_path("../../"),
             )
 
@@ -109,15 +91,14 @@ class FalconTestCase(unittest.TestCase):
             if o is not None:
                 o.delete()
 
-    @parameterized.expand(get_test_devices, skip_on_empty=True)
-    def test_falcon_process_file(self, device):
+    def test_falcon_process_file(self):
         o = None
 
         try:
             o = Falcon(
                 access_key=self._access_key,
                 model_path=default_model_path("../../"),
-                device=device,
+                device=self._device,
                 library_path=default_library_path("../../"),
             )
 

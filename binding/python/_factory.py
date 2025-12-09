@@ -9,10 +9,20 @@
 # specific language governing permissions and limitations under the License.
 #
 
-from typing import *
+from typing import (
+    Optional,
+    Sequence
+)
 
-from ._falcon import Falcon
-from ._util import default_library_path, default_model_path
+from ._falcon import (
+    Falcon,
+    list_hardware_devices,
+)
+
+from ._util import (
+    default_library_path,
+    default_model_path
+)
 
 
 def create(access_key: str, model_path: Optional[str] = None, device: Optional[str] = None, library_path: Optional[str] = None) -> Falcon:
@@ -43,6 +53,21 @@ def create(access_key: str, model_path: Optional[str] = None, device: Optional[s
     return Falcon(access_key=access_key, model_path=model_path, deivce=device, library_path=library_path)
 
 
+def available_devices(library_path: Optional[str] = None) -> Sequence[str]:
+    """
+    Lists all available devices that Falcon can use for inference. Each entry in the list can be the `device` argument
+    of `.create` factory method or `Falcon` constructor.
+    :param library_path: Absolute path to Falcon's dynamic library. If not set it will be set to the default location.
+    :return: List of all available devices that Falcon can use for inference.
+    """
+
+    if library_path is None:
+        library_path = default_library_path()
+
+    return list_hardware_devices(library_path=library_path)
+
+
 __all__ = [
     "create",
+    "available_devices"
 ]
