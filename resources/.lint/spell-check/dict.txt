@@ -44,3 +44,5 @@ cwrap
 Embedder
 Emscripten
 HEAPU
+HEAPF
+pthread
