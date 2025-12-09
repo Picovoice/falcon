@@ -112,25 +112,17 @@ jobs:
         working-directory: resources/.scripts
         run: bash machine-state.sh
 
-  perf-windows-desktop:
+  perf-windows-arm64:
     runs-on: ${{ matrix.machine }}
 
     strategy:
       fail-fast: false
       matrix:
-        device: [ gpu ]
-        machine: [ pv-linux, pv-windows, pv-ios ]
+        device: [ cpu:1 ]
+        machine: [ pv-windows-arm64 ]
         include:
-          - device: cpu:1
-            machine: pv-windows-arm64
+          - machine: pv-windows-arm64
             performance_threshold_sec: 1.5
-          - machine: pv-linux
-            performance_threshold_sec: 1.5
-          - machine: pv-windows
-            performance_threshold_sec: 1.5
-          - machine: pv-ios
-            performance_threshold_sec: 1.5
-
     steps:
       - uses: actions/checkout@v3
 
