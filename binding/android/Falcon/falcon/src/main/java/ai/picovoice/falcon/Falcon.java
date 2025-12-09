@@ -56,6 +56,17 @@ public class Falcon {
     }
 
     /**
+     * Lists all available devices that Falcon can use for inference.
+     * Each entry in the list can be used as the `device` argument when initializing Falcon.
+     *
+     * @return Array of all available devices that Falcon can be used for inference.
+     * @throws FalconException if getting available devices fails.
+     */
+    public static String[] getAvailableDevices() throws FalconException {
+        return FalconNative.listHardwareDevices();
+    }
+
+    /**
      * Constructor.
      *
      * @param accessKey AccessKey obtained from Picovoice Console
@@ -265,7 +276,7 @@ public class Falcon {
             }
 
             if (device == null) {
-                device = "cpu:1";
+                device = "best";
             }
 
             return new Falcon(

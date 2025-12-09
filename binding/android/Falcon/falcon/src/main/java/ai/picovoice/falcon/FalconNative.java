@@ -35,4 +35,6 @@ class FalconNative {
     static native FalconSegments processFile(
             long object,
             String path) throws FalconException;
+
+    static native String[] listHardwareDevices() throws FalconException;
 }

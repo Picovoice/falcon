@@ -131,6 +131,30 @@ public class FalconTest {
                 }
             }
         }
+
+        @Test
+        public void testInitFailWithInvalidDevice() {
+            boolean didFail = false;
+            try {
+                new Falcon.Builder()
+                        .setAccessKey(accessKey)
+                        .setDevice("invalid:9")
+                        .build(appContext);
+            } catch (FalconException e) {
+                didFail = true;
+            }
+
+            assertTrue(didFail);
+        }
+
+        @Test
+        public void testGetAvailableDevices() throws FalconException {
+            String[] availableDevices = Falcon.getAvailableDevices();
+            assertTrue(availableDevices.length > 0);
+            for (String d : availableDevices) {
+                assertTrue(d != null && d.length() > 0);
+            }
+        }
     }
 
     @RunWith(Parameterized.class)
