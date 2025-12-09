@@ -31,7 +31,7 @@ def main():
         nargs='+',
         metavar='PATH',
         help='Absolute paths to `.wav` files')
-    arser.add_argument(
+    parser.add_argument(
         '--device',
         help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
              'Default: automatically selects best device for `pvfalcon`')

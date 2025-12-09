@@ -71,7 +71,7 @@ def main():
         default=-1,
         type=int,
         help='Audio device index to use from --show_audio_devices')
-    arser.add_argument(
+    parser.add_argument(
         '--device',
         help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
              'Default: automatically selects best device for `pvfalcon`')
