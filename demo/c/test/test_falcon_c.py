@@ -14,24 +14,6 @@ import os.path
 import subprocess
 import sys
 import unittest
-from parameterized import parameterized
-
-
-def get_test_devices():
-    result = list()
-    
-    device = sys.argv[3] if len(sys.argv) > 3 else None
-    if device == "cpu":
-        max_threads = os.cpu_count() // 2
-        i = 1
-
-        while i <= max_threads:
-            result.append(f"cpu:{i}")
-            i *= 2
-    else:
-        result.append(device)
-
-    return result
 
 
 def get_lib_ext(platform):
@@ -48,7 +30,8 @@ class FalconCTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._access_key = sys.argv[1]
-        cls._platform = sys.argv[2]
+        cls._device = sys.argv[2]
+        cls._platform = sys.argv[3]
         cls._arch = "" if len(sys.argv) != 5 else sys.argv[4]
         cls._root_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..")
 
@@ -65,15 +48,25 @@ class FalconCTestCase(unittest.TestCase):
             "libpv_falcon." + get_lib_ext(self._platform)
         )
 
-    @parameterized.expand(get_test_devices)
-    def test_falcon(self, device):
+    def test_falcon(self):
         args = [
             os.path.join(os.path.dirname(__file__), "../build/falcon_demo"),
             "-a", self._access_key,
             "-l", self._get_library_file(),
             "-m", os.path.join(self._root_dir, 'lib/common/falcon_params.pv'),
-            "-y", device,
+            "-y", self._device,
             os.path.join(self._root_dir, 'resources/audio_samples/test.wav'),
+        ]
+        process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        self.assertEqual(process.poll(), 0)
+        self.assertEqual(stderr.decode('utf-8'), '')
+
+    def test_list_hardware_devices(self):
+        args = [
+            os.path.join(os.path.dirname(__file__), "../build/falcon_demo"),
+            "-l", self._get_library_file(),
+            "-z"
         ]
         process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -83,6 +76,6 @@ class FalconCTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     if len(sys.argv) < 4 or len(sys.argv) > 5:
-        print("usage: test_falcon_c.py ${AccessKey} ${Platform} ${Device} [${Arch}]")
+        print("usage: test_falcon_c.py ${AccessKey} ${Device} ${Platform} [${Arch}]")
         exit(1)
-    unittest.main(argv=sys.argv[:1], verbosity=2)
+    unittest.main(argv=sys.argv[:1])

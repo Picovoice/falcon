@@ -171,7 +171,9 @@ Create an instance of the engine and perform speaker diarization on an audio fil
 #include "pv_falcon.h"
 
 pv_falcon_t *falcon = NULL;
-pv_status_t status = pv_falcon_init("${ACCESS_KEY}", "${MODEL_PATH}", &falcon);
+const char *device = "best";
+
+pv_status_t status = pv_falcon_init("${ACCESS_KEY}", "${MODEL_PATH}", device, &falcon);
 if (status != PV_STATUS_SUCCESS) {
     // error handling logic
 }
@@ -305,6 +307,13 @@ falcon.delete()
 For more details, see the [Android SDK](./binding/android/README.md).
 
 ## Releases
+
+### v2.0.0 - December 9th, 2025
+
+ - Improved engine performance
+ - Added support for running on GPU or multiple CPU cores
+ - Node.js min version bumped to Node 18
+ - iOS min version bumped to iOS 16
 
 ### v1.0.0 — November 28th, 2023
 
