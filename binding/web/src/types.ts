@@ -48,8 +48,11 @@ export type FalconWorkerInitRequest = {
   command: 'init';
   accessKey: string;
   modelPath: string;
-  wasm: string;
+  device?: string;
   wasmSimd: string;
+  wasmSimdLib: string;
+  wasmPThread: string;
+  wasmPThreadLib: string;
   sdk: string;
 };
 

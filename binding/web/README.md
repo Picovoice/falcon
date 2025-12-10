@@ -8,7 +8,7 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 
 - Private; All voice processing runs locally.
 - Cross-Platform:
-  - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64)
+  - Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64, arm64)
   - Raspberry Pi (3, 4, 5)
   - Chrome, Safari, Firefox, and Edge
 
@@ -18,10 +18,27 @@ Falcon is an on-device speaker diarization engine. Falcon is:
 - Firefox
 - Safari
 
+## Requirements
+
+The Falcon Web Binding uses [SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer).
+
+Include the following headers in the response to enable the use of `SharedArrayBuffers`:
+
+```
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+```
+
+Refer to our [Web demo](../../demo/web) for an example on creating a server with the corresponding response headers.
+
+Browsers that don't support `SharedArrayBuffers` or applications that don't include the required headers will fall back to using standard `ArrayBuffers`. This will disable multithreaded processing.
+
 ### Restrictions
 
 IndexedDB is required to use `Falcon` in a worker thread. Browsers without IndexedDB support
 (i.e. Firefox Incognito Mode) should use `Falcon` in the main thread.
+
+Multi-threading is only enabled for `Falcon` when using on a web worker.
 
 ## Installation
 

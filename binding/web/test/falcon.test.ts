@@ -8,6 +8,7 @@ import { FalconSegment } from '../src';
 import { FalconError } from '../src/falcon_errors';
 
 const ACCESS_KEY = Cypress.env('ACCESS_KEY');
+const DEVICE = Cypress.env('DEVICE');
 
 const validateMetadata = (
   segments: FalconSegment[],
@@ -29,19 +30,21 @@ const runInitTest = async (
   params: {
     accessKey?: string;
     model?: PvModel;
+    device?: string;
     expectFailure?: boolean;
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
     model = { publicPath: '/test/falcon_params.pv', forceWrite: true },
+    device = undefined,
     expectFailure = false,
   } = params;
 
   let isFailed = false;
 
   try {
-    const falcon = await instance.create(accessKey, model);
+    const falcon = await instance.create(accessKey, model, device);
     expect(falcon.sampleRate).to.be.eq(16000);
     expect(typeof falcon.version).to.eq('string');
     expect(falcon.version.length).to.be.greaterThan(0);
@@ -71,15 +74,17 @@ const runProcTest = async (
   params: {
     accessKey?: string;
     model?: PvModel;
+    device?: string;
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
     model = { publicPath: '/test/falcon_params.pv', forceWrite: true },
+    device = DEVICE,
   } = params;
 
   try {
-    const falcon = await instance.create(accessKey, model);
+    const falcon = await instance.create(accessKey, model, device);
 
     const { segments } = await falcon.process(inputPcm);
 
@@ -204,6 +209,15 @@ describe('Falcon Binding', function () {
       cy.wrap(null).then(async () => {
         await runInitTest(instance, {
           accessKey: 'invalid',
+          expectFailure: true,
+        });
+      });
+    });
+
+    it(`should be able to handle invalid device (${instanceString})`, () => {
+      cy.wrap(null).then(async () => {
+        await runInitTest(instance, {
+          device: 'invalid',
           expectFailure: true,
         });
       });

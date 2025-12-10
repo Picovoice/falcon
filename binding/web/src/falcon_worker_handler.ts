@@ -1,5 +1,5 @@
 /*
-  Copyright 2024 Picovoice Inc.
+  Copyright 2024-2025 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -32,10 +32,12 @@ const initRequest = async (request: FalconWorkerInitRequest): Promise<any> => {
     };
   }
   try {
-    Falcon.setWasm(request.wasm);
     Falcon.setWasmSimd(request.wasmSimd);
+    Falcon.setWasmSimdLib(request.wasmSimdLib);
+    Falcon.setWasmPThread(request.wasmPThread);
+    Falcon.setWasmPThreadLib(request.wasmPThreadLib);
     Falcon.setSdk(request.sdk);
-    falcon = await Falcon._init(request.accessKey, request.modelPath);
+    falcon = await Falcon._init(request.accessKey, request.modelPath, request.device);
     return {
       command: 'ok',
       version: falcon.version,
