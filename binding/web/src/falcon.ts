@@ -57,7 +57,6 @@ type pv_free_error_stack_type = (messageStack: number) => void;
 type FalconModule = EmscriptenModule & {
   _pv_free: (address: number) => void;
 
-  _pv_falcon_delete: pv_falcon_delete_type
   _pv_falcon_segments_delete: pv_falcon_segments_delete_type
   _pv_sample_rate: pv_sample_rate_type
   _pv_falcon_version: pv_falcon_version_type
@@ -76,6 +75,7 @@ type FalconWasmOutput = {
   module: FalconModule;
 
   pv_falcon_process: pv_falcon_process_type;
+  pv_falcon_delete: pv_falcon_delete_type;
 
   version: string;
   sampleRate: number;
@@ -93,6 +93,7 @@ export class Falcon {
   private _module?: FalconModule;
 
   private readonly _pv_falcon_process: pv_falcon_process_type;
+  private readonly _pv_falcon_delete: pv_falcon_delete_type;
 
   private readonly _sampleRate: number;
   private readonly _version: string;
@@ -117,6 +118,7 @@ export class Falcon {
     this._module = handleWasm.module;
 
     this._pv_falcon_process = handleWasm.pv_falcon_process;
+    this._pv_falcon_delete = handleWasm.pv_falcon_delete;
 
     this._version = handleWasm.version;
     this._sampleRate = handleWasm.sampleRate;
@@ -356,7 +358,7 @@ export class Falcon {
     if (!this._module) {
       return;
     }
-    this._module._pv_falcon_delete(this._objectAddress);
+    this._pv_falcon_delete(this._objectAddress);
     this._module._pv_free(this._messageStackAddressAddressAddress);
     this._module._pv_free(this._messageStackDepthAddress);
     this._module._pv_free(this._segmentsAddressAddress);
@@ -389,6 +391,10 @@ export class Falcon {
       module,
       "pv_falcon_process",
       5);
+    const pv_falcon_delete: pv_falcon_delete_type = this.wrapAsyncFunction(
+      module,
+      "pv_falcon_delete",
+      1);
 
     const objectAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (objectAddressAddress === 0) {
@@ -502,6 +508,7 @@ export class Falcon {
       module: module,
 
       pv_falcon_process: pv_falcon_process,
+      pv_falcon_delete: pv_falcon_delete,
 
       version: version,
       sampleRate: sampleRate,
