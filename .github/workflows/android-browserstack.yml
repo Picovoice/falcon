@@ -62,7 +62,7 @@ jobs:
           echo storeFile=../picovoice.jks >> local.properties
 
       - name: Inject Device
-        run: echo device="cpu" >> local.properties
+        run: echo device="cpu:1" >> local.properties
 
       - name: Setup Android keystore file
         run: echo "${{secrets.ANDROID_RELEASE_KEYSTORE_FILE_B64}}" | base64 -d > picovoice.jks
@@ -126,7 +126,7 @@ jobs:
           echo storeFile=../picovoice.jks >> local.properties
 
       - name: Inject Device
-        run: echo device="cpu" >> local.properties
+        run: echo device="cpu:1" >> local.properties
 
       - name: Setup Android keystore file
         run: echo "${{secrets.ANDROID_RELEASE_KEYSTORE_FILE_B64}}" | base64 -d > picovoice.jks
