@@ -90,7 +90,7 @@ type FalconWasmOutput = {
 const MAX_PCM_LENGTH_SEC = 60 * 15;
 
 export class Falcon {
-  private readonly _module: FalconModule;
+  private _module?: FalconModule;
 
   private readonly _pv_falcon_process: pv_falcon_process_type;
 
@@ -361,6 +361,7 @@ export class Falcon {
     this._module._pv_free(this._messageStackDepthAddress);
     this._module._pv_free(this._segmentsAddressAddress);
     this._module._pv_free(this._numSegmentsAddress);
+    this._module = undefined;
   }
 
   private static async initWasm(
