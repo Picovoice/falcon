@@ -33,8 +33,7 @@ import java.util.List;
 
 import ai.picovoice.falcon.Falcon;
 import ai.picovoice.falcon.FalconException;
-import ai.picovoice.falcon.FalconSegments;
-import ai.picovoice.falcon.FalconSegments.Segment;
+import ai.picovoice.falcon.FalconSegment;
 
 
 @RunWith(Enclosed.class)
