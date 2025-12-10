@@ -1,5 +1,5 @@
 #
-#    Copyright 2023 Picovoice Inc.
+#    Copyright 2023-2025 Picovoice Inc.
 #
 #    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 #    file accompanying this source.
@@ -25,6 +25,7 @@ class FalconTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._access_key = sys.argv[1]
+        cls._device = sys.argv[2]
         cls._audio_directory = os.path.join(os.path.dirname(__file__), "..", "..", "resources", "audio_samples")
         cls._error_threshold = 0.05
 
@@ -43,21 +44,39 @@ class FalconTestCase(unittest.TestCase):
             Falcon(
                 access_key="invalid",
                 model_path=default_model_path("../../"),
+                device=self._device,
                 library_path=default_library_path("../../"),
             )
 
     def test_invalid_model_path(self):
         with self.assertRaises(FalconIOError):
-            Falcon(access_key=self._access_key, model_path="invalid", library_path=default_library_path("../../"))
+            Falcon(
+                access_key=self._access_key,
+                model_path="invalid",
+                device=self._device,
+                library_path=default_library_path("../../"))
+
+    def test_invalid_device(self):
+        with self.assertRaises(FalconInvalidArgumentError):
+            Falcon(
+                access_key=self._access_key,
+                model_path=default_model_path("../../"),
+                device="invalid",
+                library_path=default_library_path("../../"))
 
     def test_invalid_library_path(self):
         with self.assertRaises(FalconIOError):
-            Falcon(access_key=self._access_key, model_path=default_model_path("../../"), library_path="invalid")
+            Falcon(
+                access_key=self._access_key,
+                model_path=default_model_path("../../"),
+                device=self._device,
+                library_path="invalid")
 
     def test_version(self):
         o = Falcon(
             access_key=self._access_key,
             model_path=default_model_path("../../"),
+            device=self._device,
             library_path=default_library_path("../../"),
         )
         self.assertIsInstance(o.version, str)
@@ -70,6 +89,7 @@ class FalconTestCase(unittest.TestCase):
             o = Falcon(
                 access_key=self._access_key,
                 model_path=default_model_path("../../"),
+                device=self._device,
                 library_path=default_library_path("../../"),
             )
 
@@ -90,6 +110,7 @@ class FalconTestCase(unittest.TestCase):
             o = Falcon(
                 access_key=self._access_key,
                 model_path=default_model_path("../../"),
+                device=self._device,
                 library_path=default_library_path("../../"),
             )
 
@@ -111,6 +132,7 @@ class FalconTestCase(unittest.TestCase):
             f = Falcon(
                 access_key="invalid",
                 model_path=default_model_path(relative_path),
+                device=self._device,
                 library_path=default_library_path(relative_path),
             )
             self.assertIsNone(f)
@@ -124,6 +146,7 @@ class FalconTestCase(unittest.TestCase):
             f = Falcon(
                 access_key="invalid",
                 model_path=default_model_path(relative_path),
+                device=self._device,
                 library_path=default_library_path(relative_path),
             )
             self.assertIsNone(f)
@@ -137,6 +160,7 @@ class FalconTestCase(unittest.TestCase):
         f = Falcon(
             access_key=self._access_key,
             model_path=default_model_path(relative_path),
+            device=self._device,
             library_path=default_library_path(relative_path),
         )
 
@@ -156,8 +180,8 @@ class FalconTestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("usage: %s ${ACCESS_KEY}" % sys.argv[0])
+    if len(sys.argv) != 3:
+        print("usage: %s ${ACCESS_KEY} ${DEVICE}" % sys.argv[0])
         exit(1)
 
     unittest.main(argv=sys.argv[:1])

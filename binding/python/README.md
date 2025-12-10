@@ -39,7 +39,7 @@ handle = pvfalcon.create(access_key='${ACCESS_KEY}')
 
 segments = handle.process_file('${AUDIO_PATH}')
 for segment in segments:
-    print("{speaker tag=%d - start_sec=%.2f end_sec=%.2f}" 
+    print("{speaker tag=%d - start_sec=%.2f end_sec=%.2f}"
           % (segment.speaker_tag, segment.start_sec, segment.end_sec))
 ```
 
