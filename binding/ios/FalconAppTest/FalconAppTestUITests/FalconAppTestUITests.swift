@@ -63,7 +63,7 @@ class FalconAppTestUITests: XCTestCase {
                 subdirectory: "test_resources/audio_samples")!
 
         let falcon = try! Falcon(accessKey: accessKey, device: device)
-        
+
         let data = try Data(contentsOf: audioFileURL)
         var pcmBuffer = [Int16](repeating: 0, count: ((data.count - 44) / MemoryLayout<Int16>.size))
         _ = pcmBuffer.withUnsafeMutableBytes {
@@ -212,6 +212,14 @@ class FalconAppTestUITests: XCTestCase {
             XCTAssertNil(result)
         } catch {
             XCTAssert("\(error.localizedDescription)".count > 0)
+        }
+    }
+
+    func testGetAvailableDevices() throws {
+        let devices = try Falcon.getAvailableDevices()
+        XCTAssert(!devices.isEmpty)
+        for device in devices {
+            XCTAssert(!device.isEmpty)
         }
     }
 }
