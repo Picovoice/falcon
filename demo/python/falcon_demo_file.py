@@ -27,18 +27,18 @@ def main():
         '--model_path',
         help='Absolute path to Falcon model. Default: using the model provided by `pvfalcon`')
     parser.add_argument(
+        '--device',
+        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
+             'Default: automatically selects best device for `pvfalcon`')
+    parser.add_argument(
         '--wav_paths',
         nargs='+',
         metavar='PATH',
         help='Absolute paths to `.wav` files')
     parser.add_argument(
-        '--device',
-        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
-             'Default: automatically selects best device for `pvfalcon`')
-    parser.add_argument(
         '--show_inference_devices',
         action='store_true',
-        help='Show the list of available devices for Flacon inference and exit')
+        help='Show the list of available devices for Falcon inference and exit')
     args = parser.parse_args()
 
     if args.show_inference_devices:

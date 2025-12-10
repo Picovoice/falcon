@@ -63,6 +63,10 @@ def main():
         '--model_path',
         help='Absolute path to Falcon model. Default: using the model provided by `pvfalcon`')
     parser.add_argument(
+        '--device',
+        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
+             'Default: automatically selects best device for `pvfalcon`')
+    parser.add_argument(
         '--show_audio_devices',
         action='store_true',
         help='Only list available devices and exit')
@@ -72,13 +76,9 @@ def main():
         type=int,
         help='Audio device index to use from --show_audio_devices')
     parser.add_argument(
-        '--device',
-        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
-             'Default: automatically selects best device for `pvfalcon`')
-    parser.add_argument(
         '--show_inference_devices',
         action='store_true',
-        help='Show the list of available devices for Flacon inference and exit')
+        help='Show the list of available devices for Falcon inference and exit')
     args = parser.parse_args()
 
     if args.show_audio_devices:
