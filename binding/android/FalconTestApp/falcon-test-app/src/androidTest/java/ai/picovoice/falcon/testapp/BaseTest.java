@@ -1,5 +1,5 @@
 /*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2024-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ai.picovoice.falcon.FalconSegments.Segment;
+import ai.picovoice.falcon.FalconSegment;
 
 public class BaseTest {
 
@@ -96,8 +96,8 @@ public class BaseTest {
     }
 
     protected void validateMetadata(
-            Segment[] segments,
-            Segment[] expectedSegments
+            FalconSegment[] segments,
+            FalconSegment[] expectedSegments
     ) {
         assertEquals(segments.length, expectedSegments.length);
         for (int i = 0; i < segments.length; i++) {

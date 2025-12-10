@@ -27,12 +27,12 @@ class FalconNative {
 
     static native void delete(long object);
 
-    static native FalconSegments process(
+    static native FalconSegment[] process(
             long object,
             short[] pcm,
             int numSamples) throws FalconException;
 
-    static native FalconSegments processFile(
+    static native FalconSegment[] processFile(
             long object,
             String path) throws FalconException;
 

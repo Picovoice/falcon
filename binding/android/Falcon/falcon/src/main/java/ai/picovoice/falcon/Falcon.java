@@ -107,10 +107,10 @@ public class Falcon {
      *            equal to {@link #getSampleRate()} and be 16-bit linearly-encoded. Furthermore,
      *            Falcon operates on single channel audio. If you wish to process data in a different
      *            sample rate or format, consider using {@link #processFile(String)}.
-     * @return FalconSegments object which contains the diarization results of the engine.
+     * @return FalconSegment[] object which contains the diarization results of the engine.
      * @throws FalconException if there is an error while processing the audio frame.
      */
-    public FalconSegments process(short[] pcm) throws FalconException {
+    public FalconSegment[] process(short[] pcm) throws FalconException {
         if (handle == 0) {
             throw new FalconInvalidStateException("Attempted to call Falcon process after delete.");
         }
@@ -127,10 +127,10 @@ public class Falcon {
      *
      * @param path Absolute path to the audio file. The supported formats are:
      *             `3gp (AMR)`, `FLAC`, `MP3`, `MP4/m4a (AAC)`, `Ogg`, `WAV` and `WebM`.
-     * @return FalconSegments object which contains the diarization results of the engine.
+     * @return FalconSegment[] object which contains the diarization results of the engine.
      * @throws FalconException if there is an error while processing the audio frame.
      */
-    public FalconSegments processFile(String path) throws FalconException {
+    public FalconSegment[] processFile(String path) throws FalconException {
         if (handle == 0) {
             throw new FalconInvalidStateException("Attempted to call Falcon processFile after delete.");
         }
