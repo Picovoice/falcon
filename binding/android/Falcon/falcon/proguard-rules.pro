@@ -1,2 +1,2 @@
 -keep class ai.picovoice.falcon.*Exception { <init>(...); }
--keep class ai.picovoice.falcon.FalconSegments { <init>(...); }
+-keep class ai.picovoice.falcon.FalconSegment { <init>(...); }
