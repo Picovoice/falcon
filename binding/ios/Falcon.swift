@@ -39,7 +39,7 @@ public struct FalconSegment {
 
 /// iOS binding for Falcon speaker diarization engine. Provides a Swift interface to the Falcon library.
 public class Falcon {
-    
+
 #if SWIFT_PACKAGE
 
     static let resourceBundle = Bundle.module
@@ -64,7 +64,7 @@ public class Falcon {
     }()
 
 #endif
-    
+
     private static let supportedAudioTypes: Set = [
         "3gp",
         "flac",
@@ -119,7 +119,7 @@ public class Falcon {
 
         var deviceArg = device
         if deviceArg == nil {
-            deviceArg = "cpu:1"
+            deviceArg = "best"
         }
 
         pv_set_sdk(Falcon.sdk)
