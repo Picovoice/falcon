@@ -96,10 +96,10 @@ public class Falcon {
     public static func getAvailableDevices() throws -> [String] {
         var cHardwareDevices: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?
         var numHardwareDevices: Int32 = 0
-        let status = pv_eagle_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)
+        let status = pv_falcon_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)
         if status != PV_STATUS_SUCCESS {
             let messageStack = try Falcon.getMessageStack()
-            throw Falcon.pvStatusToEagleError(status, "Falcon getAvailableDevices failed", messageStack)
+            throw Falcon.pvStatusToFalconError(status, "Falcon getAvailableDevices failed", messageStack)
         }
 
         var hardwareDevices: [String] = []
