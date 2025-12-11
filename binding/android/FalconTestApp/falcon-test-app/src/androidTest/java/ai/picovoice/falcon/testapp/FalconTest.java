@@ -1,5 +1,5 @@
 /*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2024-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -13,6 +13,8 @@
 package ai.picovoice.falcon.testapp;
 
 import static org.junit.Assert.*;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -128,6 +130,30 @@ public class FalconTest {
                 }
             }
         }
+
+        @Test
+        public void testInitFailWithInvalidDevice() {
+            boolean didFail = false;
+            try {
+                new Falcon.Builder()
+                        .setAccessKey(accessKey)
+                        .setDevice("invalid:9")
+                        .build(appContext);
+            } catch (FalconException e) {
+                didFail = true;
+            }
+
+            assertTrue(didFail);
+        }
+
+        @Test
+        public void testGetAvailableDevices() throws FalconException {
+            String[] availableDevices = Falcon.getAvailableDevices();
+            assertTrue(availableDevices.length > 0);
+            for (String d : availableDevices) {
+                assertTrue(d != null && d.length() > 0);
+            }
+        }
     }
 
     @RunWith(Parameterized.class)
@@ -183,6 +209,7 @@ public class FalconTest {
         public void testDiarization() throws Exception {
             Falcon falcon = new Falcon.Builder()
                     .setAccessKey(accessKey)
+                    .setDevice(device)
                     .build(appContext);
 
             short[] pcm = readAudioFile(getAudioFilepath(testAudioFile));
