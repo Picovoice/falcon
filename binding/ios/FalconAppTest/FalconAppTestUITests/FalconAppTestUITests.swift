@@ -1,5 +1,5 @@
 //
-//  Copyright 2024 Picovoice Inc.
+//  Copyright 2024-2025 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -38,6 +38,7 @@ struct DiarizationTestSegment: Decodable {
 
 class FalconAppTestUITests: XCTestCase {
     let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
+    let device: String = "{TESTING_DEVICE_HERE}"
 
     override func setUpWithError() throws {
         continueAfterFailure = true
@@ -61,8 +62,8 @@ class FalconAppTestUITests: XCTestCase {
                 withExtension: "",
                 subdirectory: "test_resources/audio_samples")!
 
-        let falcon = try! Falcon(accessKey: accessKey)
-        
+        let falcon = try! Falcon(accessKey: accessKey, device: device)
+
         let data = try Data(contentsOf: audioFileURL)
         var pcmBuffer = [Int16](repeating: 0, count: ((data.count - 44) / MemoryLayout<Int16>.size))
         _ = pcmBuffer.withUnsafeMutableBytes {
@@ -82,7 +83,7 @@ class FalconAppTestUITests: XCTestCase {
             testAudio: String) throws {
         let bundle = Bundle(for: type(of: self))
 
-        let falcon = try! Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey, device: device)
 
         let audioFilePath: String = bundle.path(
                 forResource: testAudio,
@@ -105,7 +106,7 @@ class FalconAppTestUITests: XCTestCase {
                 withExtension: "",
                 subdirectory: "test_resources/audio_samples")!
 
-        let falcon = try! Falcon(accessKey: accessKey)
+        let falcon = try! Falcon(accessKey: accessKey, device: device)
 
         let falconSegments = try falcon.processFile(audioFileURL)
         falcon.delete()
@@ -125,7 +126,7 @@ class FalconAppTestUITests: XCTestCase {
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
+            try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
                 try runTestProcess(
                         expectedSegments: testCase.segments,
                         testAudio: testCase.audio_file)
@@ -143,7 +144,7 @@ class FalconAppTestUITests: XCTestCase {
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
+            try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
                 try runTestProcessFile(
                         expectedSegments: testCase.segments,
                         testAudio: testCase.audio_file)
@@ -161,7 +162,7 @@ class FalconAppTestUITests: XCTestCase {
         let testData = try JSONDecoder().decode(TestData.self, from: testDataJsonData)
 
         for testCase in testData.tests.diarization_tests {
-            try XCTContext.runActivity(named: "\(testCase.audio_file)") { _ in
+            try XCTContext.runActivity(named: "\(testCase.audio_file) \(device)") { _ in
                 try runTestProcessURL(
                         expectedSegments: testCase.segments,
                         testAudio: testCase.audio_file)
@@ -211,6 +212,14 @@ class FalconAppTestUITests: XCTestCase {
             XCTAssertNil(result)
         } catch {
             XCTAssert("\(error.localizedDescription)".count > 0)
+        }
+    }
+
+    func testGetAvailableDevices() throws {
+        let devices = try Falcon.getAvailableDevices()
+        XCTAssert(!devices.isEmpty)
+        for device in devices {
+            XCTAssert(!device.isEmpty)
         }
     }
 }
