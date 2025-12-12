@@ -234,19 +234,22 @@ export class Falcon {
       throw new FalconErrors.FalconRuntimeError('Browser not supported.');
     }
 
-    let deviceArg = (device) ? device : "best";
+    if (!device) {
+      device = "best";
+    }
+
     const isWorkerScope = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
     if (
       !isWorkerScope &&
-      (deviceArg === 'best' || (deviceArg.startsWith('cpu') && deviceArg !== 'cpu:1'))
+      (device === 'best' || (device.startsWith('cpu') && device !== 'cpu:1'))
     ) {
       // eslint-disable-next-line no-console
       console.warn('Multi-threading is not supported on main thread.');
-      deviceArg = 'cpu:1';
+      device = 'cpu:1';
     }
 
     const sabDefined = typeof SharedArrayBuffer !== 'undefined'
-      && (deviceArg !== "cpu:1");
+      && (device !== "cpu:1");
 
     return new Promise<Falcon>((resolve, reject) => {
       Falcon._falconMutex
@@ -254,7 +257,7 @@ export class Falcon {
           const wasmOutput = await Falcon.initWasm(
             accessKey.trim(),
             modelPath.trim(),
-            deviceArg,
+            device!,
             (sabDefined) ? this._wasmPThread : this._wasmSimd,
             (sabDefined) ? this._wasmPThreadLib : this._wasmSimdLib,
             (sabDefined) ? createModulePThread : createModuleSimd,
