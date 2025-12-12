@@ -257,7 +257,7 @@ export class Falcon {
           const wasmOutput = await Falcon.initWasm(
             accessKey.trim(),
             modelPath.trim(),
-            (device) ? device : "best",
+            device,
             (sabDefined) ? this._wasmPThread : this._wasmSimd,
             (sabDefined) ? this._wasmPThreadLib : this._wasmSimdLib,
             (sabDefined) ? createModulePThread : createModuleSimd,
