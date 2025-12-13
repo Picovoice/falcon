@@ -1,5 +1,5 @@
 /*
-    Copyright 2023 Picovoice Inc.
+    Copyright 2021-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -32,6 +32,11 @@ typedef struct pv_falcon pv_falcon_t;
  *
  * @param access_key AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
  * @param model_path The absolute path to the file containing Falcon's model parameters.
+ * @param device String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+ * suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+ * GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+ * `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+ * argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
  * @param[out] object Constructed instance of Falcon.
  * @return A status code indicating the result of the initialization. Possible values include:
  *         - `PV_STATUS_OUT_OF_MEMORY`: Memory allocation failure.
@@ -46,6 +51,7 @@ typedef struct pv_falcon pv_falcon_t;
 PV_API pv_status_t pv_falcon_init(
         const char *access_key,
         const char *model_path,
+        const char *device,
         pv_falcon_t **object);
 
 /**
@@ -125,10 +131,10 @@ PV_API pv_status_t pv_falcon_process_file(
         pv_segment_t **segments);
 
 /**
- * Deletes segments allocated by `pv_falcon_process()` and `pv_falcon_process_file()`.
+ * Deletes segments allocated by `pv_falcon_process()`.
  *
  * Use this function to properly release memory allocated for segments returned by the
- * `pv_falcon_process()` and `pv_falcon_process_file()` functions.
+ * `pv_falcon_process()` functions.
  *
  * @param segments Pointer to the array of segments to be deleted.
  */
@@ -140,6 +146,30 @@ PV_API void pv_falcon_segments_delete(pv_segment_t *segments);
  * @return A pointer to a string containing the version information.
  */
 PV_API const char *pv_falcon_version(void);
+
+/**
+ * Gets a list of hardware devices that can be specified when calling `pv_falcon_init`
+ *
+ * @param[out] hardware_devices Array of available hardware devices. Devices are NULL terminated strings.
+ *                              The array must be freed using `pv_falcon_free_hardware_devices`.
+ * @param[out] num_hardware_devices The number of devices in the `hardware_devices` array.
+ * @return Status code. Returns `PV_STATUS_OUT_OF_MEMORY`, `PV_STATUS_INVALID_ARGUMENT`, `PV_STATUS_INVALID_STATE`,
+ * `PV_STATUS_RUNTIME_ERROR`, `PV_STATUS_ACTIVATION_ERROR`, `PV_STATUS_ACTIVATION_LIMIT_REACHED`,
+ * `PV_STATUS_ACTIVATION_THROTTLED`, or `PV_STATUS_ACTIVATION_REFUSED` on failure.
+ */
+PV_API pv_status_t pv_falcon_list_hardware_devices(
+        char ***hardware_devices,
+        int32_t *num_hardware_devices);
+
+/**
+ * Frees memory allocated by `pv_falcon_list_hardware_devices`.
+ *
+ * @param[out] hardware_devices Array of available hardware devices allocated by `pv_falcon_list_hardware_devices`.
+ * @param[out] num_hardware_devices The number of devices in the `hardware_devices` array.
+ */
+PV_API void pv_falcon_free_hardware_devices(
+        char **hardware_devices,
+        int32_t num_hardware_devices);
 
 #ifdef __cplusplus
 

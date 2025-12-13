@@ -1,5 +1,5 @@
 /*
-    Copyright 2019-2023 Picovoice Inc.
+    Copyright 2019-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of
    the license is located in the "LICENSE" file accompanying this source.
@@ -83,19 +83,107 @@ static void print_dl_error(const char *message) {
 #endif
 }
 
+static void print_usage(const char *program_name) {
+    fprintf(
+            stdout,
+            "Usage: %s  -l LIBRARY_PATH [-a ACCESS_KEY -m MODEL_PATH -y DEVICE] audio_path0 audio_path1 ...\n"
+            "        %s [-z] -l LIBRARY_PATH\n",
+            program_name,
+            program_name);
+}
+
 static void print_error_message(char **message_stack, int32_t message_stack_depth) {
     for (int32_t i = 0; i < message_stack_depth; i++) {
         fprintf(stderr, "\n  [%d] %s", i, message_stack[i]);
     }
 }
 
+static void print_inference_devices(const char *library_path) {
+    void *dl_handle = open_dl(library_path);
+    if (!dl_handle) {
+        fprintf(stderr, "Failed to open library at '%s'.\n", library_path);
+        exit(EXIT_FAILURE);
+    }
+
+    const char *(*pv_status_to_string_func)(pv_status_t) = load_symbol(dl_handle, "pv_status_to_string");
+    if (!pv_status_to_string_func) {
+        print_dl_error("Failed to load 'pv_status_to_string'");
+        exit(EXIT_FAILURE);
+    }
+
+    pv_status_t (*pv_falcon_list_hardware_devices_func)(char ***, int32_t *) =
+    load_symbol(dl_handle, "pv_falcon_list_hardware_devices");
+    if (!pv_falcon_list_hardware_devices_func) {
+        print_dl_error("failed to load `pv_falcon_list_hardware_devices`");
+        exit(EXIT_FAILURE);
+    }
+
+    pv_status_t (*pv_falcon_free_hardware_devices_func)(char **, int32_t) =
+        load_symbol(dl_handle, "pv_falcon_free_hardware_devices");
+    if (!pv_falcon_free_hardware_devices_func) {
+        print_dl_error("failed to load `pv_falcon_free_hardware_devices`");
+        exit(EXIT_FAILURE);
+    }
+
+    pv_status_t (*pv_get_error_stack_func)(char ***, int32_t *) =
+        load_symbol(dl_handle, "pv_get_error_stack");
+    if (!pv_get_error_stack_func) {
+        print_dl_error("failed to load 'pv_get_error_stack_func'");
+        exit(EXIT_FAILURE);
+    }
+
+    void (*pv_free_error_stack_func)(char **) =
+        load_symbol(dl_handle, "pv_free_error_stack");
+    if (!pv_free_error_stack_func) {
+        print_dl_error("failed to load 'pv_free_error_stack_func'");
+        exit(EXIT_FAILURE);
+    }
+
+    char **message_stack = NULL;
+    int32_t message_stack_depth = 0;
+    pv_status_t error_status = PV_STATUS_RUNTIME_ERROR;
+
+    char **hardware_devices = NULL;
+    int32_t num_hardware_devices = 0;
+    pv_status_t status = pv_falcon_list_hardware_devices_func(&hardware_devices, &num_hardware_devices);
+    if (status != PV_STATUS_SUCCESS) {
+        fprintf(
+                stderr,
+                "Failed to list hardware devices with `%s`.\n",
+                pv_status_to_string_func(status));
+        error_status = pv_get_error_stack_func(&message_stack, &message_stack_depth);
+        if (error_status != PV_STATUS_SUCCESS) {
+            fprintf(
+                    stderr,
+                    ".\nUnable to get falcon error state with '%s'.\n",
+                    pv_status_to_string_func(error_status));
+            exit(EXIT_FAILURE);
+        }
+
+        if (message_stack_depth > 0) {
+            fprintf(stderr, ":\n");
+            print_error_message(message_stack, message_stack_depth);
+            pv_free_error_stack_func(message_stack);
+        }
+        exit(EXIT_FAILURE);
+    }
+
+    for (int32_t i = 0; i < num_hardware_devices; i++) {
+        fprintf(stdout, "%s\n", hardware_devices[i]);
+    }
+    pv_falcon_free_hardware_devices_func(hardware_devices, num_hardware_devices);
+    close_dl(dl_handle);
+}
+
 int picovoice_main(int argc, char **argv) {
     const char *access_key = NULL;
     const char *model_path = NULL;
     const char *library_path = NULL;
+    const char *device = NULL;
+    bool show_inference_devices = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, "a:m:l:")) != -1) {
+    while ((opt = getopt(argc, argv, "za:m:l:y:")) != -1) {
         switch (opt) {
             case 'a':
                 access_key = optarg;
@@ -106,19 +194,62 @@ int picovoice_main(int argc, char **argv) {
             case 'l':
                 library_path = optarg;
                 break;
+            case 'y':
+                device = optarg;
+                break;
+            case 'z':
+                show_inference_devices = true;
+                break;
             default:
                 break;
         }
     }
 
+    if (show_inference_devices) {
+        if (!library_path) {
+            fprintf(stderr, "`library_path` is required to view available inference devices.\n");
+            print_usage(argv[0]);
+            exit(EXIT_FAILURE);
+        }
+
+        print_inference_devices(library_path);
+        return EXIT_SUCCESS;
+    }
+
     if (!(access_key && library_path && model_path && (optind < argc))) {
-        fprintf(stderr, "usage: -a ACCESS_KEY -m MODEL_PATH -l LIBRARY_PATH audio_path0 audio_path1 ...\n");
+        print_usage(argv[0]);
         exit(1);
+    }
+
+    if (device == NULL) {
+        device = "best";
     }
 
     void *dl_handle = open_dl(library_path);
     if (!dl_handle) {
         fprintf(stderr, "failed to load library at `%s`.\n", library_path);
+
+#if defined(_WIN32) || defined(_WIN64)
+
+        DWORD errorCode = GetLastError();
+
+        LPVOID msgBuffer;
+        FormatMessage(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            errorCode,
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            (LPTSTR)&msgBuffer,
+            0,
+            NULL
+        );
+
+        printf("LoadLibrary failed with error %lu: %s\n", errorCode, (char*)msgBuffer);
+
+        LocalFree(msgBuffer);
+
+#endif
+
         exit(1);
     }
 
@@ -138,7 +269,7 @@ int picovoice_main(int argc, char **argv) {
 
     const char *(*pv_falcon_version_func)() = load_symbol(dl_handle, "pv_falcon_version");
 
-    pv_status_t (*pv_falcon_init_func)(const char *, const char *, pv_falcon_t **) =
+    pv_status_t (*pv_falcon_init_func)(const char *, const char *, const char *, pv_falcon_t **) =
             load_symbol(dl_handle, "pv_falcon_init");
     if (!pv_falcon_init_func) {
         print_dl_error("failed to load `pv_falcon_init`");
@@ -195,6 +326,7 @@ int picovoice_main(int argc, char **argv) {
     pv_status_t status = pv_falcon_init_func(
             access_key,
             model_path,
+            device,
             &falcon);
     if (status != PV_STATUS_SUCCESS) {
         fprintf(stderr, "failed to init with `%s`.\n", pv_status_to_string_func(status));
@@ -262,6 +394,8 @@ int picovoice_main(int argc, char **argv) {
         }
         pv_falcon_segments_delete_func(segments);
     }
+
+    pv_falcon_delete_func(falcon);
 
     fprintf(stdout, "proc took %.2f sec\n", proc_sec);
 

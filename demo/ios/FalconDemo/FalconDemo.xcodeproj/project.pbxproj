@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E9C52222EE8E26600860AA4 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = 1E9C52212EE8E26600860AA4 /* Falcon */; };
+		1EE7063E2EECCA2F00D7B1A1 /* Falcon in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE7063D2EECCA2F00D7B1A1 /* Falcon */; };
 		32769079E5BC2BA141FA659F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327695EA9D71F6A29C6D079A /* ViewModel.swift */; };
 		3276967434C9CEBD0AF09237 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 327694975368499C3B7946DD /* Assets.xcassets */; };
 		327698EADFD16D8F70823520 /* FalconDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327697358B823E5B2EF0FA8C /* FalconDemoApp.swift */; };
@@ -30,6 +32,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1CF9E2D2CFA698C004BA9A9 /* Falcon in Frameworks */,
+				1EE7063E2EECCA2F00D7B1A1 /* Falcon in Frameworks */,
+				1E9C52222EE8E26600860AA4 /* Falcon in Frameworks */,
 				E1F352F82D00D81A0069B0E6 /* Falcon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,7 +113,7 @@
 			);
 			mainGroup = 327692BCE8C735F3534C318E;
 			packageReferences = (
-				E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */,
+				1EE7063C2EECCA2F00D7B1A1 /* XCRemoteSwiftPackageReference "falcon" */,
 			);
 			productRefGroup = 32769B87809678D96B1C6C55 /* Products */;
 			projectDirPath = "";
@@ -219,7 +223,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -249,7 +253,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -351,24 +355,24 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */ = {
+		1EE7063C2EECCA2F00D7B1A1 /* XCRemoteSwiftPackageReference "falcon" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Picovoice/falcon";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.1;
+				version = 2.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E1CF9E2C2CFA698C004BA9A9 /* Falcon */ = {
+		1E9C52212EE8E26600860AA4 /* Falcon */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Falcon;
 		};
-		E1F352F72D00D81A0069B0E6 /* Falcon */ = {
+		1EE7063D2EECCA2F00D7B1A1 /* Falcon */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1F352F62D00D81A0069B0E6 /* XCRemoteSwiftPackageReference "falcon" */;
+			package = 1EE7063C2EECCA2F00D7B1A1 /* XCRemoteSwiftPackageReference "falcon" */;
 			productName = Falcon;
 		};
 /* End XCSwiftPackageProductDependency section */

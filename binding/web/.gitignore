@@ -1,6 +1,6 @@
 node_modules
 dist
-lib/pv_falcon*.wasm
+src/lib/*
 cypress/fixtures/audio_samples/*
 test/falcon_params.js
 test/falcon_params.pv

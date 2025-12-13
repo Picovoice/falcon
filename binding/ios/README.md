@@ -15,6 +15,10 @@ Falcon is an on-device speaker diarization engine. Falcon is:
   - Chrome, Safari, Firefox, and Edge
   - Raspberry Pi (3, 4, 5)
 
+## Compatibility
+
+- iOS 16.0+
+
 ## Installation
 
 <!-- markdown-link-check-disable -->

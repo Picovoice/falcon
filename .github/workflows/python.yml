@@ -3,7 +3,7 @@ name: Python
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [ main ]
     paths:
       - '.github/workflows/python.yml'
       - 'binding/python/**'
@@ -16,7 +16,7 @@ on:
       - 'resources/audio_samples/*.wav'
       - 'resources/.test/**'
   pull_request:
-    branches: [main, 'v[0-9]+.[0-9]+']
+    branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - '.github/workflows/python.yml'
       - 'binding/python/**'
@@ -39,8 +39,9 @@ jobs:
 
     strategy:
       matrix:
+        device: [ cpu, cpu:1 ]
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13', '3.14' ]
 
     steps:
     - uses: actions/checkout@v3
@@ -57,14 +58,22 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Test
-      run: python test_falcon.py ${{secrets.PV_VALID_ACCESS_KEY}}
+      run: python test_falcon.py ${{ secrets.PV_VALID_ACCESS_KEY }} ${{ matrix.device }}
 
   build-self-hosted:
     runs-on: ${{ matrix.machine }}
 
     strategy:
       matrix:
-        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
+        device: [ best ]
+        machine: [ rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64 ]
+        include:
+          - device: gpu
+            machine: pv-linux
+          - device: gpu
+            machine: pv-windows
+          - device: gpu
+            machine: pv-ios
 
     steps:
     - uses: actions/checkout@v3
@@ -76,4 +85,4 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Test
-      run: python3 test_falcon.py ${{secrets.PV_VALID_ACCESS_KEY}}
+      run: python3 test_falcon.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{ matrix.device }}

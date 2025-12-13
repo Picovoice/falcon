@@ -1,5 +1,5 @@
 /*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2024-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -22,7 +22,8 @@ class FalconNative {
 
     static native long init(
             String accessKey,
-            String modelPath) throws FalconException;
+            String modelPath,
+            String deviceString) throws FalconException;
 
     static native void delete(long object);
 
@@ -34,4 +35,6 @@ class FalconNative {
     static native FalconSegment[] processFile(
             long object,
             String path) throws FalconException;
+
+    static native String[] listHardwareDevices() throws FalconException;
 }

@@ -1,5 +1,5 @@
 /*
-  Copyright 2024 Picovoice Inc.
+  Copyright 2024-2025 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -16,14 +16,14 @@ import { Mutex } from 'async-mutex';
 import { simd } from 'wasm-feature-detect';
 
 import {
-  aligned_alloc_type,
-  pv_free_type,
-  buildWasm,
   arrayBufferToStringAtIndex,
+  base64ToUint8Array,
   isAccessKeyValid,
   loadModel,
-  PvError,
 } from '@picovoice/web-utils';
+
+import createModuleSimd from "./lib/pv_falcon_simd";
+import createModulePThread from "./lib/pv_falcon_pthread";
 
 import { FalconModel, FalconSegment, FalconSegments, PvStatus } from './types';
 import { pvStatusToException } from './falcon_errors';
@@ -36,6 +36,7 @@ import * as FalconErrors from './falcon_errors';
 type pv_falcon_init_type = (
   accessKey: number,
   modelPath: number,
+  device: number,
   object: number
 ) => Promise<number>;
 type pv_falcon_process_type = (
@@ -45,118 +46,104 @@ type pv_falcon_process_type = (
   numSegments: number,
   segments: number
 ) => Promise<number>;
-type pv_falcon_delete_type = (object: number) => Promise<void>;
-type pv_falcon_segments_delete_type = (segments: number) => Promise<void>;
-type pv_status_to_string_type = (status: number) => Promise<number>;
-type pv_sample_rate_type = () => Promise<number>;
-type pv_falcon_version_type = () => Promise<number>;
-type pv_set_sdk_type = (sdk: number) => Promise<void>;
-type pv_get_error_stack_type = (
-  messageStack: number,
-  messageStackDepth: number
-) => Promise<number>;
-type pv_free_error_stack_type = (messageStack: number) => Promise<void>;
+type pv_falcon_delete_type = (object: number) => void;
+type pv_falcon_segments_delete_type = (segments: number) => void;
+type pv_sample_rate_type = () => number;
+type pv_falcon_version_type = () => number;
+type pv_set_sdk_type = (sdk: number) => void;
+type pv_get_error_stack_type = (messageStack: number, messageStackDepth: number) => number;
+type pv_free_error_stack_type = (messageStack: number) => void;
 
-/**
- * JavaScript/WebAssembly Binding for Falcon
- */
+type FalconModule = EmscriptenModule & {
+  _pv_free: (address: number) => void;
+
+  _pv_falcon_segments_delete: pv_falcon_segments_delete_type
+  _pv_sample_rate: pv_sample_rate_type
+  _pv_falcon_version: pv_falcon_version_type
+
+  _pv_set_sdk: pv_set_sdk_type;
+  _pv_get_error_stack: pv_get_error_stack_type;
+  _pv_free_error_stack: pv_free_error_stack_type;
+
+  // em default functions
+  addFunction: typeof addFunction;
+  ccall: typeof ccall;
+  cwrap: typeof cwrap;
+}
 
 type FalconWasmOutput = {
-  aligned_alloc: aligned_alloc_type;
-  memory: WebAssembly.Memory;
-  pvFree: pv_free_type;
+  module: FalconModule;
+
+  pv_falcon_process: pv_falcon_process_type;
+  pv_falcon_delete: pv_falcon_delete_type;
+
+  version: string;
+  sampleRate: number;
 
   objectAddress: number;
   numSegmentsAddress: number;
   segmentsAddressAddress: number;
   messageStackAddressAddressAddress: number;
   messageStackDepthAddress: number;
-
-  pvFalconDelete: pv_falcon_delete_type;
-  pvFalconSegmentsDelete: pv_falcon_segments_delete_type;
-  pvFalconProcess: pv_falcon_process_type;
-  pvStatusToString: pv_status_to_string_type;
-  pvGetErrorStack: pv_get_error_stack_type;
-  pvFreeErrorStack: pv_free_error_stack_type;
-
-  sampleRate: number;
-  version: string;
-  pvError: PvError;
 };
 
 const MAX_PCM_LENGTH_SEC = 60 * 15;
 
 export class Falcon {
-  private readonly _pvFalconDelete: pv_falcon_delete_type;
-  private readonly _pvFalconSegmentsDelete: pv_falcon_segments_delete_type;
-  private readonly _pvFalconProcess: pv_falcon_process_type;
-  private readonly _pvGetErrorStack: pv_get_error_stack_type;
-  private readonly _pvFreeErrorStack: pv_free_error_stack_type;
+  private _module?: FalconModule;
 
-  private _wasmMemory?: WebAssembly.Memory;
-  private readonly _pvFree: pv_free_type;
-  private readonly _processMutex: Mutex;
+  private readonly _pv_falcon_process: pv_falcon_process_type;
+  private readonly _pv_falcon_delete: pv_falcon_delete_type;
+
+  private readonly _sampleRate: number;
+  private readonly _version: string;
+
+  private readonly _functionMutex: Mutex;
 
   private readonly _objectAddress: number;
-  private readonly _alignedAlloc: CallableFunction;
-  private readonly _numSegmentsAddress: number;
-  private readonly _segmentsAddressAddress: number;
   private readonly _messageStackAddressAddressAddress: number;
   private readonly _messageStackDepthAddress: number;
+  private readonly _segmentsAddressAddress: number;
+  private readonly _numSegmentsAddress: number;
 
-  private static _sampleRate: number;
-  private static _version: string;
-  private static _wasm: string;
   private static _wasmSimd: string;
+  private static _wasmSimdLib: string;
+  private static _wasmPThread: string;
+  private static _wasmPThreadLib: string;
   private static _sdk: string = 'web';
 
   private static _falconMutex = new Mutex();
 
   private constructor(handleWasm: FalconWasmOutput) {
-    Falcon._sampleRate = handleWasm.sampleRate;
-    Falcon._version = handleWasm.version;
+    this._module = handleWasm.module;
 
-    this._pvFalconDelete = handleWasm.pvFalconDelete;
-    this._pvFalconProcess = handleWasm.pvFalconProcess;
-    this._pvFalconSegmentsDelete = handleWasm.pvFalconSegmentsDelete;
-    this._pvGetErrorStack = handleWasm.pvGetErrorStack;
-    this._pvFreeErrorStack = handleWasm.pvFreeErrorStack;
+    this._pv_falcon_process = handleWasm.pv_falcon_process;
+    this._pv_falcon_delete = handleWasm.pv_falcon_delete;
 
-    this._wasmMemory = handleWasm.memory;
-    this._pvFree = handleWasm.pvFree;
+    this._version = handleWasm.version;
+    this._sampleRate = handleWasm.sampleRate;
+
     this._objectAddress = handleWasm.objectAddress;
-    this._alignedAlloc = handleWasm.aligned_alloc;
-    this._numSegmentsAddress = handleWasm.numSegmentsAddress;
-    this._segmentsAddressAddress = handleWasm.segmentsAddressAddress;
-    this._messageStackAddressAddressAddress =
-      handleWasm.messageStackAddressAddressAddress;
+    this._messageStackAddressAddressAddress = handleWasm.messageStackAddressAddressAddress;
     this._messageStackDepthAddress = handleWasm.messageStackDepthAddress;
+    this._segmentsAddressAddress = handleWasm.segmentsAddressAddress;
+    this._numSegmentsAddress = handleWasm.numSegmentsAddress;
 
-    this._processMutex = new Mutex();
+    this._functionMutex = new Mutex();
   }
 
   /**
    * Get Falcon engine version.
    */
   get version(): string {
-    return Falcon._version;
+    return this._version;
   }
 
   /**
    * Get sample rate.
    */
   get sampleRate(): number {
-    return Falcon._sampleRate;
-  }
-
-  /**
-   * Set base64 wasm file.
-   * @param wasm Base64'd wasm file to use to initialize wasm.
-   */
-  public static setWasm(wasm: string): void {
-    if (this._wasm === undefined) {
-      this._wasm = wasm;
-    }
+    return this._sampleRate;
   }
 
   /**
@@ -166,6 +153,36 @@ export class Falcon {
   public static setWasmSimd(wasmSimd: string): void {
     if (this._wasmSimd === undefined) {
       this._wasmSimd = wasmSimd;
+    }
+  }
+
+  /**
+   * Set base64 SIMD wasm file in text format.
+   * @param wasmSimdLib Base64'd wasm file in text format.
+   */
+  public static setWasmSimdLib(wasmSimdLib: string): void {
+    if (this._wasmSimdLib === undefined) {
+      this._wasmSimdLib = wasmSimdLib;
+    }
+  }
+
+  /**
+   * Set base64 wasm file with SIMD and pthread feature.
+   * @param wasmPThread Base64'd wasm file to use to initialize wasm.
+   */
+  public static setWasmPThread(wasmPThread: string): void {
+    if (this._wasmPThread === undefined) {
+      this._wasmPThread = wasmPThread;
+    }
+  }
+
+  /**
+   * Set base64 SIMD and thread wasm file in text format.
+   * @param wasmPThreadLib Base64'd wasm file in text format.
+   */
+  public static setWasmPThreadLib(wasmPThreadLib: string): void {
+    if (this._wasmPThreadLib === undefined) {
+      this._wasmPThreadLib = wasmPThreadLib;
     }
   }
 
@@ -186,34 +203,61 @@ export class Falcon {
    * Set to a different name to use multiple models across `falcon` instances.
    * @param model.forceWrite Flag to overwrite the model in storage even if it exists.
    * @param model.version Version of the model file. Increment to update the model file in storage.
+   * @param device String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+   * suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+   * GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+   * `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+   * argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
    *
    * @returns An instance of the Falcon engine.
    */
   public static async create(
     accessKey: string,
-    model: FalconModel
+    model: FalconModel,
+    device?: string,
   ): Promise<Falcon> {
     const customWritePath = model.customWritePath
       ? model.customWritePath
       : 'falcon_model';
     const modelPath = await loadModel({ ...model, customWritePath });
 
-    return await Falcon._init(accessKey, modelPath);
+    return await Falcon._init(accessKey, modelPath, device);
   }
 
-  public static _init(accessKey: string, modelPath: string): Promise<Falcon> {
+  public static async _init(accessKey: string, modelPath: string, device?: string): Promise<Falcon> {
     if (!isAccessKeyValid(accessKey)) {
       throw new FalconErrors.FalconInvalidArgumentError('Invalid AccessKey');
     }
 
+    const isSimd = await simd();
+    if (!isSimd) {
+      throw new FalconErrors.FalconRuntimeError('Browser not supported.');
+    }
+
+    let deviceArg = (device) ? device : "best";
+    const isWorkerScope = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+    if (
+      !isWorkerScope &&
+      (deviceArg === 'best' || (deviceArg.startsWith('cpu') && deviceArg !== 'cpu:1'))
+    ) {
+      // eslint-disable-next-line no-console
+      console.warn('Multi-threading is not supported on main thread.');
+      deviceArg = 'cpu:1';
+    }
+
+    const sabDefined = typeof SharedArrayBuffer !== 'undefined'
+      && (deviceArg !== "cpu:1");
+
     return new Promise<Falcon>((resolve, reject) => {
       Falcon._falconMutex
         .runExclusive(async () => {
-          const isSimd = await simd();
           const wasmOutput = await Falcon.initWasm(
             accessKey.trim(),
-            isSimd ? this._wasmSimd : this._wasm,
-            modelPath
+            modelPath.trim(),
+            deviceArg,
+            (sabDefined) ? this._wasmPThread : this._wasmSimd,
+            (sabDefined) ? this._wasmPThreadLib : this._wasmSimdLib,
+            (sabDefined) ? createModulePThread : createModuleSimd,
           );
           return new Falcon(wasmOutput);
         })
@@ -240,7 +284,7 @@ export class Falcon {
       );
     }
 
-    const maxSize = MAX_PCM_LENGTH_SEC * Falcon._sampleRate;
+    const maxSize = MAX_PCM_LENGTH_SEC * this._sampleRate;
     if (pcm.length > maxSize) {
       throw new FalconErrors.FalconInvalidArgumentError(
         `'pcm' must be less than ${maxSize} samples (${MAX_PCM_LENGTH_SEC} seconds)`
@@ -248,16 +292,15 @@ export class Falcon {
     }
 
     return new Promise<FalconSegments>((resolve, reject) => {
-      this._processMutex
+      this._functionMutex
         .runExclusive(async () => {
-          if (this._wasmMemory === undefined) {
+          if (this._module === undefined) {
             throw new FalconErrors.FalconInvalidStateError(
               'Attempted to call Falcon process after release.'
             );
           }
 
-          const inputBufferAddress = await this._alignedAlloc(
-            Int16Array.BYTES_PER_ELEMENT,
+          const inputBufferAddress = this._module._malloc(
             pcm.length * Int16Array.BYTES_PER_ELEMENT
           );
           if (inputBufferAddress === 0) {
@@ -266,59 +309,48 @@ export class Falcon {
             );
           }
 
-          const memoryBuffer = new Int16Array(this._wasmMemory.buffer);
-
-          memoryBuffer.set(
+          this._module.HEAP16.set(
             pcm,
             inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
           );
-          const status = await this._pvFalconProcess(
+          const status = await this._pv_falcon_process(
             this._objectAddress,
             inputBufferAddress,
             pcm.length,
             this._numSegmentsAddress,
             this._segmentsAddressAddress
           );
-          await this._pvFree(inputBufferAddress);
-
-          const memoryBufferUint8 = new Uint8Array(this._wasmMemory.buffer);
-          const memoryBufferView = new DataView(this._wasmMemory.buffer);
+          this._module._pv_free(inputBufferAddress);
 
           if (status !== PvStatus.SUCCESS) {
             const messageStack = await Falcon.getMessageStack(
-              this._pvGetErrorStack,
-              this._pvFreeErrorStack,
+              this._module._pv_get_error_stack,
+              this._module._pv_free_error_stack,
               this._messageStackAddressAddressAddress,
               this._messageStackDepthAddress,
-              memoryBufferView,
-              memoryBufferUint8
+              this._module.HEAP32,
+              this._module.HEAPU8
             );
 
             throw pvStatusToException(status, 'Process failed', messageStack);
           }
 
-          const numSegments = memoryBufferView.getInt32(
-            this._numSegmentsAddress,
-            true
-          );
-          const segmentsAddress = memoryBufferView.getInt32(
-            this._segmentsAddressAddress,
-            true
-          );
+          const numSegments = this._module.HEAP32[this._numSegmentsAddress / Int32Array.BYTES_PER_ELEMENT];
+          const segmentsAddress = this._module.HEAP32[this._segmentsAddressAddress / Int32Array.BYTES_PER_ELEMENT];
 
           let ptr = segmentsAddress;
           const segments: FalconSegment[] = [];
           for (let i = 0; i < numSegments; i++) {
-            const startSec = memoryBufferView.getFloat32(ptr, true);
+            const startSec = this._module.HEAPF32[ptr / Float32Array.BYTES_PER_ELEMENT];
             ptr += Float32Array.BYTES_PER_ELEMENT;
-            const endSec = memoryBufferView.getFloat32(ptr, true);
+            const endSec = this._module.HEAPF32[ptr / Float32Array.BYTES_PER_ELEMENT];
             ptr += Float32Array.BYTES_PER_ELEMENT;
-            const speakerTag = memoryBufferView.getInt32(ptr, true);
+            const speakerTag = this._module.HEAP32[ptr / Int32Array.BYTES_PER_ELEMENT];
             ptr += Int32Array.BYTES_PER_ELEMENT;
             segments.push({ startSec, endSec, speakerTag });
           }
 
-          await this._pvFalconSegmentsDelete(segmentsAddress);
+          this._module._pv_falcon_segments_delete(segmentsAddress);
 
           return { segments };
         })
@@ -335,196 +367,169 @@ export class Falcon {
    * Releases resources acquired by WebAssembly module.
    */
   public async release(): Promise<void> {
-    await this._pvFalconDelete(this._objectAddress);
-    await this._pvFree(this._numSegmentsAddress);
-    await this._pvFree(this._segmentsAddressAddress);
-    await this._pvFree(this._messageStackAddressAddressAddress);
-    await this._pvFree(this._messageStackDepthAddress);
-    delete this._wasmMemory;
-    this._wasmMemory = undefined;
+    if (!this._module) {
+      return;
+    }
+    this._pv_falcon_delete(this._objectAddress);
+    this._module._pv_free(this._messageStackAddressAddressAddress);
+    this._module._pv_free(this._messageStackDepthAddress);
+    this._module._pv_free(this._segmentsAddressAddress);
+    this._module._pv_free(this._numSegmentsAddress);
+    this._module = undefined;
   }
 
   private static async initWasm(
     accessKey: string,
+    modelPath: string,
+    device: string,
     wasmBase64: string,
-    modelPath: string
+    wasmLibBase64: string,
+    createModuleFunc: any,
   ): Promise<any> {
-    // A WebAssembly page has a constant size of 64KiB. -> 1MiB ~= 16 pages
-    const memory = new WebAssembly.Memory({ initial: 2875 });
-
-    const memoryBufferUint8 = new Uint8Array(memory.buffer);
-
-    const pvError = new PvError();
-
-    const exports = await buildWasm(memory, wasmBase64, pvError);
-    const aligned_alloc = exports.aligned_alloc as aligned_alloc_type;
-    const pv_free = exports.pv_free as pv_free_type;
-    const pv_falcon_version =
-      exports.pv_falcon_version as pv_falcon_version_type;
-    const pv_falcon_process =
-      exports.pv_falcon_process as pv_falcon_process_type;
-    const pv_falcon_delete = exports.pv_falcon_delete as pv_falcon_delete_type;
-    const pv_falcon_segments_delete =
-      exports.pv_falcon_segments_delete as pv_falcon_segments_delete_type;
-    const pv_falcon_init = exports.pv_falcon_init as pv_falcon_init_type;
-    const pv_sample_rate = exports.pv_sample_rate as pv_sample_rate_type;
-    const pv_set_sdk = exports.pv_set_sdk as pv_set_sdk_type;
-    const pv_get_error_stack =
-      exports.pv_get_error_stack as pv_get_error_stack_type;
-    const pv_free_error_stack =
-      exports.pv_free_error_stack as pv_free_error_stack_type;
-
-    const numSegmentsAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
+    const blob = new Blob(
+      [base64ToUint8Array(wasmLibBase64)],
+      { type: 'application/javascript' }
     );
-    if (numSegmentsAddress === 0) {
-      throw new FalconErrors.FalconOutOfMemoryError(
-        'malloc failed: Cannot allocate memory'
-      );
-    }
+    const module: FalconModule = await createModuleFunc({
+      mainScriptUrlOrBlob: blob,
+      wasmBinary: base64ToUint8Array(wasmBase64),
+    });
 
-    const segmentsAddressAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
-    if (segmentsAddressAddress === 0) {
-      throw new FalconErrors.FalconOutOfMemoryError(
-        'malloc failed: Cannot allocate memory'
-      );
-    }
+    const pv_falcon_init: pv_falcon_init_type = this.wrapAsyncFunction(
+      module,
+      "pv_falcon_init",
+      4);
+    const pv_falcon_process: pv_falcon_process_type = this.wrapAsyncFunction(
+      module,
+      "pv_falcon_process",
+      5);
+    const pv_falcon_delete: pv_falcon_delete_type = this.wrapAsyncFunction(
+      module,
+      "pv_falcon_delete",
+      1);
 
-    const objectAddressAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
+    const objectAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (objectAddressAddress === 0) {
       throw new FalconErrors.FalconOutOfMemoryError(
         'malloc failed: Cannot allocate memory'
       );
     }
 
-    const accessKeyAddress = await aligned_alloc(
-      Uint8Array.BYTES_PER_ELEMENT,
-      (accessKey.length + 1) * Uint8Array.BYTES_PER_ELEMENT
-    );
-
+    const accessKeyAddress = module._malloc((accessKey.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
     if (accessKeyAddress === 0) {
       throw new FalconErrors.FalconOutOfMemoryError(
         'malloc failed: Cannot allocate memory'
       );
     }
-
     for (let i = 0; i < accessKey.length; i++) {
-      memoryBufferUint8[accessKeyAddress + i] = accessKey.charCodeAt(i);
+      module.HEAPU8[accessKeyAddress + i] = accessKey.charCodeAt(i);
     }
-    memoryBufferUint8[accessKeyAddress + accessKey.length] = 0;
+    module.HEAPU8[accessKeyAddress + accessKey.length] = 0;
 
     const modelPathEncoded = new TextEncoder().encode(modelPath);
-    const modelPathAddress = await aligned_alloc(
-      Uint8Array.BYTES_PER_ELEMENT,
-      (modelPathEncoded.length + 1) * Uint8Array.BYTES_PER_ELEMENT
-    );
-
+    const modelPathAddress = module._malloc((modelPathEncoded.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
     if (modelPathAddress === 0) {
+      throw new FalconErrors.FalconOutOfMemoryError('malloc failed: Cannot allocate memory');
+    }
+    module.HEAPU8.set(modelPathEncoded, modelPathAddress);
+    module.HEAPU8[modelPathAddress + modelPathEncoded.length] = 0;
+
+    const deviceAddress = module._malloc((device.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
+    if (deviceAddress === 0) {
       throw new FalconErrors.FalconOutOfMemoryError(
         'malloc failed: Cannot allocate memory'
       );
     }
-
-    memoryBufferUint8.set(modelPathEncoded, modelPathAddress);
-    memoryBufferUint8[modelPathAddress + modelPathEncoded.length] = 0;
+    for (let i = 0; i < device.length; i++) {
+      module.HEAPU8[deviceAddress + i] = device.charCodeAt(i);
+    }
+    module.HEAPU8[deviceAddress + device.length] = 0;
 
     const sdkEncoded = new TextEncoder().encode(this._sdk);
-    const sdkAddress = await aligned_alloc(
-      Uint8Array.BYTES_PER_ELEMENT,
-      (sdkEncoded.length + 1) * Uint8Array.BYTES_PER_ELEMENT
-    );
+    const sdkAddress = module._malloc((sdkEncoded.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
     if (!sdkAddress) {
-      throw new FalconErrors.FalconOutOfMemoryError(
-        'malloc failed: Cannot allocate memory'
-      );
+      throw new FalconErrors.FalconOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
-    memoryBufferUint8.set(sdkEncoded, sdkAddress);
-    memoryBufferUint8[sdkAddress + sdkEncoded.length] = 0;
-    await pv_set_sdk(sdkAddress);
-    await pv_free(sdkAddress);
+    module.HEAPU8.set(sdkEncoded, sdkAddress);
+    module.HEAPU8[sdkAddress + sdkEncoded.length] = 0;
+    module._pv_set_sdk(sdkAddress);
+    module._pv_free(sdkAddress);
 
-    const messageStackDepthAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
+    const messageStackDepthAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (!messageStackDepthAddress) {
       throw new FalconErrors.FalconOutOfMemoryError(
         'malloc failed: Cannot allocate memory'
       );
     }
 
-    const messageStackAddressAddressAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
+    const messageStackAddressAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (!messageStackAddressAddressAddress) {
       throw new FalconErrors.FalconOutOfMemoryError(
         'malloc failed: Cannot allocate memory'
       );
     }
 
-    const memoryBufferView = new DataView(memory.buffer);
-
     const status = await pv_falcon_init(
       accessKeyAddress,
       modelPathAddress,
-      objectAddressAddress
+      deviceAddress,
+      objectAddressAddress,
     );
-    await pv_free(accessKeyAddress);
-    await pv_free(modelPathAddress);
+    module._pv_free(accessKeyAddress);
+    module._pv_free(modelPathAddress);
+    module._pv_free(deviceAddress);
     if (status !== PvStatus.SUCCESS) {
       const messageStack = await Falcon.getMessageStack(
-        pv_get_error_stack,
-        pv_free_error_stack,
+        module._pv_get_error_stack,
+        module._pv_free_error_stack,
         messageStackAddressAddressAddress,
         messageStackDepthAddress,
-        memoryBufferView,
-        memoryBufferUint8
+        module.HEAP32,
+        module.HEAPU8,
       );
 
-      throw pvStatusToException(
-        status,
-        'Initialization failed',
-        messageStack,
-        pvError
+      throw pvStatusToException(status, 'Initialization failed', messageStack);
+    }
+
+    const objectAddress = module.HEAP32[objectAddressAddress / Int32Array.BYTES_PER_ELEMENT];
+    module._pv_free(objectAddressAddress);
+
+    const numSegmentsAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
+    if (numSegmentsAddress === 0) {
+      throw new FalconErrors.FalconOutOfMemoryError(
+        'malloc failed: Cannot allocate memory'
       );
     }
-    const objectAddress = memoryBufferView.getInt32(objectAddressAddress, true);
 
-    const sampleRate = await pv_sample_rate();
-    const versionAddress = await pv_falcon_version();
+    const segmentsAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
+    if (segmentsAddressAddress === 0) {
+      throw new FalconErrors.FalconOutOfMemoryError(
+        'malloc failed: Cannot allocate memory'
+      );
+    }
+
+    const sampleRate = module._pv_sample_rate();
+
+    const versionAddress = module._pv_falcon_version();
     const version = arrayBufferToStringAtIndex(
-      memoryBufferUint8,
-      versionAddress
+      module.HEAPU8,
+      versionAddress,
     );
 
     return {
-      aligned_alloc,
-      memory: memory,
-      pvFree: pv_free,
+      module: module,
+
+      pv_falcon_process: pv_falcon_process,
+      pv_falcon_delete: pv_falcon_delete,
+
+      version: version,
+      sampleRate: sampleRate,
 
       objectAddress: objectAddress,
-      numSegmentsAddress: numSegmentsAddress,
-      segmentsAddressAddress: segmentsAddressAddress,
       messageStackAddressAddressAddress: messageStackAddressAddressAddress,
       messageStackDepthAddress: messageStackDepthAddress,
-
-      pvFalconDelete: pv_falcon_delete,
-      pvFalconSegmentsDelete: pv_falcon_segments_delete,
-      pvFalconProcess: pv_falcon_process,
-      pvGetErrorStack: pv_get_error_stack,
-      pvFreeErrorStack: pv_free_error_stack,
-
-      sampleRate: sampleRate,
-      version: version,
-      pvError: pvError,
+      segmentsAddressAddress: segmentsAddressAddress,
+      numSegmentsAddress: numSegmentsAddress,
     };
   }
 
@@ -533,41 +538,38 @@ export class Falcon {
     pv_free_error_stack: pv_free_error_stack_type,
     messageStackAddressAddressAddress: number,
     messageStackDepthAddress: number,
-    memoryBufferView: DataView,
+    memoryBufferInt32: Int32Array,
     memoryBufferUint8: Uint8Array
   ): Promise<string[]> {
-    const status = await pv_get_error_stack(
-      messageStackAddressAddressAddress,
-      messageStackDepthAddress
-    );
+    const status = pv_get_error_stack(messageStackAddressAddressAddress, messageStackDepthAddress);
     if (status !== PvStatus.SUCCESS) {
-      throw pvStatusToException(status, 'Unable to get Falcon error state');
+      throw new Error(`Unable to get error state: ${status}`);
     }
 
-    const messageStackAddressAddress = memoryBufferView.getInt32(
-      messageStackAddressAddressAddress,
-      true
-    );
+    const messageStackAddressAddress = memoryBufferInt32[messageStackAddressAddressAddress / Int32Array.BYTES_PER_ELEMENT];
 
-    const messageStackDepth = memoryBufferView.getInt32(
-      messageStackDepthAddress,
-      true
-    );
+    const messageStackDepth = memoryBufferInt32[messageStackDepthAddress / Int32Array.BYTES_PER_ELEMENT];
     const messageStack: string[] = [];
     for (let i = 0; i < messageStackDepth; i++) {
-      const messageStackAddress = memoryBufferView.getInt32(
-        messageStackAddressAddress + i * Int32Array.BYTES_PER_ELEMENT,
-        true
-      );
-      const message = arrayBufferToStringAtIndex(
-        memoryBufferUint8,
-        messageStackAddress
-      );
+      const messageStackAddress = memoryBufferInt32[
+        (messageStackAddressAddress / Int32Array.BYTES_PER_ELEMENT) + i
+      ];
+      const message = arrayBufferToStringAtIndex(memoryBufferUint8, messageStackAddress);
       messageStack.push(message);
     }
 
-    await pv_free_error_stack(messageStackAddressAddress);
+    pv_free_error_stack(messageStackAddressAddress);
 
     return messageStack;
+  }
+
+  private static wrapAsyncFunction(module: FalconModule, functionName: string, numArgs: number): (...args: any[]) => any {
+    // @ts-ignore
+    return module.cwrap(
+      functionName,
+      "number",
+      Array(numArgs).fill("number"),
+      { async: true }
+    );
   }
 }

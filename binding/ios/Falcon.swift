@@ -1,5 +1,5 @@
 //
-//  Copyright 2024 Picovoice Inc.
+//  Copyright 2024-2025 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -39,7 +39,7 @@ public struct FalconSegment {
 
 /// iOS binding for Falcon speaker diarization engine. Provides a Swift interface to the Falcon library.
 public class Falcon {
-    
+
 #if SWIFT_PACKAGE
 
     static let resourceBundle = Bundle.module
@@ -64,7 +64,7 @@ public class Falcon {
     }()
 
 #endif
-    
+
     private static let supportedAudioTypes: Set = [
         "3gp",
         "flac",
@@ -88,13 +88,42 @@ public class Falcon {
         self.sdk = sdk
     }
 
+    /// Lists all available devices that Falcon can use for inference.
+    /// Entries in the list can be used as the `device` argument when initializing Falcon.
+    ///
+    /// - Throws: FalconError
+    /// - Returns: Array of available devices that Falcon can be used for inference.
+    public static func getAvailableDevices() throws -> [String] {
+        var cHardwareDevices: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?
+        var numHardwareDevices: Int32 = 0
+        let status = pv_falcon_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)
+        if status != PV_STATUS_SUCCESS {
+            let messageStack = try Falcon.getMessageStack()
+            throw Falcon.pvStatusToFalconError(status, "Falcon getAvailableDevices failed", messageStack)
+        }
+
+        var hardwareDevices: [String] = []
+        for i in 0..<numHardwareDevices {
+            hardwareDevices.append(String(cString: cHardwareDevices!.advanced(by: Int(i)).pointee!))
+        }
+
+        pv_falcon_free_hardware_devices(cHardwareDevices, numHardwareDevices)
+
+        return hardwareDevices
+    }
+
     /// Constructor.
     ///
     /// - Parameters:
     ///   - accessKey: The AccessKey obtained from Picovoice Console (https://console.picovoice.ai).
     ///   - modelPath: Absolute path to file containing model parameters.
+    ///   - device: String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+    ///     suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+    ///     GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+    ///     `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+    ///     argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
     /// - Throws: FalconError
-    public init(accessKey: String, modelPath: String? = nil) throws {
+    public init(accessKey: String, modelPath: String? = nil, device: String? = nil) throws {
 
         if accessKey.count == 0 {
             throw FalconInvalidArgumentError("AccessKey is required for Falcon initialization")
@@ -112,16 +141,22 @@ public class Falcon {
             modelPathArg = try self.getResourcePath(modelPathArg!)
         }
 
+        var deviceArg = device
+        if deviceArg == nil {
+            deviceArg = "best"
+        }
+
         pv_set_sdk(Falcon.sdk)
 
         let status = pv_falcon_init(
                 accessKey,
                 modelPathArg,
+                deviceArg,
                 &handle)
 
         if status != PV_STATUS_SUCCESS {
-            let messageStack = try getMessageStack()
-            throw pvStatusToFalconError(status, "Falcon init failed", messageStack)
+            let messageStack = try Falcon.getMessageStack()
+            throw Falcon.pvStatusToFalconError(status, "Falcon init failed", messageStack)
         }
     }
 
@@ -163,8 +198,8 @@ public class Falcon {
                 &numSegments,
                 &cSegments)
         if status != PV_STATUS_SUCCESS {
-            let messageStack = try getMessageStack()
-            throw pvStatusToFalconError(status, "Falcon process failed", messageStack)
+            let messageStack = try Falcon.getMessageStack()
+            throw Falcon.pvStatusToFalconError(status, "Falcon process failed", messageStack)
         }
 
         var segments = [FalconSegment]()
@@ -208,8 +243,8 @@ public class Falcon {
                 &numSegments,
                 &cSegments)
         if status != PV_STATUS_SUCCESS {
-            let messageStack = try getMessageStack()
-            throw pvStatusToFalconError(status, "Falcon process file failed", messageStack)
+            let messageStack = try Falcon.getMessageStack()
+            throw Falcon.pvStatusToFalconError(status, "Falcon process file failed", messageStack)
         }
 
         var segments = [FalconSegment]()
@@ -260,7 +295,7 @@ public class Falcon {
                 "If this is a packaged asset, ensure you have added it to your xcode project.")
     }
 
-    private func pvStatusToFalconError(
+    private static func pvStatusToFalconError(
         _ status: pv_status_t,
         _ message: String,
         _ messageStack: [String] = []) -> FalconError {
@@ -293,7 +328,7 @@ public class Falcon {
         }
     }
 
-    private func getMessageStack() throws -> [String] {
+    private static func getMessageStack() throws -> [String] {
         var messageStackRef: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?
         var messageStackDepth: Int32 = 0
         let status = pv_get_error_stack(&messageStackRef, &messageStackDepth)

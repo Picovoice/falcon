@@ -14,6 +14,7 @@ import Falcon
 
 class PerformanceTest: XCTestCase {
     let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
+    let device: String = "{TESTING_DEVICE_HERE}"
     let iterationString: String = "{NUM_TEST_ITERATIONS}"
     let procThresholdString: String = "{PROC_PERFORMANCE_THRESHOLD_SEC}"
 
@@ -30,7 +31,7 @@ class PerformanceTest: XCTestCase {
         try XCTSkipIf(procPerformanceThresholdSec == nil)
 
         let bundle = Bundle(for: type(of: self))
-        let falcon = try? Falcon(accessKey: accessKey)
+        let falcon = try? Falcon(accessKey: accessKey, device: device)
 
         let filePath: String = bundle.path(forResource: "test", ofType: "wav")!
 
