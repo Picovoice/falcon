@@ -93,10 +93,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.3.tgz#c2b9d2e374ee62c586d3adbea87199b1d7a7a6ba"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
-"@picovoice/falcon-web@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@picovoice/falcon-web/-/falcon-web-2.0.1.tgz#adbb98719fe47a597fda833eb75883ef8f730ee6"
-  integrity sha512-9JC9HfzHCsZCvaSBOymgopgum0k+DtnF4bvVB0l+ZigEFe0s82VmF0CydtvSGg5dHmCkyOLo3w5GJ5ajLEWhmA==
+"@picovoice/falcon-web@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@picovoice/falcon-web/-/falcon-web-2.0.2.tgz#dc44882a3615d9e89f3e11ec00ba071386c60034"
+  integrity sha512-f59ICxIFhIn3valahCFtVCQG8U5gq8W1h31HCTGbR9ajwmzkSGalFWDfa8v5qkCMNlNmPk2NzZb/kf31eXZb/A==
   dependencies:
     "@picovoice/web-utils" "=1.4.3"
 
