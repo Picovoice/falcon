@@ -132,6 +132,12 @@ describe('Falcon Binding', function () {
     }
   });
 
+  it('List hardware devices', async () => {
+    const hardwareDevices: string[] = await Falcon.listAvailableDevices();
+    expect(Array.isArray(hardwareDevices)).to.be.true;
+    expect(hardwareDevices).length.to.be.greaterThan(0);
+  });
+
   for (const instance of [Falcon, FalconWorker]) {
     const instanceString = instance === FalconWorker ? 'worker' : 'main';
 
