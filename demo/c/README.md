@@ -26,7 +26,17 @@ cmake -S demo/c/ -B demo/c/build
 cmake --build demo/c/build
 ```
 
-### Build Windows
+### Build Windows Amd64 (x86_64)
+
+Build the demo by running this from the root of the repository:
+
+```console
+cmake -S demo/c/ -B demo/c/build -G "MinGW Makefiles"
+cmake --build demo/c/build
+cp lib/windows/amd64/* demo/c/build/
+```
+
+### Build Windows Arm64
 
 Build the demo by running this from the root of the repository:
 
