@@ -46,3 +46,4 @@ Emscripten
 HEAPU
 HEAPF
 pthread
+XCTEST
