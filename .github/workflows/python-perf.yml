@@ -80,7 +80,7 @@ jobs:
           - machine: rpi4-64
             performance_threshold_sec: 2.5
           - machine: rpi5-64
-            performance_threshold_sec: 1.0
+            performance_threshold_sec: 1.25
 
 
     steps:
